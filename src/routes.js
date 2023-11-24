@@ -14,6 +14,8 @@ import Perfiles from './Componentes/Perfiles.svelte'
 import Postulados from './Administrativo/Postulados.svelte'
 // @ts-ignore
 import RegistroPuesto from './Administrativo/RegistroPuesto.svelte'
+// @ts-ignore
+import RegistrarPuesto from './Administrativo/RegistrarPuesto.svelte'
 // Errores
 // @ts-ignore
 import Error404 from "./Errores/Error404.svelte";
@@ -29,6 +31,7 @@ const routes ={
     //Administrativos
     '/Postulados':Postulados,
     '/RegistroPuesto':RegistroPuesto,
+    '/RegistrarPuesto':RegistrarPuesto,
     // Errores
     '*': Error404
 }
