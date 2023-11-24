@@ -4,7 +4,7 @@
     $mysql = new classGetPostInDataBase();
     // Consulta SQL para obtener puestos no validados ordenados por fecha límite ascendente
     $query = 
-    "SELECT titulo, descripcion, fecha_limite
+    "SELECT titulo, descripcion, fecha_limite, lugar
     FROM Puestos;
     ";
     // Ejecutar la consulta SQL
@@ -28,6 +28,7 @@
             $rsPuestos[$i]['titulo'] = $row['titulo'];
             $rsPuestos[$i]['descripcion'] = $row['descripcion'];
             $rsPuestos[$i]['fecha_limite'] = $row['fecha_limite'];
+            $rsPuestos[$i]['lugar'] = $row['lugar'];
             $i++;
         }
     }

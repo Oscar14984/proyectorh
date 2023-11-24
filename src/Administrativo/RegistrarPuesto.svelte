@@ -16,12 +16,8 @@ function agregarOferta() {
   function actualizarOfrecemos() {
     ofrecemos = ofertas.join('; ');
   }
-let puestos = [
-    {titulo:"Odontologo General", lugar:"satelite", fecha_limite:"11/11/2023"},
-    {titulo:"resepcionsita ", lugar:"satelite", fecha_limite:"10/11/2023"},
-    {titulo:"resepcionsita General", lugar:"satelite", fecha_limite:"10/11/2023"},
-]
 
+//Para agregar un puesto nuevo
 let estado = null;
 let titulo= ''
 let descripcion= ''
@@ -64,6 +60,20 @@ const enviarFormulario = async () => {
     console.error(error.response);
     }
   };
+//para ver los puestos
+  let tienePuestos;
+  let rsPuestos;
+  const puestos = async () => {
+    const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/getPuestosData.php');
+    const data = JSON.parse(res.data.d);
+    tienePuestos = data.tienePuestos;
+    if (tienePuestos == true ) {
+      rsPuestos = Object.values(data.rsPuestos);
+    } else {
+      rsPuestos = "";
+    }
+  };
+  puestos();
 </script>
 
 <main>
@@ -77,19 +87,21 @@ const enviarFormulario = async () => {
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            {#each puestos as puesto}
-                <tbody>
-                    <tr>
-                        <td>{puesto.titulo}</td>
-                        <td>{puesto.lugar}</td>
-                        <td>{puesto.fecha_limite}</td>
-                        <td>
-                            <button class="btn btn-info">Editar</button>
-                            <button class="btn btn-info">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            {/each}
+            {#if tienePuestos}
+                 {#each rsPuestos as puesto(puesto.id_puesto)}
+                     <tbody>
+                         <tr>
+                             <td>{puesto.titulo}</td>
+                             <td>{puesto.fecha_limite}</td>
+                             <td>{puesto.lugar}</td>
+                             <td>
+                                 <button class="btn btn-info">Editar</button>
+                                 <button class="btn btn-info">Eliminar</button>
+                             </td>
+                         </tr>
+                     </tbody>
+                 {/each}
+            {/if}
           </table>
     </div>
 
