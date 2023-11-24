@@ -1,0 +1,128 @@
+<script>
+ import axios from "axios";
+ //postulados
+let tieneUsuarios;
+let rsUsuarios;
+
+const cargarUsuarios = async () => {
+    const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/getUsuarios.php');
+    const data = JSON.parse(res.data.d);
+    tieneUsuarios = data.tieneUsuarios;
+    if (tieneUsuarios == true ) {
+      rsUsuarios = Object.values(data.rsUsuarios);
+    } else {
+      rsUsuarios = "";
+    }
+};
+cargarUsuarios();
+// PAGINADOR
+let maxRegsPP = 10
+    let paginas = 0
+    let paginaActual = 1
+    let registroInicial = 1
+    let registroFinal = 10
+    let residuo = 0
+    let pagAd = 0
+    
+    const cambiarMaxRegsPP = () => {
+        paginas = Math.floor( rsUsuarios.length / maxRegsPP )
+        residuo = ( rsUsuarios.length % maxRegsPP )
+        if ( residuo > 0 ) {
+            pagAd = 1
+        } else {
+            pagAd = 0
+        }
+        paginas = paginas + pagAd
+        paginaActual = 1
+        registroInicial = 1
+        registroFinal = maxRegsPP
+    }
+
+    const cambiarEstatus = () => {
+        cargarUsuarios()
+    }
+
+    const cambiarPagina = (pagina) => {
+        paginaActual = pagina
+        registroInicial = (paginaActual * maxRegsPP) - (maxRegsPP - 1)
+        registroFinal = paginaActual * maxRegsPP
+    }
+</script>
+
+<main>
+<div class="container">
+    <table class="table table-hover" >
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Primer Apellido</th>
+            <th scope="col">Segundo Apellido</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        {#if tieneUsuarios}
+            {#each  rsUsuarios.slice(registroInicial - 1, registroFinal) as usuario (usuario.id_usuario)}
+                <tbody>
+                    <tr>
+                        <td>{usuario.nombre}</td>
+                        <td>{usuario.apellido_paterno}</td>
+                        <td>{usuario.apellido_materno}</td>
+                        <td>
+                        <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
+                        <a href="ruta_al_archivo.pdf" class="btn btn-success">Descargar PDF</a>
+                        <a href="ruta_al_archivo_de_videos.zip" class="btn btn-primary">Descargar Videos</a>
+                        </td>
+                    </tr>
+                </tbody>
+            {/each}
+        {/if}
+        </table>
+        <div class="col-6 col-lg-4 col-xxl-3">
+            <div class="input-group mb-3 bg-light">
+                <span class="input-group-text"><strong>Registros por página:</strong></span>
+                <select class="form-select" bind:value={maxRegsPP} on:change="{cambiarMaxRegsPP}">
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                </select>
+            </div>
+        </div>
+        {#if tieneUsuarios }
+            <div class="input-group mb-1">
+                <div role="group">
+                    {#if paginaActual != 1}
+                        <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(1)}>{'<<'}</button>
+                    {:else}
+                        <button type="button" class="btn btn-primary" disabled>{'<<'}</button>
+                    {/if}
+                    {#if paginaActual != 1}
+                        <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginaActual-1)}>{'<'}</button>
+                    {:else}
+                        <button type="button" class="btn btn-primary" disabled>{'<'}</button>
+                    {/if}
+                    {#each Array(paginas) as _, i}
+                        {#if i+1 == paginaActual - 1 || i+1 == paginaActual || i+1 == paginaActual + 1}
+                            <button type="button" class="btn {paginaActual == i+1 ? 'btn-primary' : 'btn-light'}" on:click={()=>cambiarPagina(i+1)}>{i+1}</button>
+                        {/if}
+                    {/each}
+                    {#if paginaActual < paginas}
+                        <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginaActual+1)}>{'>'}</button>
+                    {:else}
+                        <button type="button" class="btn btn-primary" disabled>{'>'}</button>
+                    {/if}
+                    {#if paginaActual < paginas}
+                        <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginas)}>{'>>'}</button>
+                    {:else}
+                        <button type="button" class="btn btn-primary" disabled>{'>>'}</button>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+    </div>
+</main>
+
+<style>
+.table{
+    background-color: rgb(198, 244, 255);
+}
+</style>
