@@ -83,6 +83,34 @@ function handleFileChange(event) {
     }
   }
 };
+  //Función para subir video
+  const subirDocumento = async () => {
+  if (selectedFile) {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('idUsuario', idUsuario);
+
+    try {
+      const response = await axios.post(Lugar.backend+'insertDocument.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 200) {
+        
+        Swal.fire({
+          title: "¡Excelente!",
+          text: "El video se ha subido correctamente",
+          icon: "success"
+        });
+      }
+    } catch (error) {
+      // Handle video upload errors
+      console.error('Error al subir el video:', error);
+    }
+  }
+};
 
 </script>
 
@@ -123,9 +151,12 @@ function handleFileChange(event) {
 
       <div>
         <h1 class="pendientes text-info" style="margin-top: 4%; margin-left: 10%; ">Pendientes</h1>
-        <input type="file" id="file-input" name="img" accept="video/*"  on:change={handleFileChange}>
+        <!-- para subir videos -->
+        <input type="file" id="file-input" name="video" accept="video/*"  on:change={handleFileChange}>
         <button class="btn btn-success" on:click={subirVideo}>Subir video</button>
-
+        <!-- para subir documentos -->
+        <input type="file" id="file-input" name="cv" accept="application/pdf" on:change={handleFileChange}>
+        <button class="btn btn-success" on:click={subirDocumento}>Subir CV</button>
       </div>
 </main>
 
