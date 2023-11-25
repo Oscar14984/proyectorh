@@ -2,21 +2,42 @@
     import axios from 'axios'
     import Lugar from '../Lugares';
 
-// let ofertas = ['Oferta inicial'];
+    let ofrecemos = ['Oferta inicial'];
+    let requisitos = ['Requisito inicial'];
+    let funcionesGenerales = ['Función general inicial'];
+    let habilidadesConocimientos = ['Habilidad/conocimiento inicial'];
 
-// function agregarOferta() {
-//     ofertas = [...ofertas, ''];
-//     actualizarOfrecemos();
-//   }
+const agregarOferta = () =>{
+  ofrecemos = [...ofrecemos, ''];
+}
 
-//   function eliminarOferta(index) {
-//     ofertas = ofertas.filter((_, i) => i !== index);
-//     actualizarOfrecemos();
-//   }
+const eliminarOferta=(index)=> {
+  ofrecemos = ofrecemos.filter((_, i) => i !== index);
+}
 
-//   function actualizarOfrecemos() {
-//     ofrecemos = ofertas.join('; ');
-//   }
+  const agregarRequisito = () =>{
+    requisitos = [...requisitos, ''];
+  }
+
+  const eliminarRequisito = (index)=> {
+    requisitos = requisitos.filter((_, i) => i !== index);
+  }
+
+  const agregarFuncionGeneral =()=> {
+    funcionesGenerales = [...funcionesGenerales, ''];
+  }
+
+  const eliminarFuncionGeneral=(index)=> {
+    funcionesGenerales = funcionesGenerales.filter((_, i) => i !== index);
+  }
+
+  const agregarHabilidadConocimiento=()=> {
+    habilidadesConocimientos = [...habilidadesConocimientos, ''];
+  }
+
+  const eliminarHabilidadConocimiento=(index)=> {
+    habilidadesConocimientos = habilidadesConocimientos.filter((_, i) => i !== index);
+  }
 
 //Para agregar un puesto nuevo
 let estado = null;
@@ -24,13 +45,19 @@ let titulo= ''
 let descripcion= ''
 let fecha_limite= ''
 let lugar= ''
-let requisitos= []
-let ofrecemos= []
-let funcionesGenerales= []
-let habilidadesConocimientos= []
+// let ofrecemos= []
+// let requisitos= []
+// let funcionesGenerales= []
+// let habilidadesConocimientos= []
 
 const enviarFormulario = async () => {
   try {
+    // Asegurarse de que las variables sean siempre arrays
+    requisitos = Array.isArray(requisitos) ? requisitos : [];
+    ofrecemos = Array.isArray(ofrecemos) ? ofrecemos : [];
+    funcionesGenerales = Array.isArray(funcionesGenerales) ? funcionesGenerales : [];
+    habilidadesConocimientos = Array.isArray(habilidadesConocimientos) ? habilidadesConocimientos : [];
+    
     const response = await axios.post(Lugar.backend+"registrarPuesto.php", {
       titulo,
       descripcion,
@@ -40,6 +67,10 @@ const enviarFormulario = async () => {
       ofrecemos,
       funciones_generales: funcionesGenerales,
       habilidades_conocimientos: habilidadesConocimientos,
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
     // Manejar la respuesta del servidor
     estado = response.data;
@@ -133,31 +164,59 @@ const enviarFormulario = async () => {
                         
                             <label>
                             Ofrecemos:
-                            <!-- {#each ofertas as oferta, index (index)}
-                                <div class="input-group mb-3">
-                                <input type="text" class="form-control" bind:value={oferta} placeholder="Nueva oferta" />
-                                <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarOferta(index)}>-</button>
-                                {#if index === ofertas.length - 1}
-                                    <button class="btn btn-outline-secondary" type="button" on:click={agregarOferta}>+</button>
-                                {/if}
-                                </div>
-                            {/each} -->
-                            <input bind:value={ofrecemos} type="text" required />
+                            <!-- Sección de ofrecemos -->
+                                {#each ofrecemos as oferta, index (index)}
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" bind:value={ofrecemos[index]} placeholder="Nueva oferta" />
+                                        <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarOferta(index)}>-</button>
+                                        {#if index === ofrecemos.length - 1}
+                                            <button class="btn btn-outline-secondary" type="button" on:click={agregarOferta}>+</button>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            <!-- <input bind:value={ofrecemos} type="text" required /> -->
                             </label>
                         
                             <label>
                             Habilidades y Conocimientos Necesarios:
-                            <textarea bind:value={habilidadesConocimientos} rows="4" required></textarea>
+                            <!-- Sección de habilidades y conocimientos -->
+                            {#each habilidadesConocimientos as habilidad, index (index)}
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" bind:value={habilidadesConocimientos[index]} placeholder="Nueva habilidad/conocimiento" />
+                                    <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarHabilidadConocimiento( index)}>-</button>
+                                    {#if index === habilidadesConocimientos.length - 1}
+                                        <button class="btn btn-outline-secondary" type="button" on:click={agregarHabilidadConocimiento}>+</button>
+                                    {/if}
+                                </div>
+                            {/each}
                             </label>
                         
                             <label>
                             Requisitos:
-                            <textarea bind:value={requisitos} rows="4" required></textarea>
+                            <!-- Sección de requisitos -->
+                                {#each requisitos as requisito, index (index)}
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" bind:value={requisitos[index]} placeholder="Nuevo requisito" />
+                                        <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarRequisito(index)}>-</button>
+                                        {#if index === requisitos.length - 1}
+                                            <button class="btn btn-outline-secondary" type="button" on:click={ agregarRequisito}>+</button>
+                                        {/if}
+                                    </div>
+                                {/each}
                             </label>
                         
                             <label>
                             Funciones Generales:
-                            <textarea bind:value={funcionesGenerales} rows="4" required></textarea>
+                            <!-- Sección de funciones generales -->
+                                {#each funcionesGenerales as funcion, index (index)}
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" bind:value={funcionesGenerales[index]} placeholder="Nueva función general" />
+                                        <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarFuncionGeneral(index)}>-</button>
+                                        {#if index === funcionesGenerales.length - 1}
+                                            <button class="btn btn-outline-secondary" type="button" on:click={ agregarFuncionGeneral}>+</button>
+                                        {/if}
+                                        </div>
+                                {/each}
                             </label>
                         </form>
                     </div>
