@@ -2,6 +2,7 @@
 	import { session } from './../session.js';
   import { link, push } from 'svelte-spa-router';
   import axios from 'axios';
+  import Lugar from '../Lugares.js';
   import Swal from 'sweetalert2';
   import Spinner from './Spinner.svelte';
   
@@ -30,7 +31,7 @@ const iniciarSesion = async () => {
   };
     try {
       spinner = true
-      const response = await axios.post("http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/login.php", {
+      const response = await axios.post(Lugar.backend+"logInUser.php", {
         correo,
         contrasena,
       });
