@@ -4,6 +4,7 @@
 import { onMount } from "svelte";
 import { session } from "../session";
 import axios from 'axios';
+import Lugar from "../Lugares";
 import Swal from 'sweetalert2'
 
   let idUsuario = null; 
@@ -34,7 +35,7 @@ function handleFileChange(event) {
       formData.append('correoUsuario', correoUsuario);
 
       try {
-        const response = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/insertProfilePhoto.php', formData, {
+        const response = await axios.post(Lugar.backend+'insertProfilePhoto.php', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -59,10 +60,10 @@ function handleFileChange(event) {
   if (selectedFile) {
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('fase', fase);  
+    formData.append('idUsuario', idUsuario);
 
     try {
-      const response = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/insertVideo.php', formData, {
+      const response = await axios.post(Lugar.backend+'insertVideo.php', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
