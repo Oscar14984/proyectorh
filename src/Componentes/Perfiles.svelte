@@ -83,7 +83,7 @@ function handleFileChange(event) {
     }
   }
 };
-  //Función para subir video
+  //Función para subir documento
   const subirDocumento = async () => {
   if (selectedFile) {
     const formData = new FormData();
@@ -101,13 +101,13 @@ function handleFileChange(event) {
         
         Swal.fire({
           title: "¡Excelente!",
-          text: "El video se ha subido correctamente",
+          text: "El Documento se ha subido correctamente",
           icon: "success"
         });
       }
     } catch (error) {
-      // Handle video upload errors
-      console.error('Error al subir el video:', error);
+      // error de subir documento
+      console.error('Error al subir el Documento:', error);
     }
   }
 };
