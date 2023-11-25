@@ -1,21 +1,22 @@
 <script>
     import axios from 'axios'
+    import Lugar from '../Lugares';
 
-let ofertas = ['Oferta inicial'];
+// let ofertas = ['Oferta inicial'];
 
-function agregarOferta() {
-    ofertas = [...ofertas, ''];
-    actualizarOfrecemos();
-  }
+// function agregarOferta() {
+//     ofertas = [...ofertas, ''];
+//     actualizarOfrecemos();
+//   }
 
-  function eliminarOferta(index) {
-    ofertas = ofertas.filter((_, i) => i !== index);
-    actualizarOfrecemos();
-  }
+//   function eliminarOferta(index) {
+//     ofertas = ofertas.filter((_, i) => i !== index);
+//     actualizarOfrecemos();
+//   }
 
-  function actualizarOfrecemos() {
-    ofrecemos = ofertas.join('; ');
-  }
+//   function actualizarOfrecemos() {
+//     ofrecemos = ofertas.join('; ');
+//   }
 
 //Para agregar un puesto nuevo
 let estado = null;
@@ -24,33 +25,22 @@ let descripcion= ''
 let fecha_limite= ''
 let lugar= ''
 let requisitos= []
-let ofrecemos= ""
+let ofrecemos= []
 let funcionesGenerales= []
 let habilidadesConocimientos= []
 
 const enviarFormulario = async () => {
   try {
-    // Convertir los arrays a formato JSON
-    const requisitosJSON = JSON.stringify(requisitos);
-    const ofrecemosJSON = JSON.stringify(ofrecemos);
-    const funcionesGeneralesJSON = JSON.stringify(funcionesGenerales);
-    const habilidadesConocimientosJSON = JSON.stringify(habilidadesConocimientos);
-
-    const response = await axios.post("http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/registrarPuesto.php", {
+    const response = await axios.post(Lugar.backend+"registrarPuesto.php", {
       titulo,
       descripcion,
       fecha_limite,
       lugar,
-      requisitos: requisitosJSON,
-      ofrecemos: ofrecemosJSON,
-      funciones_generales: funcionesGeneralesJSON,
-      habilidades_conocimientos: habilidadesConocimientosJSON,
+      requisitos,
+      ofrecemos,
+      funciones_generales: funcionesGenerales,
+      habilidades_conocimientos: habilidadesConocimientos,
     });
-
-    console.log(response.data);
-    const trimmedData = response.data.trim();
-    console.log(trimmedData);
-
     // Manejar la respuesta del servidor
     estado = response.data;
     } catch (error) {
@@ -64,7 +54,7 @@ const enviarFormulario = async () => {
   let tienePuestos;
   let rsPuestos;
   const puestos = async () => {
-    const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/getPuestosData.php');
+    const res = await axios.post(Lugar.backend+'getPuestosData.php');
     const data = JSON.parse(res.data.d);
     tienePuestos = data.tienePuestos;
     if (tienePuestos == true ) {
@@ -92,8 +82,8 @@ const enviarFormulario = async () => {
                      <tbody>
                          <tr>
                              <td>{puesto.titulo}</td>
-                             <td>{puesto.fecha_limite}</td>
                              <td>{puesto.lugar}</td>
+                             <td>{puesto.fecha_limite}</td>
                              <td>
                                  <button class="btn btn-info">Editar</button>
                                  <button class="btn btn-info">Eliminar</button>
@@ -143,7 +133,7 @@ const enviarFormulario = async () => {
                         
                             <label>
                             Ofrecemos:
-                            {#each ofertas as oferta, index (index)}
+                            <!-- {#each ofertas as oferta, index (index)}
                                 <div class="input-group mb-3">
                                 <input type="text" class="form-control" bind:value={oferta} placeholder="Nueva oferta" />
                                 <button class="btn btn-outline-secondary" type="button" on:click={() => eliminarOferta(index)}>-</button>
@@ -151,7 +141,8 @@ const enviarFormulario = async () => {
                                     <button class="btn btn-outline-secondary" type="button" on:click={agregarOferta}>+</button>
                                 {/if}
                                 </div>
-                            {/each}
+                            {/each} -->
+                            <input bind:value={ofrecemos} type="text" required />
                             </label>
                         
                             <label>

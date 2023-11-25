@@ -1,5 +1,8 @@
 <script>
 import axios from "axios";
+import Lugar from "../Lugares";
+
+
 
 let estado = null;
 let titulo= ''
@@ -19,7 +22,7 @@ const enviarFormulario = async () => {
     const funcionesGeneralesJSON = JSON.stringify(funcionesGenerales);
     const habilidadesConocimientosJSON = JSON.stringify(habilidadesConocimientos);
 
-    const response = await axios.post("http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/registrarPuesto.php", {
+    const response = await axios.post(Lugar.backend+"registrarPuesto.php", {
       titulo,
       descripcion,
       fecha_limite,
@@ -28,6 +31,10 @@ const enviarFormulario = async () => {
       ofrecemos: ofrecemosJSON,
       funciones_generales: funcionesGeneralesJSON,
       habilidades_conocimientos: habilidadesConocimientosJSON,
+      // requisitos,
+      // ofrecemos,
+      // funciones_generales: funcionesGenerales,
+      // habilidades_conocimientos: habilidadesConocimientos,
     });
 
     console.log(response.data);

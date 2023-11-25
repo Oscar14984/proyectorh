@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import Lugar from '../Lugares';
 import {link, push} from 'svelte-spa-router' 
 import Swal from 'sweetalert2'
 
@@ -13,7 +14,7 @@ let lookPass = false
 
 async function iniciarSesion() {
     try {
-      const response = await axios.post("http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/logInUser.php", {
+      const response = await axios.post(Lugar.backend+"logInUser.php", {
         correo,
         contrasena,
       });
