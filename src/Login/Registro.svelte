@@ -1,6 +1,9 @@
 <script>
+// @ts-nocheck
+
   //librerias
 import axios from "axios";
+import Lugar from "../Lugares";
 import Swal from 'sweetalert2'
 
 //Componentes
@@ -46,7 +49,7 @@ const validarContrasena = (contrasena) => {
             // contraValidada = false
         }
 };
-//PAra validar en correo
+//Para validar en correo
 const validarCorreo = (string) => {
     let out = '';
     let filtro = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_@.-';
@@ -121,7 +124,7 @@ if(contrasena !== confirmarContrasena){
 };
 spinner = true;
   try {
-    const response = await axios.post("http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/sigInUser.php", {
+    const response = await axios.post(Lugar.backend+"sigInUser.php", {
       nombre,
       apellido_paterno,
       apellido_materno,
@@ -201,9 +204,9 @@ spinner = true;
           <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" on:click={()=> (verContra = !verContra)}><i class={verContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
             {#if !verContra}
-                <input type="password" class="form-control" bind:value={contrasena} on:input={validarContrasena} placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control" bind:value={contrasena}  pattern="^(?=.*[0-9](?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16})$" placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
-                <input type="text" class="form-control" bind:value={contrasena} on:input={validarContrasena} placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="text" class="form-control" bind:value={contrasena} pattern="^(?=.*[0-9](?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16})$" placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
 

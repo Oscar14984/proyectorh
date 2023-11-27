@@ -1,11 +1,14 @@
 <script>
+	import { push } from 'svelte-spa-router';
     import axios from 'axios'
     import Lugar from '../Lugares';
+import Modal from '../Componentes/Modal.svelte'
+    
 
-    let ofrecemos = ['Oferta inicial'];
-    let requisitos = ['Requisito inicial'];
-    let funcionesGenerales = ['Función general inicial'];
-    let habilidadesConocimientos = ['Habilidad/conocimiento inicial'];
+let ofrecemos = ['Oferta inicial'];
+let requisitos = ['Requisito inicial'];
+let funcionesGenerales = ['Función general inicial'];
+let habilidadesConocimientos = ['Habilidad/conocimiento inicial'];
 
 const agregarOferta = () =>{
   ofrecemos = [...ofrecemos, ''];
@@ -85,7 +88,7 @@ const enviarFormulario = async () => {
   let tienePuestos;
   let rsPuestos;
   const puestos = async () => {
-    const res = await axios.post(Lugar.backend+'getPuestosData.php');
+    const res = await axios.post(Lugar.backend+'getPuestosDataPrueba.php');
     const data = JSON.parse(res.data.d);
     tienePuestos = data.tienePuestos;
     if (tienePuestos == true ) {
@@ -95,10 +98,27 @@ const enviarFormulario = async () => {
     }
   };
   puestos();
+  //push a inicio
+  const inicio = () =>{
+    push('/InicioAdmin')
+  }
+//modal para ediar
+let openModal = false;
+let cargo = null;
+const modalOpen = async (data) => {
+    openModal = false;
+};
+
+const editar = () =>{
+
+}
 </script>
 
 <main>
     <div class="container">
+      <div class="boton-inicio">
+        <button class="btn btn-success" on:click={inicio}>Inicio</button>
+      </div>
         <table class="table table-hover">
             <thead>
               <tr>
@@ -116,7 +136,7 @@ const enviarFormulario = async () => {
                              <td>{puesto.lugar}</td>
                              <td>{puesto.fecha_limite}</td>
                              <td>
-                                 <button class="btn btn-info">Editar</button>
+                                 <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
                                  <button class="btn btn-info">Eliminar</button>
                              </td>
                          </tr>
@@ -228,6 +248,18 @@ const enviarFormulario = async () => {
             </div>
         </div>
     </div>
+    {#if openModal == true}
+      <Modal
+      open={openModal}
+      onClosed={(data) => modalOpen(data)}
+      modalSize="modal-xl"
+      title=" Editar puesto :"
+      saveButtonText="Editar"
+      closeButtonText="Cerrar"
+      >
+
+      </Modal>
+    {/if}
 </main>
 
 <style>

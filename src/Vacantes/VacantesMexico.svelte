@@ -7,7 +7,7 @@
   let rsPuestos;
 
   const puestos = async () => {
-    const res = await axios.post(Lugar.backend+'getPuestosData.php');
+    const res = await axios.post(Lugar.backend+'getPuestosDataPrueba.php');
     const data = JSON.parse(res.data.d);
     tienePuestos = data.tienePuestos;
     if (tienePuestos == true ) {

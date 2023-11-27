@@ -1,22 +1,26 @@
 <?php
     require_once "accesos.php";
     require_once "classGetPostInDataBase.php";
-    require_once "classInsertInDropBox.php";
-    $insertarEnDropBox = new classInsertInDropBox();
-    $insertarEnBaseDatos = new classGetPostInDataBase();
-    if(!empty($_FILES)){
-        $dataDocument = json_decode(file_get_contents("php://input"), true);
-        $locDocumentDropBox = $_FILES['file']['tmp_name'];
-        $documentName = $_FILES['file']['name'];
-        $documentExten = explode(".",$documentName);
-        $documentExten = end($documentExten);
-        $idUsuario = $_POST["idUsuario"];
-        $values = array($idUsuario,$documentExten,"documento_cv_usuario_".$idUsuario.".".$documentExten,"/documentos/documento_cv_usuario_".$idUsuario.".".$documentExten,"inicial");
-        $queryInsertDocuments = "INSERT INTO Documentos(id_usuario,mime,file_name,localidad,fase) VALUES (?,?,?,?,?)";
-        $insertarEnBaseDatos->consulta_ca($queryInsertDocuments,$values);
-        $insertarEnDropBox->post(dirname($locDocumentDropBox),basename($locDocumentDropBox),"/documentos","documento_cv_usuario_".$idUsuario.".".$documentExten);
-        $_POST["estado"] = true;
-    }else{
+    $insertInDataBase = new classGetPostInDataBase();
+    $jsonAdminoData = json_decode(file_get_contents("php://input"), true);
+
+    $queryInsertAdmin = "INSERT INTO AdminUsuario(nombre,apellido_paterno,apellido_materno,correo,numero,contrasena,foto) VALUES (?,?,?,?,?,?,?)";
+    $nombre = $jsonAdminoData["nombre"];
+    $apellido_paterno = $jsonAdminoData["apellido_paterno"];
+    $apellido_materno = $jsonAdminoData["apellido_materno"];
+    $correo = $jsonAdminoData["correo"];
+    $numero = $jsonAdminoData["numero"];
+    $contrasena = $jsonAdminoData["contrasena"];
+    $contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+    $foto = "/fotos_perfiles/foto_general_perfil.jpg";
+    $queryCheck = "SELECT * FROM AdminUsuario us WHERE us.correo = '".$correo."'";
+    $correoRepCon = $insertarEnBaseDatos->consulta_sa($queryCheck);
+    if ($correoRepCon->num_rows > 0) {
+        echo "repetido";
         $_POST["estado"] = false;
+    }else{
+        $values = array($nombre,$apellido_paterno,$apellido_materno,$correo,$numero,$contrasena,$foto);
+        $insertInDataBase->consulta_ca($queryInsertAdmin,$values);
+        $_POST["estado"] = true;
     }
 ?>

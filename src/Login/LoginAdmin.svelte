@@ -14,7 +14,7 @@ let lookPass = false
 
 async function iniciarSesion() {
     try {
-      const response = await axios.post(Lugar.backend+"logInUser.php", {
+      const response = await axios.post(Lugar.backend+"logInAdmin.php", {
         correo,
         contrasena,
       });

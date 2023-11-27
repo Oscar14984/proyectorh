@@ -1,11 +1,16 @@
 <script>
- import axios from "axios";
+import { push } from 'svelte-spa-router';
+import axios from "axios";
+import Lugar from '../Lugares';
+import Inicio from '../UsuarioFinal/Inicio.svelte';
+
+
  //postulados
 let tieneUsuarios;
 let rsUsuarios;
 
 const cargarUsuarios = async () => {
-    const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/getUsuarios.php');
+    const res = await axios.post(Lugar.backend+'getUsuarios.php');
     const data = JSON.parse(res.data.d);
     tieneUsuarios = data.tieneUsuarios;
     if (tieneUsuarios == true ) {
@@ -47,10 +52,17 @@ let maxRegsPP = 10
         registroInicial = (paginaActual * maxRegsPP) - (maxRegsPP - 1)
         registroFinal = paginaActual * maxRegsPP
     }
+    //boton para ir a inicio
+    const inicio = () =>{
+        push('/InicioAdmin')
+    }
 </script>
 
 <main>
 <div class="container">
+    <div class="boton-inicio">
+        <button class="btn btn-success" on:click={inicio}>Inicio</button>
+    </div>
     <table class="table table-hover" >
         <thead>
           <tr>

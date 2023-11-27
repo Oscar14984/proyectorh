@@ -1,4 +1,5 @@
 <script>
+	import { push } from 'svelte-spa-router';
   import axios from "axios";
   import Lugar from "../Lugares";
   import { onMount } from 'svelte';
@@ -7,34 +8,44 @@
   let rsPuestos;
 
   const getPuestos = async () => {
-    try {
-      const res = await axios.post(Lugar.backend + 'getPuestosDataPrueba.php');
-      const data = res.data;
+  try {
+    const res = await axios.post(Lugar.backend + 'getPuestosData.php');
+    const data = res.data;
 
-      tienePuestos = data.length > 0;
-      if (tienePuestos) {
-        // Ensure rsPuestos is an array of objects
-        rsPuestos = data.map(puesto => ({
+    if (Array.isArray(data) && data.length > 0) {
+      rsPuestos = data.map((/** @type {{ id_puesto: any; titulo: any; descripcion: any; fecha_limite: any; lugar: any; requisitos: string; ofrecemos: string; funcionesGenerales: string; habilidadesConocimientos: string; }} */ puesto) => {
+        return {
           id_puesto: puesto.id_puesto,
           titulo: puesto.titulo,
           descripcion: puesto.descripcion,
           fecha_limite: puesto.fecha_limite,
           lugar: puesto.lugar,
-          requisitos: JSON.parse(puesto.requisitos),
-          ofrecemos: JSON.parse(puesto.ofrecemos),
-          funciones_generales: JSON.parse(puesto.funcionesGenerales),
-          habilidades_conocimientos: JSON.parse(puesto.habilidadesConocimientos),
-        }));
-      } else {
-        rsPuestos = [];
-      }
-    } catch (error) {
-      console.error("Error al obtener los puestos:", error);
+          // requisitos: puesto.requisitos,
+          // ofrecemos: puesto.ofrecemos,
+          // funciones_generales: puesto.funcionesGenerales,
+          // habilidades_conocimientos: puesto.habilidadesConocimientos,
+        };
+      });
+    } else {
+      rsPuestos = [];
     }
-  };
+  } catch (error) {
+    console.error("Error al obtener los puestos:", error);
+    throw new Error("Error al obtener los puestos");
+  }
+};
 
-  onMount(() => {
+
+
+// let puestos = [];
+  onMount( async() => {
     getPuestos();
+    // try {
+    //   const response = await axios.post(Lugar.backend + 'getPuestosData.php');
+    //   puestos = response.data;
+    // } catch (error) {
+    //   console.error('Error data:', error);
+    // }
   });
 </script>
 
@@ -44,48 +55,48 @@
   </div>
   <div class="container">
     {#if tienePuestos}
-      {#each rsPuestos as vacante (vacante.id_puesto)}
+      {#each rsPuestos as puesto (puesto.id_puesto) }
       <div class="card mt-3">
         <div class="card-body">
-          <h5 class="card-title">{vacante.titulo}</h5>
-          <p class="card-text"><strong>Descripción:</strong> {vacante.descripcion}</p>
-          <p class="card-text"><strong>Fecha Límite:</strong> {vacante.fecha_limite}</p>
-          <p class="card-text"><strong>Lugar:</strong> {vacante.lugar}
+          <h5 class="card-title">{puesto.titulo}</h5>
+          <p class="card-text"><strong>Descripción:</strong> {puesto.descripcion}</p>
+          <p class="card-text"><strong>Fecha Límite:</strong> {puesto.fecha_limite}</p>
+          <p class="card-text"><strong>Lugar:</strong> {puesto.lugar}
 
           <h6 class="card-subtitle mt-3 mb-2 text-muted">Requisitos:</h6>
           <ul class="list-group">
-            {#if vacante.requisitos && vacante.requisitos.length > 0}
-            {#each vacante.requisitos.filter(Boolean) as requisito}
-                <li class="list-group-item">{requisito}</li>
-            {/each}
-            {/if}
+            <!-- {#if puesto.requisitos && puesto.requisitos.length > 0}
+            {#each puesto.requisitos as requisito} -->
+                <li class="list-group-item">{puesto.requisito}</li>
+            <!-- {/each}
+            {/if} -->
           </ul>
 
           <h6 class="card-subtitle mt-3 mb-2 text-muted">Ofrecemos:</h6>
           <ul class="list-group">
-            {#if vacante.ofrecemos && vacante.ofrecemos.length > 0}
-            {#each vacante.ofrecemos.filter(Boolean) as ofrecemo}
-              <li class="list-group-item">{ofrecemo}</li>
-            {/each}
-            {/if}
+            <!-- {#if puesto.ofrecemos && puesto.ofrecemos.length > 0}
+            {#each puesto.ofrecemos as ofrecemo} -->
+              <li class="list-group-item">{puesto.ofrecemos}</li>
+            <!-- {/each}
+            {/if} -->
           </ul>
 
           <h6 class="card-subtitle mt-3 mb-2 text-muted">Funciones Generales:</h6>
           <ul class="list-group">
-            {#if vacante.funciones_generales && vacante.funciones_generales.length > 0}
-            {#each vacante.funciones_generales.filter(Boolean) as funcionGeneral}
-              <li class="list-group-item">{funcionGeneral}</li>
-            {/each}
-            {/if}
+            <!-- {#if puesto.funciones_generales && puesto.funciones_generales.length > 0}
+            {#each puesto.funciones_generales as funcionGeneral} -->
+              <li class="list-group-item">{puesto.funcionGeneral}</li>
+            <!-- {/each}
+            {/if} -->
           </ul>
 
           <h6 class="card-subtitle mt-3 mb-2 text-muted">Habilidades y Conocimientos:</h6>
           <ul class="list-group">
-            {#if vacante.habilidades_conocimientos && vacante.habilidades_conocimientos.length > 0}
-            {#each vacante.habilidades_conocimientos.filter(Boolean) as habilidadConocimiento}
-              <li class="list-group-item">{habilidadConocimiento}</li>
-            {/each}
-            {/if}
+            <!-- {#if puesto.habilidades_conocimientos && puesto.habilidades_conocimientos.length > 0}
+            {#each puesto.habilidades_conocimientos as habilidadConocimiento} -->
+              <li class="list-group-item">{puesto.habilidadConocimiento}</li>
+            <!-- {/each}
+            {/if} -->
           </ul>
         </div>
       </div>
