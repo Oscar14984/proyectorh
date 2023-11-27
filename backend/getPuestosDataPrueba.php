@@ -1,74 +1,66 @@
 <?php
-require_once "accesos.php";
-require_once "classGetPostInDataBase.php";
+    require_once "accesos.php";
+    require_once "classGetPostInDataBase.php";
 
-// Crear una instancia de la clase para acceder a la base de datos
-$getFromDataBase = new classGetPostInDataBase();
+    $queryGetPustosData = "SELECT * FROM Puestos";
+    $insertarEnBaseDatos = new classGetPostInDataBase();
+    $getPuestosData = $insertarEnBaseDatos->consulta_sa($queryGetPustosData);
 
-try {
-    // Consulta para obtener todos los puestos con sus detalles
-    $queryGetPuestos = "SELECT p.id_puesto, p.titulo, p.descripcion, p.fecha_limite, p.lugar,
-                               r.descripcion as requisito,
-                               o.descripcion as ofrecemos,
-                               fg.descripcion as funcion_general,
-                               hc.descripcion as habilidad_conocimiento
-                        FROM Puestos p
-                        LEFT JOIN Requisitos r ON p.id_puesto = r.id_puesto
-                        LEFT JOIN Ofrecemos o ON p.id_puesto = o.id_puesto
-                        LEFT JOIN FuncionesGenerales fg ON p.id_puesto = fg.id_puesto
-                        LEFT JOIN HabilidadesConocimientos hc ON p.id_puesto = hc.id_puesto";
+    $jsonDataPuestos = array();
 
-    $result = $getFromDataBase->consulta_ca($queryGetPuestos);
-
-    // Verificar si se obtuvieron resultados
-    if ($result->num_rows > 0) {
-        // Crear un array para almacenar los datos de los puestos
-        $puestos = array();
-
-        // Recorrer los resultados y almacenarlos en el array
-        while ($row = $result->fetch_assoc()) {
-            $puestoId = $row["id_puesto"];
-
-            // Verificar si ya existe el puesto en el array principal
-            if (!isset($puestos[$puestoId])) {
-                $puestos[$puestoId] = array(
-                    "id_puesto" => $puestoId,
-                    "titulo" => $row["titulo"],
-                    "descripcion" => $row["descripcion"],
-                    "fecha_limite" => $row["fecha_limite"],
-                    "lugar" => $row["lugar"],
-                    "requisitos" => array(),
-                    "ofrecemos" => array(),
-                    "funciones_generales" => array(),
-                    "habilidades_conocimientos" => array()
-                );
+    if ($getPuestosData->num_rows > 0) {
+        while($row = $getPuestosData->fetch_assoc()) {
+            //Requisitos
+            $queryRequisitos = "SELECT * FROM Requisitos re WHERE re.id_puesto = ?";
+            $values = array((int)$row["id_puesto"]);
+            $result = $insertarEnBaseDatos->consulta_ca($queryRequisitos,$values);
+            $arrayRequisitos = array();
+            while($row = $result->fetch_assoc()){
+                array_push($arrayRequisitos,json_encode(array("id"=>$row["id"],"linea"=>$row["descripcion"])));
             }
-
-            // Agregar detalles al array del puesto
-            if (!empty($row["requisito"])) {
-                $puestos[$puestoId]["requisitos"][] = $row["requisito"];
+            //Ofrecemos
+            $queryOfrecemos = "SELECT * FROM Ofrecemos of WHERE of.id_puesto = ?";
+            $values = array((int)$row["id_puesto"]);
+            $result = $insertarEnBaseDatos->consulta_ca($queryOfrecemos,$values);
+            $arrayOfrecemos= array();
+            while($row = $result->fetch_assoc()){
+                array_push($arrayOfrecemos,json_encode(array("id"=>$row["id"],"linea"=>$row["descripcion"])));
             }
-            if (!empty($row["ofrecemos"])) {
-                $puestos[$puestoId]["ofrecemos"][] = $row["ofrecemos"];
+            //FuncionesGenerales
+            $queryFuncionesGenerales = "SELECT * FROM FuncionesGenerales fg WHERE fg.id_puesto = ?";
+            $values = array((int)$row["id_puesto"]);
+            $result = $insertarEnBaseDatos->consulta_ca($queryFuncionesGenerales,$values);
+            $arrayFuncionesGenerales = array();
+            while($row = $result->fetch_assoc()){
+                array_push($arrayFuncionesGenerales,json_encode(array("id"=>$row["id"],"linea"=>$row["descripcion"])));
             }
-            if (!empty($row["funcion_general"])) {
-                $puestos[$puestoId]["funciones_generales"][] = $row["funcion_general"];
+            //HabilidadesConocimientos
+            $queryHabilidadesConocimientos = "SELECT * FROM HabilidadesConocimientos hc WHERE hc.id_puesto = ?";
+            $values = array((int)$row["id_puesto"]);
+            $result = $insertarEnBaseDatos->consulta_ca($queryHabilidadesConocimientos,$values);
+            $arrayHabilidadesGenerales = array();
+            while($row = $result->fetch_assoc()){
+                array_push($arrayHabilidadesGenerales,json_encode(array("id"=>$row["id"],"linea"=>$row["descripcion"])));
             }
-            if (!empty($row["habilidad_conocimiento"])) {
-                $puestos[$puestoId]["habilidades_conocimientos"][] = $row["habilidad_conocimiento"];
-            }
+            $jsonPuesto= array("id_puesto" => $row["id_puesto"],
+                            "titulo" => $row["titulo"],
+                            "descripcion" => $row["descripcion"],
+                            "fecha_limite" => $row["fecha_limite"],
+                            "lugar" => $row["lugar"],
+                            "requisitos" => json_encode($arrayRequisitos),
+                            "ofrecemos" => json_encode($arrayOfrecemos),
+                            "funcionesGenerales" => json_encode($arrayFuncionesGenerales),
+                            "habilidadesConocimientos" => json_encode($arrayHabilidadesGenerales));
+            $jsonPuesto = json_encode($jsonPuesto);
+            array_unshift($jsonDataPuestos,$jsonPuesto);
+            //array_push($jsonDataPuestos,array($row["id_puesto"],$row["titulo"],$row["descripcion"],$row["fecha_limite"],$row["lugar"],array("requisitos",$arrayRequisitos),array("ofrecemos",$arrayOfrecemos),array("funcionesGenerales",$arrayFuncionesGenerales)));
         }
 
-        // Convertir el array a formato JSON y mostrarlo
-        echo json_encode(array_values($puestos)); // Usar array_values para reiniciar los índices numéricos
-    } else {
-        echo "No se encontraron puestos.";
+        $jsonSalida = json_encode($jsonDataPuestos);
+        $_POST["dataPuestos"] = $jsonSalida;
+    }else{
+        //En caso de tener una respuesta incorrecta tiramos todo
+        $_POST["dataPuestos"] = false;
     }
-} catch (Exception $e) {
-    // Manejar la excepción si ocurre algún error
-    echo "Error al obtener los puestos: " . $e->getMessage();
-} finally {
-    // Desconectar la base de datos
-    $getFromDataBase->dbDisconnect();
-}
+    $insertarEnBaseDatos->dbDisconnect();
 ?>
