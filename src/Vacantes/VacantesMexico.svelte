@@ -1,12 +1,13 @@
 <script>
     import axios from "axios";
+    import Lugar from "../Lugares";
     import { onMount } from 'svelte';
 
   let tienePuestos;
   let rsPuestos;
 
   const puestos = async () => {
-    const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/getPuestosData.php');
+    const res = await axios.post(Lugar.backend+'getPuestosData.php');
     const data = JSON.parse(res.data.d);
     tienePuestos = data.tienePuestos;
     if (tienePuestos == true ) {

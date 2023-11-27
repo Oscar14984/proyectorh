@@ -111,7 +111,12 @@ function handleFileChange(event) {
     }
   }
 };
+//barra
+let pasoActual = 1;
 
+  function cambiarPaso(paso) {
+    pasoActual = paso;
+  }
 </script>
 
 <main>
@@ -148,16 +153,55 @@ function handleFileChange(event) {
         </div>
       </div> <!--Fin de la carta-->
       
-
-      <div>
+      <div class="container">
         <h1 class="pendientes text-info" style="margin-top: 4%; margin-left: 10%; ">Pendientes</h1>
-        <!-- para subir videos -->
+        <!-- Barra de progreso -->
+        <div class="d-flex justify-content-between">
+          {#each [1, 2, 3, 4, 5, 6, 7, 8] as numero (numero)}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div class={`circulo ${numero <= pasoActual ? 'activo' : ''}`} on:click={() => cambiarPaso(numero)}>
+              {numero}
+            </div>
+          {/each}
+        </div>
+      
+        <!-- Contenido según el paso actual -->
+        {#if pasoActual === 1}
+          <div>
+            <h2>Paso 1: Subir Video y Documento</h2>
+            <!--  formulario para subir video y documento -->
+            <div class="grid-container">
+              <!-- para subir videos -->
+              <input type="file" id="file-input" name="video" accept="video/*"  on:change={handleFileChange}>
+              <button class="btn btn-success" on:click={subirVideo}>Subir video</button>
+              <!-- para subir documentos -->
+              <input type="file" id="file-input" name="cv" accept="application/pdf" on:change={handleFileChange}>
+              <button class="btn btn-success" on:click={subirDocumento}>Subir CV</button>
+            </div>
+          </div>
+        {/if}
+      
+        {#if pasoActual === 2}
+          <div>
+            <h2>Paso 2: Descripción Personal</h2>
+            <!-- Aquí colocar el formulario para la descripción personal -->
+          </div>
+        {/if}
+      
+        <!-- Repite lo mismo para los demás pasos -->
+      
+      </div>
+
+      <!-- <div>
+        <h1 class="pendientes text-info" style="margin-top: 4%; margin-left: 10%; ">Pendientes</h1>
+        para subir videos
         <input type="file" id="file-input" name="video" accept="video/*"  on:change={handleFileChange}>
         <button class="btn btn-success" on:click={subirVideo}>Subir video</button>
-        <!-- para subir documentos -->
+        para subir documentos
         <input type="file" id="file-input" name="cv" accept="application/pdf" on:change={handleFileChange}>
         <button class="btn btn-success" on:click={subirDocumento}>Subir CV</button>
-      </div>
+      </div> -->
 </main>
 
 <style>
@@ -210,4 +254,28 @@ function handleFileChange(event) {
     margin-left: 30%;
   }
 }
+/* para la barra */
+.circulo {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+  }
+
+  .activo {
+    background-color: #007bff;
+  }
+
+  .grid-container{
+    display: grid;
+    
+    grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+    gap: 1rem;
+  }
+ 
 </style>
