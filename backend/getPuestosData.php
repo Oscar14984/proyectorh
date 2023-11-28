@@ -58,7 +58,6 @@
         }
 
         $jsonSalida = ($jsonDataPuestos);
-        // echo var_dump($jsonSalida);
         // echo "<script>console.log('Esta es la info de la data Puesto:', " . json_encode($jsonSalida) . ");</script>";
         $response['d']=json_encode(array("jsonSalida"=>$jsonSalida));
         echo json_encode($response);
