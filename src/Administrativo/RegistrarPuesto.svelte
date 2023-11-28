@@ -290,7 +290,7 @@ const eliminarPuesto = async (id_puestoT) =>{
       saveButtonText="Editar"
       closeButtonText="Cerrar"
       >
-
+     
       </Modal>
     {/if}
 </main>
