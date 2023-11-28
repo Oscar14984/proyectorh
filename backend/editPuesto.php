@@ -3,6 +3,7 @@
     require_once "classGetPostInDataBase.php";
     $insertarEnBaseDatos = new classGetPostInDataBase();
 
+    $queryUpdatePuesto = "UPDATE Puestos pu SET pu.titulo = ?, pu.descripcion = ?, fecha_limite = ?, pu.lugar = ? WHERE pu.id_puesto = ?";
     $queryUpdateRequisitosGenerales = "UPDATE Requisitos re SET re.descripcion = ? WHERE re.id = ?";
     $queryUpdateOfrecemos = "UPDATE Ofrecemos of SET of.descripcion = ? WHERE of.id = ?";
     $queryUpdateFuncionesGenerales = "UPDATE FuncionesGenerales fg SET fg.descripcion = ? WHERE fg.id = ?";
@@ -10,13 +11,19 @@
 
     $dataDocument = json_decode(file_get_contents("php://input"), true);
 
-    $requisitos = json_decode($dataDocument["requisitos"]);
-    $ofrecemos = json_decode($dataDocument["ofrecemos"]);
-    $funcionesGenerales = json_decode($dataDocument["funciones_generales"]);
-    $habilidadesConocimientos = json_decode($dataDocument["habilidades_conocimientos"]);
+    $titulo = $dataDocument["titulo"];
+    $descripcion = $dataDocument["descripcion"];
+    $fechaLimite = $dataDocument["fecha_limite"];
+    $lugar = $dataDocument["lugar"];
+    $idPuesto = $dataDocument["id_puesto"];
+    $requisitos = $dataDocument["requisitos"];
+    $ofrecemos = $dataDocument["ofrecemos"];
+    $funcionesGenerales = $dataDocument["funciones_generales"];
+    $habilidadesConocimientos = ($dataDocument["habilidades_conocimientos"]);
+    $values = array($titulo,$descripcion,$fecha_limite,$lugar,(int)$idPuesto);
+    $insertarEnBaseDatos->consulta_ca($queryUpdatePuesto,$values);
 
     foreach ($requisitos as $requisito) {
-        $requisito = json_decode($requisito);
         $id = $requisito["id"];
         $req = $requisito["linea"];
         $valuesRequisito = array($req,$id);
@@ -24,7 +31,6 @@
     }
 
     foreach ($ofrecemos as $ofrece) {
-        $ofrece = json_decode($ofrece);
         $id = $ofrece["id"];
         $ofer = $ofrece["linea"];
         $valuesOferta = array($ofer,$id);
@@ -32,7 +38,6 @@
     }
 
     foreach ($funcionesGenerales as $funcion) {
-        $funcionesGenerales = json_decode($funcion);
         $id = $funcion["id"];
         $fun = $funcion["linea"];
         $valuesRequisito = array($fun,$id);
@@ -40,10 +45,10 @@
     }
 
     foreach ($habilidadesConocimientos as $habCon) {
-        $habCon = json_decode($habCon);
         $id = $habCon["id"];
         $hab = $habCon["linea"];
         $valuesRequisito = array($hab,$id);
         $insertInDataBase->consulta_ca($queryUpdateHabilidadesConocimientos,$valuesRequisito);
     }
+    $insertarEnBaseDatos->dbDisconnect();
 ?>

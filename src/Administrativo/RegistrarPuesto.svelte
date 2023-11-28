@@ -89,15 +89,18 @@ const enviarFormulario = async () => {
 //para ver los puestos
   let tienePuestos;
   let rsPuestos;
+  let jsonSalida = []
   const puestos = async () => {
-    const res = await axios.post(Lugar.backend+'getPuestosDataPrueba.php');
+    try {
+    const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
-    tienePuestos = data.tienePuestos;
-    if (tienePuestos == true ) {
-      rsPuestos = Object.values(data.rsPuestos);
-    } else {
-      rsPuestos = "";
-    }
+    // if(tienePuestos){
+      jsonSalida = Object.values(data.jsonSalida);
+      console.log(jsonSalida)
+    // } 
+  } catch (error) {
+    
+  }
   };
   puestos();
   //push a inicio
@@ -118,7 +121,7 @@ const editar = () =>{
 let id_puesto = 0
 const eliminarPuesto = async (id_puestoT) =>{
   try {
-    const res = await axios.post(Lugar.backend + 'EliminarPuesto.php',{
+    const res = await axios.post(Lugar.backend + 'deletePuesto.php',{
       id_puesto: id_puestoT,
     })
     puestos();
@@ -139,16 +142,32 @@ const eliminarPuesto = async (id_puestoT) =>{
                 <th scope="col">Titulo</th>
                 <th scope="col">Lugar</th>
                 <th scope="col">Fecha limite</th>
+                <th scope="col">Requisitos</th>
+                <th scope="col">Ofrecemos</th>
+                <th scope="col">Habilidades Conociminetos</th>
+                <th scope="col">Funciones generales</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            {#if tienePuestos}
-                 {#each rsPuestos as puesto,i}
+            
+                 {#each jsonSalida as puesto,i}
                      <tbody>
                          <tr>
                              <td>{puesto.titulo}</td>
                              <td>{puesto.lugar}</td>
                              <td>{puesto.fecha_limite}</td>
+                             {#each puesto.requisitos as requisito}
+                               <td>{requisito.linea}</td>
+                             {/each}
+                             {#each puesto.ofrecemos as ofrecemo}
+                               <td>{ofrecemo.linea}</td>
+                             {/each}
+                             {#each puesto.funcionesGenerales as funcionesGenerale}
+                               <td>{funcionesGenerale.linea}</td>
+                             {/each}
+                             {#each puesto.habilidadesConocimientos as habilidadesConocimiento}
+                               <td>{habilidadesConocimiento.linea}</td>
+                             {/each}
                              <td>
                                  <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
                                  <button class="btn btn-info" on:click={eliminarPuesto(puesto.id_puesto)}>Eliminar</button>
@@ -156,7 +175,7 @@ const eliminarPuesto = async (id_puestoT) =>{
                          </tr>
                      </tbody>
                  {/each}
-            {/if}
+            
           </table>
     </div>
 
