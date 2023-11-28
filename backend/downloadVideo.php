@@ -3,28 +3,24 @@
     require_once "classGetPostInDataBase.php";
     require_once "classInsertInDropBox.php";
     $jsonDataVideo = json_decode(file_get_contents("php://input"), true);
-    $id_usuario = $jsonDataVideo["id_usuario"];
-    $fase = $jsonDataVideo["fase"];
-    $localVideoPath = $jsonDataVideo["localVideoPath"];
-
-    $queryGetVideo = "SELECT * FROM Videos vid WHERE vid.id_usuario = ? AND vid.fase";
-    $valuesGetVideo = array($id_usuario,$fase);
-
     $insertarEnBaseDatos = new classGetPostInDataBase();
     $insertarEnDropBox = new classInsertInDropBox();
+    $idVideo = (int)$jsonDataVideo["id_video"];
 
-    $dataVideo = $insertarEnBaseDatos->consulta_ca($valuesGetVideo);
-
-    $dataVideoArray = array();
-
-    if ($dataVideo->num_rows > 0) {
-        while($row = $dataVideo->fetch_assoc()) {
-            array_push($dataVideoArray,array($row["id_usuario"],$row["mime"],$row["file_name"],$row["localidad"],$row["fase"]));
-        }
-    }else{
-        //En caso de tener una respuesta incorrecta tiramos todo
-        die("Usuario no registrado");
+    $queryDownloadVideo = "SELECT * FROM Videos vid WHERE vid.id_video = ?";
+    $values = array($idVideo);
+    $videoInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadVideo,$values);
+    $infoVideos = array();
+    while($row = $videoInformation->fetch_assoc()){
+        array_push($infoVideos,json_decode(array("id_video"=>$row["id_video"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
     }
-    $dataVideoArray = $dataVideoArray[0];
-    $insertarEnDropBox->download($dataVideoArray[3],$localVideoPath);
+    $filename = pathinfo($infoVideos[0]["localidad"], PATHINFO_FILENAME);
+    $temp = tempnam(sys_get_temp_dir(), $filename);
+    $infoVideo = $infoVideos[0];
+    $pathVideo = $infoVideo["localidad"];
+    $file = $insertarEnDropBox->download($pathVideo);
+    $contents = $file->getContents();
+    file_put_contents($temp, $contents);
+    $_POST["video_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    $insertarEnBaseDatos->dbDisconnect();
 ?>

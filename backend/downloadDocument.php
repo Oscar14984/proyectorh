@@ -2,29 +2,25 @@
     require_once "accesos.php";
     require_once "classGetPostInDataBase.php";
     require_once "classInsertInDropBox.php";
-    $jsonDataDocument= json_decode(file_get_contents("php://input"), true);
-    $id_usuario = $jsonDataDocument["id_usuario"];
-    $fase = $jsonDataDocument["fase"];
-    $localDocumentPath = $jsonDataDocument["localDOcumentPath"];
-
-    $queryGetDocument = "SELECT * FROM Documentos doc WHERE doc.id_usuario = ? AND doc.fase";
-    $valuesGetDocument = array($id_usuario,$fase);
-
+    $jsonDataDocument = json_decode(file_get_contents("php://input"), true);
     $insertarEnBaseDatos = new classGetPostInDataBase();
     $insertarEnDropBox = new classInsertInDropBox();
+    $idDocument = (int)$jsonDataDocument["id_documento"];
 
-    $dataDocumento = $insertarEnBaseDatos->consulta_ca($valuesGetDocument);
-
-    $dataDocumentArray = array();
-
-    if ($dataDocumento->num_rows > 0) {
-        while($row = $dataDocumento->fetch_assoc()) {
-            array_push($dataDocumentArray,array($row["id_usuario"],$row["mime"],$row["file_name"],$row["localidad"],$row["fase"]));
-        }
-    }else{
-        //En caso de tener una respuesta incorrecta tiramos todo
-        die("Usuario no registrado");
+    $queryDownloadDocument = "SELECT * FROM Documentos doc WHERE doc.id_doc = ?";
+    $values = array($idDocument);
+    $documentInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadDocument,$values);
+    $infoDocument = array();
+    while($row = $documentInformation->fetch_assoc()){
+        array_push($infoDocument,json_decode(array("id_doc"=>$row["id_doc"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
     }
-    $dataDocumentArray = $dataDocumentArray[0];
-    $insertarEnDropBox->download($dataDocumentArray[3],$localDocumentPath);
+    $filename = pathinfo($infoDocument[0]["localidad"], PATHINFO_FILENAME);
+    $temp = tempnam(sys_get_temp_dir(), $filename);
+    $infoDocument = $infoDocument[0];
+    $pathDocument = $infoDocument["localidad"];
+    $file = $insertarEnDropBox->download($pathDocument);
+    $contents = $file->getContents();
+    file_put_contents($temp, $contents);
+    $_POST["document_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    $insertarEnBaseDatos->dbDisconnect();
 ?>

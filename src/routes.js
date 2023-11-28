@@ -22,6 +22,8 @@ import InicioAdmin from './Administrativo/InicioAdmin.svelte'
 import LoginSuperAdmin from './AdminSuper/LoginSuperAdmin.svelte'
 // @ts-ignore
 import InicioSuperADmin from './AdminSuper/InicioSuperADmin.svelte'
+// @ts-ignore
+import ExamenTecnico from './ExamenTecnico/ExamenTecnico.svelte'
 // Errores
 // @ts-ignore
 import Error404 from "./Errores/Error404.svelte";
@@ -33,6 +35,7 @@ const routes ={
     '/VacantesMexico':VacantesMexico,
     '/VacantesColombia':VacantesColombia,
     '/Perfil':Perfiles,
+    '/ExamenTecnico':ExamenTecnico,
     //Administrativos
     '/L0gAdm1n':LoginAdmin,
     '/Postulados':Postulados,
