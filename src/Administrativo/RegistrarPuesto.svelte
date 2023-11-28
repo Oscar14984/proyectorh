@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
 	import { push } from 'svelte-spa-router';
     import axios from 'axios'
     import Lugar from '../Lugares';
@@ -112,6 +114,18 @@ const modalOpen = async (data) => {
 const editar = () =>{
 
 }
+//Eliminar puesto
+let id_puesto = 0
+const eliminarPuesto = async (id_puestoT) =>{
+  try {
+    const res = await axios.post(Lugar.backend + 'EliminarPuesto.php',{
+      id_puesto: id_puestoT,
+    })
+    puestos();
+  } catch (error) {
+    
+  }
+}
 </script>
 
 <main>
@@ -129,7 +143,7 @@ const editar = () =>{
               </tr>
             </thead>
             {#if tienePuestos}
-                 {#each rsPuestos as puesto(puesto.id_puesto)}
+                 {#each rsPuestos as puesto,i}
                      <tbody>
                          <tr>
                              <td>{puesto.titulo}</td>
@@ -137,7 +151,7 @@ const editar = () =>{
                              <td>{puesto.fecha_limite}</td>
                              <td>
                                  <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
-                                 <button class="btn btn-info">Eliminar</button>
+                                 <button class="btn btn-info" on:click={eliminarPuesto(puesto.id_puesto)}>Eliminar</button>
                              </td>
                          </tr>
                      </tbody>

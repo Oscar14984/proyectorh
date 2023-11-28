@@ -4,91 +4,69 @@
     import {link, push} from 'svelte-spa-router' 
     import Swal from 'sweetalert2'
     
-    let correo = '' 
-    let correoValido = false
-    let contrasenaValida = false
-    let contrasena = ''
+    let usuario = '' 
+    let usuarioFijo = 'SuperAdmin@2320'
+    let contracenaFijo = 'DNSA@2023_info'
+    let pass = ''
+
     let usuarioActual = ''
     let idActual = 0
-    let lookPass = false
+    let verPass = false
     
-    async function iniciarSesion() {
-        try {
-          const response = await axios.post(Lugar.backend+"logInAdmin.php", {
-            correo,
-            contrasena,
-          });
-       
-          if (response.data) {
-            // El inicio de sesión fue exitoso, puedes redirigir al usuario o realizar otras acciones aquí
-            Swal.fire('Acceso exitoso')
-          } else {
-            // Mostrar un mensaje de error o manejar el inicio de sesión fallido
-            console.log("Inicio de sesión fallido");
-          }
-        } catch (error) {
-          console.error("Error al iniciar sesión:", error);
+   const inicio = () =>{
+    try {
+        if(usuario === usuarioFijo && pass === contracenaFijo){
+            Swal.fire({
+            title: "Bienvenido!",
+            icon: "success"
+            })
+            push('/Inici0Super@dmin')
+        }else{
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "El usuario o la contraseña son incorrectas!",
+            });
         }
-      };
-    
-    // const login = async () => {
-    //         const res = await axios.post('http://localhost/RECURSOS_HUMANOS_PROYECTO/backend/logInUser.php', {
-    //             correo: correo,
-    //             contrasena: contrasena
-    //         })
-    //         const data = JSON.parse( res.data.d )
-    //         if ( data.correoExistente == 1 ) {
-    //             usuarioActual = data.nombre
-    //             idActual = parseInt(data.id_usuario)
-    //             localStorage.setItem('idActual',idActual.toString())
-    //             localStorage.setItem('usuarioActual',usuarioActual)
-    //             Swal.fire('Acceso exitoso')
-                
-    //         } else {
-    //             Swal.fire('El correo no existe en nuestra base de datos.')
-    //         }
-    //     };
-    
-        const cerrarSesion = () => {
-            usuarioActual = ''
-            idActual = 0
-            localStorage.clear()
-            
-            
-            push('/')
-        };
+    } catch (error) {
+        
+    }
+   }
+    const cerrarSesion = () => {
+        usuarioActual = ''
+        idActual = 0
+        localStorage.clear()
+        
+        
+        push('/')
+    };
     </script>
     
     <main class="d-flex justify-content-center">
-        <div class="card" style="width: 25rem;">
-            <div class="card-header">
-              Iniciar Sesión
+       
+        <form class="container card" style="margin-top: 5%;">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Usuario</label>
+              <input type="text"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" bind:value={usuario}>
             </div>
-            <div class="card-body">
-              <form>
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Correo:</label>
-                  <input type="email" class="form-control" bind:value={correo} placeholder="Correo" id="exampleInputEmail1" aria-describedby="emailHelp">
-                </div>
-    
-                <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
-                <div class="input-group mb-3">
-                    <button class="btn btn-outline-secondary" on:click={()=> (lookPass = !lookPass)}><i class={lookPass ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
-                    {#if !lookPass}
-                        <!-- content here -->
-                        <input type="password" class="form-control" bind:value={contrasena} aria-describedby="basic-addon1">
-                    {:else}
-                        <!-- else content here -->
-                        <input type="text" class="form-control"  bind:value={contrasena} aria-describedby="basic-addon1">
-                    {/if}
-                </div>
-    
-                <div class="d-flex justify-content-center">
-                    <button type="button" on:click={iniciarSesion} class="btn btn-primary ">Iniciar</button>
-                </div>
-              </form>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+              <div class="verPass">
+              {#if !verPass}
+                 <input type="password" class="form-control pass" id="exampleInputPassword1" bind:value={pass}>
+                 <!-- svelte-ignore a11y-click-events-have-key-events -->
+                 <!-- svelte-ignore a11y-no-static-element-interactions -->
+                 <span on:click={()=> (verPass = !verPass)}><i class={verPass ? "bi bi-eye": "bi bi-eye-slash"}></i></span>
+                 {:else}
+                 <input type="text" class="form-control pass" id="exampleInputPassword1" bind:value={pass}>
+                 <!-- svelte-ignore a11y-click-events-have-key-events -->
+                 <!-- svelte-ignore a11y-no-static-element-interactions -->
+                 <span on:click={()=> (verPass = !verPass)}><i class={verPass ? "bi bi-eye": "bi bi-eye-slash"}></i></span>
+              {/if}
+              </div>
             </div>
-          </div>
+            <button type="submit" class="btn btn-info" on:click={inicio}>Iniciar Sesión</button>
+          </form>
         
     </main>
     
