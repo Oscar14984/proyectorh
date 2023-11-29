@@ -7,7 +7,7 @@
     $queryUpdateRequisitosGenerales = "UPDATE Requisitos re SET re.descripcion = ? WHERE re.id = ?";
     $queryUpdateOfrecemos = "UPDATE Ofrecemos of SET of.descripcion = ? WHERE of.id = ?";
     $queryUpdateFuncionesGenerales = "UPDATE FuncionesGenerales fg SET fg.descripcion = ? WHERE fg.id = ?";
-    $queryUpdateHabilidadesConocimientos = "UPDATE HabiliadesConocimientos hc SET hc.descripcion = ? WHERE hc.id = ?";
+    $queryUpdateHabilidadesConocimientos = "UPDATE HabilidadesConocimientos hc SET hc.descripcion = ? WHERE hc.id = ?";
 
     $dataDocument = json_decode(file_get_contents("php://input"), true);
 
@@ -20,35 +20,35 @@
     $ofrecemos = $dataDocument["ofrecemos"];
     $funcionesGenerales = $dataDocument["funciones_generales"];
     $habilidadesConocimientos = ($dataDocument["habilidades_conocimientos"]);
-    $values = array($titulo,$descripcion,$fecha_limite,$lugar,(int)$idPuesto);
+    $values = array($titulo,$descripcion,$fechaLimite,$lugar,(int)$idPuesto);
     $insertarEnBaseDatos->consulta_ca($queryUpdatePuesto,$values);
 
     foreach ($requisitos as $requisito) {
         $id = $requisito["id"];
         $req = $requisito["linea"];
         $valuesRequisito = array($req,$id);
-        $insertInDataBase->consulta_ca($queryUpdateRequisitosGenerales,$valuesRequisito);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateRequisitosGenerales,$valuesRequisito);
     }
 
     foreach ($ofrecemos as $ofrece) {
         $id = $ofrece["id"];
         $ofer = $ofrece["linea"];
         $valuesOferta = array($ofer,$id);
-        $insertInDataBase->consulta_ca($queryUpdateRequisitosGenerales,$valuesOferta);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateOfrecemos,$valuesOferta);
     }
 
     foreach ($funcionesGenerales as $funcion) {
         $id = $funcion["id"];
         $fun = $funcion["linea"];
-        $valuesRequisito = array($fun,$id);
-        $insertInDataBase->consulta_ca($queryUpdateFuncionesGenerales,$valuesRequisito);
+        $valuesFuncionGeneral = array($fun,$id);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateFuncionesGenerales,$valuesFuncionGeneral);
     }
 
     foreach ($habilidadesConocimientos as $habCon) {
         $id = $habCon["id"];
         $hab = $habCon["linea"];
-        $valuesRequisito = array($hab,$id);
-        $insertInDataBase->consulta_ca($queryUpdateHabilidadesConocimientos,$valuesRequisito);
+        $valuesHabilidadConocimiento = array($hab,$id);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateHabilidadesConocimientos,$valuesHabilidadConocimiento);
     }
     $insertarEnBaseDatos->dbDisconnect();
 ?>

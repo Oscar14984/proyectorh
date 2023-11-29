@@ -1,11 +1,12 @@
 <script>
 // @ts-nocheck
-
-	import { push } from 'svelte-spa-router';
-    import axios from 'axios'
-    import Lugar from '../Lugares';
+import { push } from 'svelte-spa-router';
+import axios from 'axios'
+import Lugar from '../Lugares';
 import Modal from '../Componentes/Modal.svelte'
+import Spinner from '../Componentes/Spinner.svelte';
     
+let spinner = false;
 
 let ofrecemos = ['Oferta inicial'];
 let requisitos = ['Requisito inicial'];
@@ -46,9 +47,9 @@ const eliminarOferta=(index)=> {
 
 //Para agregar un puesto nuevo
 let estado = null;
-let titulo= ''
-let descripcion= ''
-let fecha_limite= ''
+let titulo= '';
+let descripcion= '';
+let fecha_limite= '';
 let lugar= ''
 // let ofrecemos= []
 // let requisitos= []
@@ -92,12 +93,15 @@ const enviarFormulario = async () => {
   let jsonSalida = []
   const puestos = async () => {
     try {
+    spinner = true;
     const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
-    // if(tienePuestos){
+    if(res.data){
+      spinner = true;
       jsonSalida = Object.values(data.jsonSalida);
       console.log(jsonSalida)
-    // } 
+    } 
+    spinner = false;
   } catch (error) {
     
   }
@@ -107,16 +111,46 @@ const enviarFormulario = async () => {
   const inicio = () =>{
     push('/InicioAdmin')
   }
+  //Editar puesto
 //modal para ediar
 let openModal = false;
 let cargo = null;
 const modalOpen = async (data) => {
     openModal = false;
+    if(data == 'save'){
+      try {
+     // Asegurarse de que las variables sean siempre arrays
+    cargo.requisitos = Array.isArray(cargo.requisitos) ? cargo.requisitos : [];
+    cargo.ofrecemos = Array.isArray(cargo.ofrecemos) ? cargo.ofrecemos : [];
+    cargo.funcionesGenerales = Array.isArray(cargo.funcionesGenerales) ? cargo.funcionesGenerales : [];
+    cargo.habilidadesConocimientos = Array.isArray(cargo.habilidadesConocimientos) ? cargo.habilidadesConocimientos : [];
+  
+    const res = await axios.post(Lugar.backend + 'editPuesto.php',{
+      id_puesto: cargo.id_puesto,
+      titulo: cargo.titulo,
+      descripcion: cargo.descripcion,
+      fecha_limite: cargo.fecha_limite,
+      lugar: cargo.lugar,
+      requisitos: cargo.requisitos,
+      ofrecemos: cargo.ofrecemos,
+      funciones_generales: cargo.funcionesGenerales,
+      habilidades_conocimientos: cargo.habilidadesConocimientos,
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if(res.data){
+      console.log("Puesto editado")
+    }else{
+      console.log("no se pudo realizar el cambio")
+    }
+  } catch (error) {
+    
+  }
+    }
 };
 
-const editar = () =>{
-
-}
 //Eliminar puesto
 let id_puesto = 0
 const eliminarPuesto = async (id_puestoT) =>{
@@ -132,6 +166,9 @@ const eliminarPuesto = async (id_puestoT) =>{
 </script>
 
 <main>
+  {#if spinner}
+    <Spinner />
+  {/if}
     <div class="container">
       <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
@@ -149,33 +186,39 @@ const eliminarPuesto = async (id_puestoT) =>{
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            
-                 {#each jsonSalida as puesto,i}
-                     <tbody>
-                         <tr>
-                             <td>{puesto.titulo}</td>
-                             <td>{puesto.lugar}</td>
-                             <td>{puesto.fecha_limite}</td>
-                             {#each puesto.requisitos as requisito}
-                               <td>{requisito.linea}</td>
-                             {/each}
-                             {#each puesto.ofrecemos as ofrecemo}
-                               <td>{ofrecemo.linea}</td>
-                             {/each}
-                             {#each puesto.funcionesGenerales as funcionesGenerale}
-                               <td>{funcionesGenerale.linea}</td>
-                             {/each}
-                             {#each puesto.habilidadesConocimientos as habilidadesConocimiento}
-                               <td>{habilidadesConocimiento.linea}</td>
-                             {/each}
-                             <td>
-                                 <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
-                                 <button class="btn btn-info" on:click={eliminarPuesto(puesto.id_puesto)}>Eliminar</button>
-                             </td>
-                         </tr>
-                     </tbody>
-                 {/each}
-            
+                {#each jsonSalida as puesto,i}
+                    <tbody>
+                        <tr>
+                            <td>{puesto.titulo}</td>
+                            <td>{puesto.lugar}</td>
+                            <td>{puesto.fecha_limite}</td>
+                            <td>
+                              {#each puesto.requisitos as requisito}
+                                <div>{requisito.linea}</div>
+                              {/each}
+                            </td>
+                            <td>
+                              {#each puesto.ofrecemos as ofrecemo}
+                                <div>{ofrecemo.linea}</div>
+                              {/each}
+                            </td>
+                            <td>
+                              {#each puesto.funcionesGenerales as funcionesGenerale}
+                                <div>{funcionesGenerale.linea}</div>
+                              {/each}
+                            </td>
+                            <td>
+                              {#each puesto.habilidadesConocimientos as habilidadesConocimiento}
+                                <div>{habilidadesConocimiento.linea}</div>
+                              {/each}
+                            </td>
+                            <td>
+                                <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
+                                <button class="btn btn-info" on:click={eliminarPuesto(puesto.id_puesto)}>Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                {/each}
           </table>
     </div>
 
@@ -290,7 +333,40 @@ const eliminarPuesto = async (id_puestoT) =>{
       saveButtonText="Editar"
       closeButtonText="Cerrar"
       >
-     
+      <form >
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Título:</label>
+        <input bind:value={cargo.titulo} />
+  <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Lugar:</label>
+        <input bind:value={cargo.lugar} />
+  <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Fecha límite:</label>
+        <input bind:value={cargo.fecha_limite} />
+  <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Requisitos:</label>
+        {#each cargo.requisitos as req}
+          <input bind:value={req.linea} />
+        {/each}
+
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Ofrecemos:</label>
+        {#each cargo.ofrecemos as ofr}
+          <input bind:value={ofr.linea} />
+        {/each}
+<!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>funciones generales:</label>
+        {#each cargo.funcionesGenerales as fg}
+          <input bind:value={fg.linea} />
+        {/each}
+<!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>habilidad conocimiento:</label>
+        {#each cargo.habilidadesConocimientos as hc}
+          <input bind:value={hc.linea} />
+        {/each}
+        <button type="submit">Guardar cambios</button>
+      </form>
+  
       </Modal>
     {/if}
 </main>
