@@ -364,7 +364,6 @@ const eliminarPuesto = async (id_puestoT) =>{
         {#each cargo.habilidadesConocimientos as hc}
           <input bind:value={hc.linea} />
         {/each}
-        <button type="submit">Guardar cambios</button>
       </form>
   
       </Modal>

@@ -56,6 +56,11 @@ let maxRegsPP = 10
     const inicio = () =>{
         push('/InicioAdmin')
     }
+
+    const descargaVideo = async () =>{
+        const res = await axios.post(Lugar.backend + 'downloadVideo.php')
+        
+    }
 </script>
 
 <main>
