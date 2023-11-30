@@ -9,6 +9,7 @@
         $desripcion = $jsonPuestoData["descripcion"];
         $fecha_limite = $jsonPuestoData["fecha_limite"];
         $lugar = $jsonPuestoData["lugar"];
+        $pais = $jsonPuestoData["pais"];
 
         $requisitos = $jsonPuestoData["requisitos"];
         //echo var_dump($requisitos) . "<br>";
@@ -16,16 +17,16 @@
         $funcionesGenerales = $jsonPuestoData["funciones_generales"];
         $habilidadesConocimientos = $jsonPuestoData["habilidades_conocimientos"];
 
-        $queryInsertPuesto = "INSERT INTO Puestos(titulo,descripcion,fecha_limite,lugar) VALUES (?,?,?,?)";
-        $valuesInsertPuesto = array($titulo,$desripcion,$fecha_limite,$lugar);
+        $queryInsertPuesto = "INSERT INTO Puestos(titulo,descripcion,fecha_limite,lugar,pais) VALUES (?,?,?,?,?)";
+        $valuesInsertPuesto = array($titulo,$desripcion,$fecha_limite,$lugar,$pais);
         $insertInDataBase->consulta_ca($queryInsertPuesto,$valuesInsertPuesto);
 
-        $queryConsultaGeneral = "SELECT * FROM Puestos pu WHERE pu.titulo = ? AND pu.descripcion = ? AND pu.fecha_limite = ? AND pu.lugar = ?";
-        $valuesSearchPuesto = array($titulo,$desripcion,$fecha_limite,$lugar);
+        $queryConsultaGeneral = "SELECT * FROM Puestos pu WHERE pu.titulo = ? AND pu.descripcion = ? AND pu.fecha_limite = ? AND pu.lugar = ? AND pu.pais = ?";
+        $valuesSearchPuesto = array($titulo,$desripcion,$fecha_limite,$lugar,$pais);
         $getDataPuesto = $insertInDataBase->consulta_ca($queryConsultaGeneral,$valuesSearchPuesto);
         $dataPuesto = array();
         while($row = $getDataPuesto->fetch_assoc()) {
-            array_unshift($dataPuesto,array($row["id_puesto"],$row["titulo"],$row["descripcion"],$row["fecha_limite"],$row["lugar"]));
+            array_unshift($dataPuesto,array($row["id_puesto"],$row["titulo"],$row["descripcion"],$row["fecha_limite"],$row["pais"]));
         }
         $dataPuesto = $dataPuesto[0];
         $idPuesto = (int)$dataPuesto[0];

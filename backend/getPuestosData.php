@@ -47,6 +47,7 @@
                             "descripcion" => $rowPuestos["descripcion"],
                             "fecha_limite" => $rowPuestos["fecha_limite"],
                             "lugar" => $rowPuestos["lugar"],
+                            "pais" => $rowPuestos["pais"],
                             "requisitos" => ($arrayRequisitos),
                             "ofrecemos" => ($arrayOfrecemos),
                             "funcionesGenerales" => ($arrayFuncionesGenerales),

@@ -12,15 +12,15 @@
     $videoInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadVideo,$values);
     $infoVideos = array();
     while($row = $videoInformation->fetch_assoc()){
-        array_push($infoVideos,json_decode(array("id_video"=>$row["id_video"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
+        array_push($infoVideos,(array("id_video"=>$row["id_video"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
     }
     $filename = pathinfo($infoVideos[0]["localidad"], PATHINFO_FILENAME);
     $temp = tempnam(sys_get_temp_dir(), $filename);
     $infoVideo = $infoVideos[0];
     $pathVideo = $infoVideo["localidad"];
-    // $file = $insertarEnDropBox->download($pathVideo);
-    // $contents = $file->getContents();
-    // file_put_contents($temp, $contents);
+    $file = $insertarEnDropBox->download($pathVideo);
+    $contents = $file->getContents();
+    file_put_contents($temp, $contents);
     // $_POST["video_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
     $response['d']=json_encode(array("localidad"=>$temp,"nombre"=>$filename));
     echo json_encode($response);

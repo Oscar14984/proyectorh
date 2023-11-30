@@ -13,6 +13,6 @@
         array_push($infoVideos,(array("id_video"=>$row["id_video"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
     }
     // $_POST["dataVideo"] = json_encode($infoVideos);
-    $response['d']=json_encode(array($infoVideos));
+    $response['d']=json_encode(array("infoVideos"=>$infoVideos));
     echo json_encode($response);
 ?>

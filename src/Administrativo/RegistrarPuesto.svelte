@@ -51,6 +51,7 @@ let titulo= '';
 let descripcion= '';
 let fecha_limite= '';
 let lugar= ''
+let pais= ''
 // let ofrecemos= []
 // let requisitos= []
 // let funcionesGenerales= []
@@ -69,6 +70,7 @@ const enviarFormulario = async () => {
       descripcion,
       fecha_limite,
       lugar,
+      pais,
       requisitos,
       ofrecemos,
       funciones_generales: funcionesGenerales,
@@ -93,15 +95,14 @@ const enviarFormulario = async () => {
   let jsonSalida = []
   const puestos = async () => {
     try {
-    spinner = true;
+      spinner = true;
     const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
     if(res.data){
-      spinner = true;
       jsonSalida = Object.values(data.jsonSalida);
       console.log(jsonSalida)
+      spinner = false;
     } 
-    spinner = false;
   } catch (error) {
     
   }
@@ -131,6 +132,7 @@ const modalOpen = async (data) => {
       descripcion: cargo.descripcion,
       fecha_limite: cargo.fecha_limite,
       lugar: cargo.lugar,
+      pais: cargo.pais,
       requisitos: cargo.requisitos,
       ofrecemos: cargo.ofrecemos,
       funciones_generales: cargo.funcionesGenerales,
@@ -177,6 +179,7 @@ const eliminarPuesto = async (id_puestoT) =>{
             <thead>
               <tr>
                 <th scope="col">Titulo</th>
+                <th scope="col">Pais</th>
                 <th scope="col">Lugar</th>
                 <th scope="col">Fecha limite</th>
                 <th scope="col">Requisitos</th>
@@ -190,6 +193,7 @@ const eliminarPuesto = async (id_puestoT) =>{
                     <tbody>
                         <tr>
                             <td>{puesto.titulo}</td>
+                            <td>{puesto.pais}</td>
                             <td>{puesto.lugar}</td>
                             <td>{puesto.fecha_limite}</td>
                             <td>
@@ -252,12 +256,17 @@ const eliminarPuesto = async (id_puestoT) =>{
                             Fecha Límite:
                             <input bind:value={fecha_limite} type="date" required />
                             </label>
+
+                            <label>
+                              Pais:
+                            <input bind:value={pais} type="text" required />
+                            </label>
                         
                             <label>
                             Lugar:
                             <input bind:value={lugar} type="text" required />
                             </label>
-                        
+
                             <label>
                             Ofrecemos:
                             <!-- Sección de ofrecemos -->
@@ -337,6 +346,9 @@ const eliminarPuesto = async (id_puestoT) =>{
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>Título:</label>
         <input bind:value={cargo.titulo} />
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Pais:</label>
+        <input bind:value={cargo.pais} />
   <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>Lugar:</label>
         <input bind:value={cargo.lugar} />

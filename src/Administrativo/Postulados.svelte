@@ -1,4 +1,5 @@
 <script>
+	import Spinner from './../Componentes/Spinner.svelte';
 // @ts-nocheck
 
 import { push } from 'svelte-spa-router';
@@ -7,20 +8,41 @@ import Lugar from '../Lugares';
 import { verVideo } from '../verVideo';
 
 
+let spinner = false;
+
  //postulados
 let tieneUsuarios;
 let rsUsuarios;
 
+
+// const cargarUsuarios = async () => {
+ //   const res = await axios.post(Lugar.backend+'getUsuarios.php');
+ //   const data = JSON.parse(res.data.d);
+  //  tieneUsuarios = data.tieneUsuarios;
+  //  if (tieneUsuarios == true ) {
+  //    rsUsuarios = Object.values(data.rsUsuarios);
+  //  } else {
+ //     rsUsuarios = "";
+  //  }
+//};
+
+let usuarios = [];
+
 const cargarUsuarios = async () => {
-    const res = await axios.post(Lugar.backend+'getUsuarios.php');
+    try {
+    spinner = true;
+    const res = await axios.post(Lugar.backend + 'getUsuarios.php')
     const data = JSON.parse(res.data.d);
-    tieneUsuarios = data.tieneUsuarios;
-    if (tieneUsuarios == true ) {
-      rsUsuarios = Object.values(data.rsUsuarios);
-    } else {
-      rsUsuarios = "";
-    }
-};
+    if(res.data){
+      spinner = true;
+      usuarios = Object.values(data.usuarios);
+      console.log(usuarios)
+    } 
+    spinner = false;
+  } catch (error) {
+    
+  }
+}
 
 cargarUsuarios();
 // PAGINADOR
@@ -33,8 +55,8 @@ let maxRegsPP = 10
     let pagAd = 0
     
     const cambiarMaxRegsPP = () => {
-        paginas = Math.floor( rsUsuarios.length / maxRegsPP )
-        residuo = ( rsUsuarios.length % maxRegsPP )
+        paginas = Math.floor( usuarios.length / maxRegsPP )
+        residuo = ( usuarios.length % maxRegsPP )
         if ( residuo > 0 ) {
             pagAd = 1
         } else {
@@ -60,15 +82,18 @@ let maxRegsPP = 10
         push('/InicioAdmin')
     }
     
-    const verVideos = () =>{
+    const verVideos = (id_usuario) =>{
         push('/Vidos')
-        verVideo.update(_ => ({
-          id_usuario:res.data.id_usuario,
+        verVideo.update( ()=> ({
+            id_usuario:id_usuario,
         }));
     }
 </script>
 
 <main>
+    {#if spinner == true}
+         <Spinner />
+    {/if}
 <div class="container">
     <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
@@ -84,8 +109,8 @@ let maxRegsPP = 10
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        {#if tieneUsuarios}
-            {#each  rsUsuarios.slice(registroInicial - 1, registroFinal) as usuario (usuario.id_usuario)}
+        
+            {#each  usuarios.slice(registroInicial - 1, registroFinal) as usuario (usuario.id_usuario)}
                 <tbody>
                     <tr>
                         <td>{usuario.nombre}</td>
@@ -95,13 +120,13 @@ let maxRegsPP = 10
                         <td>{usuario.numero}</td>
                         <td>
                         <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
-                        <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos </button>
+                        <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos</button>
                         <button class="btn btn-success" >Ver Documentos</button>
                         </td>
                     </tr>
                 </tbody>
             {/each}
-        {/if}
+        
         </table>
         <div class="col-6 col-lg-4 col-xxl-3">
             <div class="input-group mb-3 bg-light">

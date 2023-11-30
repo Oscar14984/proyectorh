@@ -3,7 +3,7 @@
     require_once "classGetPostInDataBase.php";
     $insertarEnBaseDatos = new classGetPostInDataBase();
 
-    $queryUpdatePuesto = "UPDATE Puestos pu SET pu.titulo = ?, pu.descripcion = ?, fecha_limite = ?, pu.lugar = ? WHERE pu.id_puesto = ?";
+    $queryUpdatePuesto = "UPDATE Puestos pu SET pu.titulo = ?, pu.descripcion = ?, fecha_limite = ?, pu.lugar = ?, pu.pais = ? WHERE pu.id_puesto = ?";
     $queryUpdateRequisitosGenerales = "UPDATE Requisitos re SET re.descripcion = ? WHERE re.id = ?";
     $queryUpdateOfrecemos = "UPDATE Ofrecemos of SET of.descripcion = ? WHERE of.id = ?";
     $queryUpdateFuncionesGenerales = "UPDATE FuncionesGenerales fg SET fg.descripcion = ? WHERE fg.id = ?";
@@ -15,12 +15,13 @@
     $descripcion = $dataDocument["descripcion"];
     $fechaLimite = $dataDocument["fecha_limite"];
     $lugar = $dataDocument["lugar"];
+    $pais = $dataDocument["pais"];
     $idPuesto = $dataDocument["id_puesto"];
     $requisitos = $dataDocument["requisitos"];
     $ofrecemos = $dataDocument["ofrecemos"];
     $funcionesGenerales = $dataDocument["funciones_generales"];
     $habilidadesConocimientos = ($dataDocument["habilidades_conocimientos"]);
-    $values = array($titulo,$descripcion,$fechaLimite,$lugar,(int)$idPuesto);
+    $values = array($titulo,$descripcion,$fechaLimite,$lugar,$pais,(int)$idPuesto);
     $insertarEnBaseDatos->consulta_ca($queryUpdatePuesto,$values);
 
     foreach ($requisitos as $requisito) {
