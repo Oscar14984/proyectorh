@@ -22,7 +22,7 @@
     $contents = $file->getContents();
     file_put_contents($temp, $contents);
     // $_POST["video_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
-    $response['d']=json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    $response['d']=array("localidad"=>$temp,"nombre"=>$filename);
     echo json_encode($response);
     $insertarEnBaseDatos->dbDisconnect();
 ?>
