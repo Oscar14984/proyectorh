@@ -47,6 +47,7 @@
             $rsUsuarios[$i]['apellido_paterno'] = $row['apellido_paterno'];
             $rsUsuarios[$i]['apellido_materno'] = $row['apellido_materno'];
             $rsUsuarios[$i]['correo'] = $row['correo'];
+            $rsUsuarios[$i]['numero'] = $row['numero'];
             $i++;
         }
     }

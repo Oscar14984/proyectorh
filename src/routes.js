@@ -10,6 +10,7 @@ import Registro from './Login/Registro.svelte'
 import VacantesColombia from './Vacantes/VacantesColombia.svelte'
 // @ts-ignore
 import Perfiles from './Componentes/Perfiles.svelte'
+//administrativo
 // @ts-ignore
 import Postulados from './Administrativo/Postulados.svelte'
 // @ts-ignore
@@ -24,6 +25,8 @@ import LoginSuperAdmin from './AdminSuper/LoginSuperAdmin.svelte'
 import InicioSuperADmin from './AdminSuper/InicioSuperADmin.svelte'
 // @ts-ignore
 import ExamenTecnico from './ExamenTecnico/ExamenTecnico.svelte'
+// @ts-ignore
+import Videos from './Administrativo/Videos.svelte'
 // Errores
 // @ts-ignore
 import Error404 from "./Errores/Error404.svelte";
@@ -42,6 +45,7 @@ const routes ={
     '/RegistroPuesto':RegistroPuesto,
     '/RegistrarPuesto':RegistrarPuesto,
     '/InicioAdmin':InicioAdmin,
+    '/Vidos':Videos,
     //SuperAdministrativo
     '/Inici0Super@dmin':InicioSuperADmin,
     '/Rut@S3gur1d@d!2023':LoginSuperAdmin,

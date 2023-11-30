@@ -18,9 +18,11 @@
     $temp = tempnam(sys_get_temp_dir(), $filename);
     $infoVideo = $infoVideos[0];
     $pathVideo = $infoVideo["localidad"];
-    $file = $insertarEnDropBox->download($pathVideo);
-    $contents = $file->getContents();
-    file_put_contents($temp, $contents);
-    $_POST["video_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    // $file = $insertarEnDropBox->download($pathVideo);
+    // $contents = $file->getContents();
+    // file_put_contents($temp, $contents);
+    // $_POST["video_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    $response['d']=json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    echo json_encode($response);
     $insertarEnBaseDatos->dbDisconnect();
 ?>

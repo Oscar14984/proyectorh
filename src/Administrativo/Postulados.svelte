@@ -1,8 +1,10 @@
 <script>
+// @ts-nocheck
+
 import { push } from 'svelte-spa-router';
 import axios from "axios";
 import Lugar from '../Lugares';
-import Inicio from '../UsuarioFinal/Inicio.svelte';
+import { verVideo } from '../verVideo';
 
 
  //postulados
@@ -19,6 +21,7 @@ const cargarUsuarios = async () => {
       rsUsuarios = "";
     }
 };
+
 cargarUsuarios();
 // PAGINADOR
 let maxRegsPP = 10
@@ -56,10 +59,12 @@ let maxRegsPP = 10
     const inicio = () =>{
         push('/InicioAdmin')
     }
-
-    const descargaVideo = async () =>{
-        const res = await axios.post(Lugar.backend + 'downloadVideo.php')
-        
+    
+    const verVideos = () =>{
+        push('/Vidos')
+        verVideo.update(_ => ({
+          id_usuario:res.data.id_usuario,
+        }));
     }
 </script>
 
@@ -74,6 +79,8 @@ let maxRegsPP = 10
             <th scope="col">Nombre</th>
             <th scope="col">Primer Apellido</th>
             <th scope="col">Segundo Apellido</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Número</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -84,10 +91,12 @@ let maxRegsPP = 10
                         <td>{usuario.nombre}</td>
                         <td>{usuario.apellido_paterno}</td>
                         <td>{usuario.apellido_materno}</td>
+                        <td>{usuario.correo}</td>
+                        <td>{usuario.numero}</td>
                         <td>
                         <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
-                        <a href="ruta_al_archivo.pdf" class="btn btn-success">Descargar PDF</a>
-                        <a href="ruta_al_archivo_de_videos.zip" class="btn btn-primary">Descargar Videos</a>
+                        <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos </button>
+                        <button class="btn btn-success" >Ver Documentos</button>
                         </td>
                     </tr>
                 </tbody>
