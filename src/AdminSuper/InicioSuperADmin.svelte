@@ -66,7 +66,38 @@ const consultarAdmin = async () =>{
     }
 };
 consultarAdmin();
+//Editar administrador
+let openEdit = false;
+let usuario = null;
+const editarAdmin = async (data) =>{
+    openEdit = false
+    if(data == 'save'){
+        try {
+            const res = await axios.post(Lugar.backend + 'editAdmin.php',{
+                id_usuario: usuario.id_usuario,
+                nombre: usuario.nombre,
+                apellido_paterno: usuario.apellido_paterno,
+                apellido_materno: usuario.apellido_materno,
+                correo: usuario.correo,
+                numero: usuario.numero,
+                contrasena: usuario.contrasena,
 
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if(res.data){
+             console.log("Puesto editado")
+            }else{
+             console.log("no se pudo realizar el cambio")
+            }
+        } catch (error) {
+            
+        }
+    }
+;}
+//Eliminar administrador
 </script>
 
 <main>
@@ -88,7 +119,7 @@ consultarAdmin();
             <tbody>
                 {#if tieneAdmins}
                      <!-- content here -->
-                     {#each jsonDataUsuariosAdmin as admin}
+                     {#each jsonDataUsuariosAdmin as admin(admin.id_usuario)}
                           <tr>
                               <th >{admin.nombre}</th>
                               <th >{admin.apellido_paterno}</th>
@@ -96,7 +127,7 @@ consultarAdmin();
                               <th >{admin.correo}</th>
                               <th >{admin.numero}</th>
                               <th>
-                                <button class="btn btn-success">Editar</button>
+                                <button class="btn btn-success" on:click={() => {openEdit = true; usuario = admin;}}>Editar</button>
                                 <button class="btn btn-success">Eliminar</button>
                               </th>
                           </tr>
@@ -108,6 +139,7 @@ consultarAdmin();
             <button class="btn btn-success" on:click={() => {openModal = true} }>Agregar Adiministrador</button>
         </div>
         </div>
+        <!--Modal de registrar administradores-->
         {#if openModal == true}
             <Modal
             open={openModal}
@@ -138,6 +170,38 @@ consultarAdmin();
                     <input bind:value={numero} />
                 </form>
             </Modal>
+        {/if}
+        <!--Modal para editar-->
+        {#if openEdit == true}
+             <Modal
+            open={openEdit}
+            onClosed={(data) => editarAdmin (data)}
+            modalSize="modal-md"
+            title="Editar Administrador:"
+            saveButtonText="Editar"
+            closeButtonText="Cerrar"
+             >
+             <form >
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Nombre:</label>
+                <input bind:value={usuario.nombre} />
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Primer apellido:</label>
+                <input bind:value={usuario.apellido_paterno} />
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Segundo apellido:</label>
+                <input bind:value={usuario.apellido_materno} />
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Correo:</label>
+                <input bind:value={usuario.correo} />
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Contraseña:</label>
+                <input bind:value={usuario.contrasena} />
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label>Número:</label>
+                <input bind:value={usuario.numero} />
+            </form>
+             </Modal>
         {/if}
 </main>
 
