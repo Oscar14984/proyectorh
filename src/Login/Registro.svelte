@@ -115,14 +115,14 @@ const registrarUsuario = async () => {
   };
 
 if(contrasena !== confirmarContrasena){
-  spinner = false;
+  // spinner = false;
   Swal.fire({
       icon: 'error',
       title: 'Oops...',
       text: 'La contraseña no coincide!',
       });
 };
-spinner = true;
+// spinner = true;
   try {
     const response = await axios.post(Lugar.backend+"sigInUser.php", {
       nombre,
@@ -137,8 +137,8 @@ spinner = true;
       Pais,
       Num_casa,
     });
-
-    if (response.data === "insertado") {
+    const data = JSON.parse(res.data.d)
+    if (response.data) {
       resultado = "Usuario insertado con éxito.";
       Swal.fire({
         position: 'top-end',
@@ -147,8 +147,8 @@ spinner = true;
         showConfirmButton: false,
         timer: 1500
       });
-      spinner = false;
-    } else if (response.data === "repetido") {
+      // spinner = false;
+    } else if (response.data ) {
       resultado = "El usuario ya existe en la base de datos.";
       spinner = false;
     } else {
@@ -204,9 +204,9 @@ spinner = true;
           <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" on:click={()=> (verContra = !verContra)}><i class={verContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
             {#if !verContra}
-                <input type="password" class="form-control" bind:value={contrasena}  pattern="^(?=.*[0-9](?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16})$" placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control" bind:value={contrasena}   placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
-                <input type="text" class="form-control" bind:value={contrasena} pattern="^(?=.*[0-9](?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16})$" placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="text" class="form-control" bind:value={contrasena}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
 
