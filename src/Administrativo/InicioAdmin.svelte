@@ -1,5 +1,4 @@
 <script>
-	import RegistrarPuesto from './RegistrarPuesto.svelte';
 	import { push } from 'svelte-spa-router';
 
     const irVacantes = () =>{
@@ -35,7 +34,8 @@
 <style>
 .container{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(25rem 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    grid-auto-rows: 200px;
     gap: 16px;
 }
 </style>

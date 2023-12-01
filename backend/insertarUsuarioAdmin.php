@@ -14,7 +14,7 @@
     $contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
     $foto = "/fotos_perfiles/foto_general_perfil.jpg";
     $queryCheck = "SELECT * FROM AdminUsuario us WHERE us.correo = '".$correo."'";
-    $correoRepCon = $insertarEnBaseDatos->consulta_sa($queryCheck);
+    $correoRepCon = $insertInDataBase->consulta_sa($queryCheck);
     if ($correoRepCon->num_rows > 0) {
         echo "repetido";
         $_POST["estado"] = false;

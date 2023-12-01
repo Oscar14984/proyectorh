@@ -11,23 +11,19 @@ import { verVideo } from '../verVideo';
 let spinner = false;
 
  //postulados
-let tieneUsuarios;
-let rsUsuarios;
-
-
-// const cargarUsuarios = async () => {
- //   const res = await axios.post(Lugar.backend+'getUsuarios.php');
- //   const data = JSON.parse(res.data.d);
-  //  tieneUsuarios = data.tieneUsuarios;
-  //  if (tieneUsuarios == true ) {
-  //    rsUsuarios = Object.values(data.rsUsuarios);
-  //  } else {
- //     rsUsuarios = "";
+ // const cargarUsuarios = async () => {
+     //   const res = await axios.post(Lugar.backend+'getUsuarios.php');
+     //   const data = JSON.parse(res.data.d);
+     //  tieneUsuarios = data.tieneUsuarios;
+     //  if (tieneUsuarios == true ) {
+         //    rsUsuarios = Object.values(data.rsUsuarios);
+         //  } else {
+             //     rsUsuarios = "";
   //  }
-//};
-
+  //};
+  
+let tieneUsuarios;
 let usuarios = [];
-
 const cargarUsuarios = async () => {
     try {
     spinner = true;
@@ -37,6 +33,9 @@ const cargarUsuarios = async () => {
       spinner = true;
       usuarios = Object.values(data.usuarios);
       console.log(usuarios)
+
+      //verificar si tiene usuarios
+        tieneUsuarios = usuarios.length > 0;
     } 
     spinner = false;
   } catch (error) {
@@ -98,7 +97,7 @@ let maxRegsPP = 10
     <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
     </div>
-    <table class="table table-hover" >
+    <table class="table table-hover" on:change="{cambiarEstatus}">
         <thead>
           <tr>
             <th scope="col">Nombre</th>

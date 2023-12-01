@@ -1,12 +1,13 @@
 <script>
-	import { idVideo } from './../idVideo.js';
+import { idVideo } from './../idVideo.js';
+import {verVideo} from '../verVideo'
+import { onMount } from 'svelte';
+import {push} from 'svelte-spa-router'
 // @ts-nocheck
 
 import Spinner from './../Componentes/Spinner.svelte';
 import axios from "axios";
 import Lugar from "../Lugares";
-import {verVideo} from '../verVideo'
-import { onMount } from 'svelte';
 
 
 const setVerIdVideo = (id_video) => {
@@ -40,10 +41,10 @@ const consultarVideos = async () => {
         
     }
 };
-
   onMount(() =>{
       consultarVideos();
   });
+  //descarga de video
 let localidad = []
   const descargaVideo = async () => {
     try {
@@ -67,7 +68,9 @@ let localidad = []
     }
 };
 
-    
+const Regresar = () =>{
+
+}
 </script>
 
 <main>

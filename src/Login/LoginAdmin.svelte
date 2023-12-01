@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 import Lugar from '../Lugares';
-import {link, push} from 'svelte-spa-router' 
+import { push} from 'svelte-spa-router' 
 import Swal from 'sweetalert2'
 
 let correo = '' 
@@ -22,6 +22,7 @@ async function iniciarSesion() {
       if (response.data) {
         // El inicio de sesión fue exitoso, puedes redirigir al usuario o realizar otras acciones aquí
         Swal.fire('Acceso exitoso')
+        push('/InicioAdmin')
       } else {
         // Mostrar un mensaje de error o manejar el inicio de sesión fallido
         console.log("Inicio de sesión fallido");

@@ -22,7 +22,7 @@ import InicioAdmin from './Administrativo/InicioAdmin.svelte'
 // @ts-ignore
 import LoginSuperAdmin from './AdminSuper/LoginSuperAdmin.svelte'
 // @ts-ignore
-import InicioSuperADmin from './AdminSuper/InicioSuperADmin.svelte'
+import InicioSuperAdmin from './AdminSuper/InicioSuperAdmin.svelte'
 // @ts-ignore
 import ExamenTecnico from './ExamenTecnico/ExamenTecnico.svelte'
 // @ts-ignore
@@ -47,7 +47,7 @@ const routes ={
     '/InicioAdmin':InicioAdmin,
     '/Vidos':Videos,
     //SuperAdministrativo
-    '/Inici0Super@dmin':InicioSuperADmin,
+    '/Inici0Super@dmin':InicioSuperAdmin,
     '/Rut@S3gur1d@d!2023':LoginSuperAdmin,
     // Errores
     '*': Error404
