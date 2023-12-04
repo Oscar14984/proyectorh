@@ -11,6 +11,7 @@ import Spinner from "../Componentes/Spinner.svelte";
 
 
 let verContra = false;
+let verConfirContra = false;
 let confirmarContrasena = "";
 // let valCorreo = false;
 // let contraValidada = false;
@@ -115,16 +116,15 @@ const registrarUsuario = async () => {
   };
 
 if(contrasena !== confirmarContrasena){
-  // spinner = false;
   Swal.fire({
       icon: 'error',
       title: 'Oops...',
       text: 'La contraseña no coincide!',
       });
 };
-// spinner = true;
-  try {
-    const response = await axios.post(Lugar.backend+"sigInUser.php", {
+try {
+    spinner = true;
+    const res = await axios.post(Lugar.backend+"sigInUser.php", {
       nombre,
       apellido_paterno,
       apellido_materno,
@@ -137,22 +137,32 @@ if(contrasena !== confirmarContrasena){
       Pais,
       Num_casa,
     });
-    const data = JSON.parse(res.data.d)
-    if (response.data) {
+    spinner = false;
+    const data = res.data;
+
+    if (data === "repetido") {
+      resultado = "El usuario ya existe en la base de datos.";
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: resultado,
+      });
+    } else if (data === "success") {
       resultado = "Usuario insertado con éxito.";
       Swal.fire({
-        position: 'top-end',
+        position: 'center',
         icon: 'success',
         title: 'Usuario registrado con éxito',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      // spinner = false;
-    } else if (response.data ) {
-      resultado = "El usuario ya existe en la base de datos.";
-      spinner = false;
     } else {
       resultado = "Error desconocido.";
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: resultado,
+      });
     }
   } catch (error) {
     console.error("Error al realizar la solicitud:", error);
@@ -209,10 +219,10 @@ if(contrasena !== confirmarContrasena){
                 <input type="text" class="form-control" bind:value={contrasena}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
-
+          <!--Confirmar contraseña-->
           <div class="input-group mb-3">
-            <button class="btn btn-outline-secondary" on:click={()=> (verContra = !verContra)}><i class={verContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
-            {#if !verContra}
+            <button class="btn btn-outline-secondary" on:click={()=> (verConfirContra = !verConfirContra)}><i class={verConfirContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
+            {#if !verConfirContra}
                 <input type="password" class="form-control" bind:value={confirmarContrasena } placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
                 <input type="text" class="form-control" bind:value={confirmarContrasena } placeholder=" Contraseña" aria-describedby="basic-addon1" required>

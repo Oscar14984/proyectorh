@@ -61,6 +61,7 @@
         $valuesDir = array((int)$resultUsuarioData[0][0],$calle,$CP,$Pais,$numero);
         $insertarEnBaseDatos->consulta_ca($queryInsertDireccion,$valuesDir);
         //Si completamos todo posteamos un true
+        echo "success";
         $_POST["data"] = true;
     }
 ?>
