@@ -52,22 +52,7 @@ let claveValida = false
         }
     }
 
-// const validarCorreo = (string) => {
-//     let out = '';
-//     let filtro = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_@.-';
-//     for (let i=0; i<string.length; i++)
-//     if (filtro.indexOf(string.charAt(i)) != -1) 
-//         out += string.charAt(i);
-//     return out
-// };
- function especialesCorreo(string){
-        let out = 0;
-        let filtro = '@.';
-        for (let i=0; i<string.length; i++)
-        if (filtro.indexOf(string.charAt(i)) != -1) 
-            out++
-        return out
-    }
+
 
 //para validar almenos una de cada una en la contraseña    
 const contarMayusculas = (string) =>{
@@ -118,10 +103,10 @@ const registrarUsuario = async () => {
 
 if(contrasena !== confirmarContrasena){
   Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'La contraseña no coincide!',
-      });
+    icon: 'error',
+    title: 'Oops...',
+    text: 'La contraseña no coincide!',
+  });
 };
 try {
     spinner = true;
@@ -149,11 +134,11 @@ try {
         text: resultado,
       });
     } else if (data === "success") {
-      resultado = "Usuario insertado con éxito.";
+      resultado = "Registrado con éxito.";
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Usuario registrado con éxito',
+        title: 'Registrado con éxito',
         showConfirmButton: false,
         timer: 1500,
       });
@@ -237,7 +222,7 @@ try {
           </div>
           
           <div class="input-group mb-3">
-            <span class="input-group-text">Número de casa</span>
+            <span class="input-group-text">Número de casa:</span>
             <input type="text" class="form-control" bind:value={Num_casa} aria-label="Amount (to the nearest dollar)" required >
           </div>
           
@@ -276,6 +261,6 @@ try {
     text-transform: uppercase;
 }
 input:invalid {
-  border: 2px dashed red;
+  border: 1px solid red;
 }
 </style>

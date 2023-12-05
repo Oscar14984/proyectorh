@@ -5,7 +5,6 @@
   import Lugar from "../Lugares";
   import { onMount } from 'svelte';
 
-  let tienePuestos = true;
   let rsPuestos;
 
 //   const getPuestos = async () => {
@@ -39,12 +38,13 @@
 // };
 
 let puestos = []
+// let tienePuestos;
 let jsonSalida = [];
 const getPuestos = async () =>{
   try {
     const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
-    // if(tienePuestos){
+    
       jsonSalida = Object.values(data.jsonSalida).map(puesto => {
         const fechaLimite = new Date(puesto.fecha_limite);
         const fechaActual = new Date();
@@ -56,9 +56,10 @@ const getPuestos = async () =>{
         const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
 
         return { ...puesto, diferenciaDias };
+        // tienePuestos = jsonSalida.length > 0;
       });
       console.log(jsonSalida)
-    // } 
+    
   } catch (error) {
     
   }
@@ -83,9 +84,9 @@ const getFecha = (diferenciaDias) => {
     <!-- Your existing HTML code -->
   </div>
   <div class="container">
-    <!-- {#if tienePuestos} -->
       {#each jsonSalida as puesto (puesto.id_puesto)}
       <div class="card mt-3 {getFecha(puesto.diferenciaDias)}">
+        <div class="card-header bg-primary text-white">Encabezado Azul</div>
         <div class="card-body">
           <h5 class="card-title">{puesto.titulo}</h5>
           <p class="card-text"><strong>Descripción:</strong> {puesto.descripcion}</p>
@@ -120,11 +121,9 @@ const getFecha = (diferenciaDias) => {
             {/each}
           </ul>
         </div>
+        <div class="card-footer bg-danger text-white">Pie de página Rojo</div>
       </div>
       {/each}
-    <!-- {:else}
-      <p class="noPuestos">No se encuentra ningún puesto disponible.</p>
-    {/if} -->
   </div>
 </main>
 
