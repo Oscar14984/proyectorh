@@ -31,34 +31,35 @@ let resultado = ""; //  almacenar el resultado
 
 let spinner = false
 
-
-const correoValido = () => {
-        correo=correo.trim()
-        correo=correo.toLowerCase()
-        correo = validarCorreo(correo)
-        if (especialesCorreo(correo)>1) {
-          // valCorreo = true
+//Para validar en correo
+let correoValido = false
+    const validarCorreo = async () => {
+        correo = correo.toLowerCase()
+        if ( /^\w+([\.\-_]?\w+)*@\w+\.\w+(\.\w+)*$/.test(correo) ) {
+            correoValido = true
         } else {
-          // valCorreo = false
+            correoValido = false
+        }
+    }
+//Para validar en contraseña
+let claveValida = false
+    const validarClave = async () => {
+        contrasena = contrasena.trim()
+        if ( contarMayusculas(contrasena)>0 && contarMinusculas(contrasena)>0 && contarNumeros(contrasena)>0 && contarEspeciales(contrasena)>0 && contrasena.length>7 ) {
+            claveValida =  true
+        } else {
+            claveValida = false
         }
     }
 
-const validarContrasena = (contrasena) => {
-  if ( contrasena.length > 7 ) {
-            // contraValidada = true
-        } else {
-            // contraValidada = false
-        }
-};
-//Para validar en correo
-const validarCorreo = (string) => {
-    let out = '';
-    let filtro = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_@.-';
-    for (let i=0; i<string.length; i++)
-    if (filtro.indexOf(string.charAt(i)) != -1) 
-        out += string.charAt(i);
-    return out
-};
+// const validarCorreo = (string) => {
+//     let out = '';
+//     let filtro = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_@.-';
+//     for (let i=0; i<string.length; i++)
+//     if (filtro.indexOf(string.charAt(i)) != -1) 
+//         out += string.charAt(i);
+//     return out
+// };
  function especialesCorreo(string){
         let out = 0;
         let filtro = '@.';
@@ -69,7 +70,7 @@ const validarCorreo = (string) => {
     }
 
 //para validar almenos una de cada una en la contraseña    
-const contarAltas = (string) =>{
+const contarMayusculas = (string) =>{
   let out = 0;
   let filtro = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   for (let i=0; i<string.length; i++)
@@ -78,7 +79,7 @@ const contarAltas = (string) =>{
   return out
 };
 
-const ContarBajas = (string) =>{
+const contarMinusculas = (string) =>{
   let out = 0;
   let filtro = 'abcdefghijklmnopqrstuvwxyz';
   for (let i=0; i<string.length; i++)
@@ -98,7 +99,7 @@ const contarNumeros = (string) =>{
 
 const contarEspeciales = (string) =>{
   let out = 0;
-  let filtro = '@!#$%&/()=';
+  let filtro = '@!#$%&/()=.';
   for (let i=0; i<string.length; i++)
   if(filtro.indexOf(string.charAt(i)) != -1)
       out++
@@ -208,24 +209,24 @@ try {
           
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon2"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control" bind:value={correo} on:input={correoValido} placeholder="Correo" aria-label="Recipient's username" aria-describedby="basic-addon2" required >
+            <input type="email" class="form-control {correoValido ? 'is-valid' : 'is-invalid'}" bind:value={correo}  on:input={validarCorreo}  placeholder="Correo" aria-label="Recipient's username" aria-describedby="basic-addon2" required >
           </div>
 
           <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" on:click={()=> (verContra = !verContra)}><i class={verContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
             {#if !verContra}
-                <input type="password" class="form-control" bind:value={contrasena}   placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={contrasena}  on:input={validarClave} placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
-                <input type="text" class="form-control" bind:value={contrasena}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="text" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={contrasena} on:input={validarClave}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
           <!--Confirmar contraseña-->
           <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" on:click={()=> (verConfirContra = !verConfirContra)}><i class={verConfirContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
             {#if !verConfirContra}
-                <input type="password" class="form-control" bind:value={confirmarContrasena } placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
-                <input type="text" class="form-control" bind:value={confirmarContrasena } placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="text" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
           
