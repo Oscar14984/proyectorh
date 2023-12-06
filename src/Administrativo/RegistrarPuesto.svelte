@@ -52,6 +52,7 @@ let descripcion= '';
 let fecha_limite= '';
 let lugar= ''
 let pais= ''
+let doctor_solicitante = '';
 // let ofrecemos= []
 // let requisitos= []
 // let funcionesGenerales= []
@@ -73,6 +74,7 @@ const enviarFormulario = async () => {
       pais,
       requisitos,
       ofrecemos,
+      doctor_solicitante,
       funciones_generales: funcionesGenerales,
       habilidades_conocimientos: habilidadesConocimientos,
     }, {
@@ -95,13 +97,13 @@ const enviarFormulario = async () => {
   let jsonSalida = []
   const puestos = async () => {
     try {
-      spinner = true;
+    spinner = true;
     const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
+    spinner = false;
     if(res.data){
       jsonSalida = Object.values(data.jsonSalida);
       console.log(jsonSalida)
-      spinner = false;
     } 
   } catch (error) {
     
@@ -132,6 +134,7 @@ const modalOpen = async (data) => {
       descripcion: cargo.descripcion,
       fecha_limite: cargo.fecha_limite,
       lugar: cargo.lugar,
+      doctor_solicitante: cargo.doctor_solicitante,
       pais: cargo.pais,
       requisitos: cargo.requisitos,
       ofrecemos: cargo.ofrecemos,
@@ -181,6 +184,7 @@ const eliminarPuesto = async (id_puestoT) =>{
                 <th scope="col">Titulo</th>
                 <th scope="col">Pais</th>
                 <th scope="col">Lugar</th>
+                <th scope="col">Solicitado por:</th>
                 <th scope="col">Fecha limite</th>
                 <th scope="col">Requisitos</th>
                 <th scope="col">Ofrecemos</th>
@@ -195,6 +199,7 @@ const eliminarPuesto = async (id_puestoT) =>{
                             <td>{puesto.titulo}</td>
                             <td>{puesto.pais}</td>
                             <td>{puesto.lugar}</td>
+                            <td>{puesto.doctor_solicitante}</td>
                             <td>{puesto.fecha_limite}</td>
                             <td>
                               {#each puesto.requisitos as requisito}
@@ -265,6 +270,11 @@ const eliminarPuesto = async (id_puestoT) =>{
                             <label>
                             Lugar:
                             <input bind:value={lugar} type="text" required />
+                            </label>
+
+                            <label>
+                            Solicitado por:
+                            <input bind:value={doctor_solicitante} type="text" required />
                             </label>
 
                             <label>
@@ -352,6 +362,9 @@ const eliminarPuesto = async (id_puestoT) =>{
   <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>Lugar:</label>
         <input bind:value={cargo.lugar} />
+  <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>Solicitado por:</label>
+        <input bind:value={cargo.doctor_solicitante} />
   <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>Fecha límite:</label>
         <input bind:value={cargo.fecha_limite} />

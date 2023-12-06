@@ -15,7 +15,7 @@
     Salida : 
     Ninguna
     */
-    require_once "accessos.php";
+    require_once "accesos.php";
     require_once "classGetPostInDataBase.php";
 
     $insertInDataBase = new classGetPostInDataBase();
@@ -43,7 +43,7 @@
         //Obtenemos id autogenerada del puesto
         $queryConsultaGeneral = "SELECT * FROM Puestos pu WHERE pu.titulo = ? AND pu.descripcion = ? AND pu.fecha_limite = ? AND pu.lugar = ?";
         $valuesSearchPuesto = array($titulo,$desripcion,$fecha_limite,$lugar);
-        $getDataPuesto = $insertInDataBase->consulta_ca($quertConsultaGeneral,$valuesSearchPuesto);
+        $getDataPuesto = $insertInDataBase->consulta_ca($queryConsultaGeneral,$valuesSearchPuesto);
         $dataPuesto = array();
         while($row = $getDataPuesto->fetch_assoc()) {
             array_unshift($dataPuesto,array($row["id_puesto"],$row["titulo"],$row["descripcion"],$row["fecha_limite"],$row["lugar"]));

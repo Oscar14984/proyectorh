@@ -47,31 +47,31 @@
 
     //Para poder hacer la insercion dinamica de los requisitos de cada puesto iteramos en cada unos de los array para poder insertar en las tablas de requisitos de los puestos
     foreach ($requisitos as $requisito) {
-        $id = (int)$requisito["id"];
+        $id = $requisito["id"];
         $req = $requisito["linea"];
         $valuesRequisito = array($req,$id);
-        $insertInDataBase->consulta_ca($queryUpdateRequisitosGenerales,$valuesRequisito);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateRequisitosGenerales,$valuesRequisito);
     }
 
     foreach ($ofrecemos as $ofrece) {
         $id = $ofrece["id"];
         $ofer = $ofrece["linea"];
         $valuesOferta = array($ofer,$id);
-        $insertInDataBase->consulta_ca($queryUpdateRequisitosGenerales,$valuesOferta);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateOfrecemos,$valuesOferta);
     }
 
     foreach ($funcionesGenerales as $funcion) {
         $id = $funcion["id"];
         $fun = $funcion["linea"];
-        $valuesRequisito = array($fun,$id);
-        $insertInDataBase->consulta_ca($queryUpdateFuncionesGenerales,$valuesRequisito);
+        $valuesFuncionGeneral = array($fun,$id);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateFuncionesGenerales,$valuesFuncionGeneral);
     }
 
     foreach ($habilidadesConocimientos as $habCon) {
         $id = $habCon["id"];
         $hab = $habCon["linea"];
-        $valuesRequisito = array($hab,$id);
-        $insertInDataBase->consulta_ca($queryUpdateHabilidadesConocimientos,$valuesRequisito);
+        $valuesHabilidadConocimiento = array($hab,$id);
+        $insertarEnBaseDatos->consulta_ca($queryUpdateHabilidadesConocimientos,$valuesHabilidadConocimiento);
     }
     //Nos deconectamos de la base de datos
     $insertarEnBaseDatos->dbDisconnect();

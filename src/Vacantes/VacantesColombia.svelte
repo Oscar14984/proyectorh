@@ -5,39 +5,6 @@
   import Lugar from "../Lugares";
   import { onMount } from 'svelte';
 
-  let rsPuestos;
-
-//   const getPuestos = async () => {
-//   try {
-//     const res = await axios.post(Lugar.backend + 'getPuestosData.php');
-//     const data = res.data;
-
-//     tienePuestos = data.length > 0;
-//     if (tienePuestos) {
-//       rsPuestos = (puesto => {
-//         // Parsea las cadenas JSON en cada propiedad correspondiente
-//         return {
-//           id_puesto: puesto.id_puesto,
-//           titulo: puesto.titulo,
-//           descripcion: puesto.descripcion,
-//           fecha_limite: puesto.fecha_limite,
-//           lugar: puesto.lugar,
-//           requisitos: JSON.parse(puesto.requisitos),
-//           ofrecemos: JSON.parse(puesto.ofrecemos),
-//           funciones_generales: JSON.parse(puesto.funcionesGenerales),
-//           habilidades_conocimientos: JSON.parse(puesto.habilidadesConocimientos),
-//         };
-//       });
-//       console.log(rsPuestos)
-//     } else {
-//       rsPuestos = [];
-//     }
-//   } catch (error) {
-//     console.error("Error al obtener los puestos:", error);
-//   }
-// };
-
-let puestos = []
 // let tienePuestos;
 let jsonSalida = [];
 const getPuestos = async () =>{
@@ -77,6 +44,18 @@ const getFecha = (diferenciaDias) => {
   onMount(() => {
     getPuestos();
   });
+
+  //para postutularse
+  const postularse = async () =>{
+    try {
+      const res = await axios.post(Lugar.backend+'registrarUsuarioPuesto.php',{
+        id_puesto:id_puesto,
+        id_usuario:id_usuario,
+      })
+    } catch (error) {
+      
+    };
+  };
 </script>
  
 <main>
@@ -85,7 +64,7 @@ const getFecha = (diferenciaDias) => {
   </div>
   <div class="container">
       {#each jsonSalida as puesto (puesto.id_puesto)}
-      <div class="card mt-3 {getFecha(puesto.diferenciaDias)}">
+      <div class="card mt-3 ">
         <div class="card-header bg-primary text-white">Encabezado Azul</div>
         <div class="card-body">
           <h5 class="card-title">{puesto.titulo}</h5>
@@ -121,7 +100,8 @@ const getFecha = (diferenciaDias) => {
             {/each}
           </ul>
         </div>
-        <div class="card-footer bg-danger text-white">Pie de página Rojo</div>
+        <div class="card-footer  text-white {getFecha(puesto.diferenciaDias)}">Tiempo estimado</div>
+        <button class="btn btn-primary mt-3 mb-3" on:click={() => postularse(puesto.id_puesto)}>Postularse</button>
       </div>
       {/each}
   </div>

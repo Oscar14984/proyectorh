@@ -11,5 +11,4 @@
     $insertarEnBaseDatos = new classGetPostInDataBase();
 
     $insertarEnBaseDatos->consulta_ca($queryRegistro,$valuesRegistroRelacion);
-    
 ?>
