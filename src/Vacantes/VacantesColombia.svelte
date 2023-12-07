@@ -1,29 +1,45 @@
 <script>
-// @ts-nocheck
-
+  // @ts-nocheck
+	import Spinner from './../Componentes/Spinner.svelte';
+  // @ts-nocheck
   import axios from "axios";
   import Lugar from "../Lugares";
+  import { session } from "../session";
   import { onMount } from 'svelte';
+
+
+  let spinner = false;
+  let idUsuario = null;
+//Para exportar el id_usuario cuando hace inicio de sesión.
+  idUsuario = $session.id_usuario;
+  console.log(idUsuario)
 
 // let tienePuestos;
 let jsonSalida = [];
 const getPuestos = async () =>{
   try {
+    spinner = true
     const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
-    
+    spinner = false
       jsonSalida = Object.values(data.jsonSalida).map(puesto => {
         const fechaLimite = new Date(puesto.fecha_limite);
         const fechaActual = new Date();
+        const idPuesto = puesto.id_puesto;
+        console.log(idPuesto)
 
+        postularse(idPuesto);
         // Calcular la diferencia en milisegundos
+        // @ts-ignore
         const diferenciaMilisegundos = fechaLimite - fechaActual;
 
         // Calcular la diferencia en días
         const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
 
+
         return { ...puesto, diferenciaDias };
         // tienePuestos = jsonSalida.length > 0;
+
       });
       console.log(jsonSalida)
     
@@ -46,11 +62,12 @@ const getFecha = (diferenciaDias) => {
   });
 
   //para postutularse
-  const postularse = async () =>{
+  const postularse = async (idPuesto) =>{
     try {
       const res = await axios.post(Lugar.backend+'registrarUsuarioPuesto.php',{
-        id_puesto:id_puesto,
-        id_usuario:id_usuario,
+        id_puesto:idPuesto,
+        // @ts-ignore
+        id_usuario:idUsuario,
       })
     } catch (error) {
       
@@ -59,6 +76,9 @@ const getFecha = (diferenciaDias) => {
 </script>
  
 <main>
+  {#if spinner == true}
+     <Spinner />
+  {/if}
   <div>
     <!-- Your existing HTML code -->
   </div>

@@ -30,7 +30,6 @@ const cargarUsuarios = async () => {
     const res = await axios.post(Lugar.backend + 'getUsuarios.php')
     const data = JSON.parse(res.data.d);
     if(res.data){
-      spinner = true;
       usuarios = Object.values(data.usuarios);
       console.log(usuarios)
 

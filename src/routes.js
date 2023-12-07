@@ -14,6 +14,8 @@ import Perfiles from './Componentes/Perfiles.svelte'
 // @ts-ignore
 import Postulados from './Administrativo/Postulados.svelte'
 // @ts-ignore
+import VerPostulados from './Administrativo/verPostulados.svelte'
+// @ts-ignore
 import RegistroPuesto from './Administrativo/RegistroPuesto.svelte'
 // @ts-ignore
 import RegistrarPuesto from './Administrativo/RegistrarPuesto.svelte'
@@ -42,6 +44,7 @@ const routes ={
     //Administrativos
     '/L0gAdm1n':LoginAdmin,
     '/Postulados':Postulados,
+    '/VerPostulados':VerPostulados,
     '/RegistroPuesto':RegistroPuesto,
     '/RegistrarPuesto':RegistrarPuesto,
     '/InicioAdmin':InicioAdmin,
