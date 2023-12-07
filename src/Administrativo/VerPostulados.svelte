@@ -47,7 +47,7 @@ const consultarPostulados = async (id_usuario) => {
   try {
     // console.log(id_usuario); // Mostrar el id_usuario
     // spinner = true; 
-    const idUsuario = id_usuario;
+    const idUsuario = 60;
     const res = await axios.post(Lugar.backend + 'getPuestosRelacionadosConUsuario.php', {
       id_usuario: idUsuario // Pasar el id_usuario en la solicitud
     });

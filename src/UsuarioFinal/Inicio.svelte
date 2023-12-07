@@ -47,9 +47,9 @@ import CartasVacantes from "../Componentes/CartasVacantes.svelte";
         height: auto;
     }
     .cartasVacantes{
-        margin-left: 255px;
+        margin-left: 500px;
     }
- @media (min-width: 300px) and (max-width: 900px){
+ @media (min-width: 300px) and (max-width: 1900px){
  .cartasVacantes{
    margin: auto;
  }
