@@ -30,10 +30,10 @@
             array_push($valuesData,array("id_puesto"=>$row["id_puesto"],"titulo"=>$row["titulo"],"descripcion"=>$row["descripcion"],"fecha_limite"=>$row["fecha_limite"]));
         }
         $jsonSalida = ($valuesData);
-        $response = json_encode(array("d"=>$jsonSalida));
-        echo $response;
-        // $response['d']=json_encode(array("jsonSalida"=>$jsonSalida));
-        // echo json_encode($response);
+        // $response = json_encode(array("d"=>$jsonSalida));
+        // echo $response;
+        $response['d']=json_encode(array("jsonSalida"=>$jsonSalida));
+        echo json_encode($response);
     }else{
         //En caso de obtener una tabla vacia
         $response = json_encode(array());
