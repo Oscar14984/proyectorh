@@ -64,7 +64,7 @@ const getFecha = (diferenciaDias) => {
   //para postutularse
   const postularse = async (idPuesto) =>{
     try {
-      const res = await axios.post(Lugar.backend+'registrarUsuarioPuesto.php',{
+      const res = await axios.post(Lugar.backend+'postulacion.php',{
         id_puesto:idPuesto,
         // @ts-ignore
         id_usuario:idUsuario,

@@ -19,35 +19,35 @@ const setVerIdUsuario = (id_usuario) => {
 let usuarios = [];
 
 // Para extraer el id_usuario
-// const extraerIdUsuario = async () => {
-//   try {
-//     const res = await axios.post(Lugar.backend + 'getUsuarios.php');
-//     const data = JSON.parse(res.data.d);
+const extraerIdUsuario = async () => {
+  try {
+    const res = await axios.post(Lugar.backend + 'getUsuarios.php');
+    const data = JSON.parse(res.data.d);
 
-//     if (data && data.usuarios) {
-//       usuarios = Object.values(data.usuarios);
+    if (data && data.usuarios) {
+      usuarios = Object.values(data.usuarios);
 
-//       if (usuarios.length > 0) {
-//         const id_usuario = usuarios[0].id_usuario;
-//         setVerIdUsuario(id_usuario);
-//         console.log(id_usuario);
-//         consultarPostulados(id_usuario);
-//       } else {
-//         console.log("No se encontraron usuarios");
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error al extraer el id_usuario:", error);
-//   }
-// };
-
+      if (usuarios.length > 0) {
+        const id_usuario = usuarios[0].id_usuario;
+        setVerIdUsuario(id_usuario);
+        console.log(id_usuario);
+        consultarPostulados(id_usuario);
+      } else {
+        console.log("No se encontraron usuarios");
+      }
+    }
+  } catch (error) {
+    console.error("Error al extraer el id_usuario:", error);
+  }
+};
+extraerIdUsuario()
 // Para consultar a los postulados
 let jsonSalida = [];
-const consultarPostulados = async () => {
+const consultarPostulados = async (id_usuario) => {
   try {
     // console.log(id_usuario); // Mostrar el id_usuario
     // spinner = true; 
-    const idUsuario = 60;
+    const idUsuario = id_usuario;
     const res = await axios.post(Lugar.backend + 'getPuestosRelacionadosConUsuario.php', {
       id_usuario: idUsuario // Pasar el id_usuario en la solicitud
     });
@@ -62,7 +62,7 @@ const consultarPostulados = async () => {
     console.error("Error al consultar los postulados:", error);
   }
 };
-consultarPostulados();
+// consultarPostulados(id_usuario);
 
 
 
