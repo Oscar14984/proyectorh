@@ -1,15 +1,22 @@
 // @ts-ignore
 import Inicio from './UsuarioFinal/Inicio.svelte'
 // @ts-ignore
+
+//Vacantes
 import VacantesMexico from './Vacantes/VacantesMexico.svelte'
+// @ts-ignore
+import VacantesColombia from './Vacantes/VacantesColombia.svelte'
+// @ts-ignore
+import VacantesPrueba from './Vacantes/VacantePrueba.svelte'
+
+//login y registro usuarios
 // @ts-ignore
 import LoginAdmin from './Login/LoginAdmin.svelte'
 // @ts-ignore
 import Registro from './Login/Registro.svelte'
 // @ts-ignore
-import VacantesColombia from './Vacantes/VacantesColombia.svelte'
-// @ts-ignore
 import Perfiles from './Componentes/Perfiles.svelte'
+
 //administrativo
 // @ts-ignore
 import Postulados from './Administrativo/Postulados.svelte'
@@ -29,6 +36,7 @@ import InicioSuperAdmin from './AdminSuper/InicioSuperAdmin.svelte'
 import ExamenTecnico from './ExamenTecnico/ExamenTecnico.svelte'
 // @ts-ignore
 import Videos from './Administrativo/Videos.svelte'
+
 // Errores
 // @ts-ignore
 import Error404 from "./Errores/Error404.svelte";
@@ -39,6 +47,7 @@ const routes ={
     '/Registro':Registro,
     '/VacantesMexico':VacantesMexico,
     '/VacantesColombia':VacantesColombia,
+    '/VacantesPrueba':VacantesPrueba,
     '/Perfil':Perfiles,
     '/ExamenTecnico':ExamenTecnico,
     //Administrativos

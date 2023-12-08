@@ -85,7 +85,6 @@ const getFecha = (diferenciaDias) => {
   <div class="container">
       {#each jsonSalida as puesto (puesto.id_puesto)}
       <div class="card mt-3 ">
-        <div class="card-header bg-primary text-white">Encabezado Azul</div>
         <div class="card-body">
           <h5 class="card-title">{puesto.titulo}</h5>
           <p class="card-text"><strong>Descripción:</strong> {puesto.descripcion}</p>
@@ -131,4 +130,8 @@ const getFecha = (diferenciaDias) => {
   .verde { background-color: green; }
   .amarillo { background-color: yellow; }
   .rojo { background-color: red; }
+
+  .card{
+    border-top: 4px solid #17a2b8;
+  }
 </style>

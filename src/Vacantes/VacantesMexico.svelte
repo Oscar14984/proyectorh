@@ -42,13 +42,13 @@
             <p class="card-text">{vacantes.descripcion}</p>
           </div>
         </div>
-        <div class="card-back">
+        <div1 class="card-back">
           <div class="card-body">
             <h5 class="card-title">Detalles de la Vacante</h5>
             <p class="card-text">Fecha Limite: {vacantes.fecha_limite}</p>
           <button class="btn btn-info">Aplicar</button>
           </div>
-        </div>
+        </div1>
       </div>
       {/each}
       {:else}
