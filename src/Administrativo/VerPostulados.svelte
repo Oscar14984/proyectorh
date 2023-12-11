@@ -19,40 +19,53 @@ const setVerIdUsuario = (id_usuario) => {
 let usuarios = [];
 
 // Para extraer el id_usuario
-const extraerIdUsuario = async () => {
-  try {
-    const res = await axios.post(Lugar.backend + 'getUsuarios.php');
-    const data = JSON.parse(res.data.d);
+// Para extraer todos los id_usuario
+let datosCargados = false;
 
-    if (data && data.usuarios) {
-      usuarios = Object.values(data.usuarios);
+const extraerTodosIdUsuario = async () => {
+  if (!datosCargados) {
+    try {
+      const res = await axios.post(Lugar.backend + 'getUsuarios.php');
+      const data = JSON.parse(res.data.d);
 
-      if (usuarios.length > 0) {
-        const id_usuario = usuarios[0].id_usuario;
-        setVerIdUsuario(id_usuario);
-        console.log(id_usuario);
-        consultarPostulados(id_usuario);
-      } else {
-        console.log("No se encontraron usuarios");
+      if (data && data.usuarios) {
+        usuarios = Object.values(data.usuarios);
+
+        if (usuarios.length > 0) {
+          usuarios.forEach(usuario => {
+            const id_usuario = usuario.id_usuario;
+            console.log(id_usuario);
+            // Aquí puedes hacer lo que necesites con cada id_usuario
+            // Por ejemplo, puedes llamar a la función consultarPostulados con cada id_usuario
+            consultarPostulados(id_usuario);
+          });
+          datosCargados = true;
+        } else {
+          console.log("No se encontraron usuarios");
+        }
       }
+    } catch (error) {
+      console.error("Error al extraer los id_usuario:", error);
     }
-  } catch (error) {
-    console.error("Error al extraer el id_usuario:", error);
+  } else {
+    console.log("Los datos ya fueron cargados");
   }
 };
-extraerIdUsuario()
+
+extraerTodosIdUsuario();
+
 // Para consultar a los postulados
 let jsonSalida = [];
 const consultarPostulados = async (id_usuario) => {
   try {
     // console.log(id_usuario); // Mostrar el id_usuario
-    // spinner = true; 
-    const idUsuario = 60;
+    spinner = true; 
+    const idUsuario = id_usuario;
     const res = await axios.post(Lugar.backend + 'getPuestosRelacionadosConUsuario.php', {
       id_usuario: idUsuario // Pasar el id_usuario en la solicitud
     });
     const data = JSON.parse(res.data.d);
-    // spinner = false; 
+    spinner = false; 
     if (res.data && data.jsonSalida) {
       jsonSalida = Object.values(data.jsonSalida);
       console.log(jsonSalida);
@@ -74,19 +87,19 @@ const consultarPostulados = async (id_usuario) => {
   {/if}
     <div class="container">
         <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Puesto</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
           {#each jsonSalida as puestos (puestos.id_puesto)}
-             <thead>
-               <tr>
-                 <th scope="col"></th>
-                 <th scope="col">First</th>
-                 <th scope="col">Last</th>
-                 <th scope="col">Handle</th>
-               </tr>
-             </thead>
              <tbody>
                <tr>
                  <th scope="row">{puestos.titulo}</th>
-                 <td>hola</td>
+                 <td>{puestos.nombre}</td>
                  <td>Otto</td>
                  <td>@mdo</td>
                </tr>

@@ -11,6 +11,7 @@ import Lugar from "../Lugares";
 import { session } from "../session";
 import { onMount } from 'svelte';
 import Modal from '../Componentes/Modal.svelte';
+    import { push } from 'svelte-spa-router';
 
   
     
@@ -19,7 +20,7 @@ let idUsuario = null;
 idUsuario = $session.id_usuario;
 console.log(idUsuario)
   
-// let tienePuestos;
+let tienePuestos;
 let jsonSalida = [];
 const getPuestos = async () =>{
 try {
@@ -40,13 +41,13 @@ try {
 
         // Calcular la diferencia en días
         const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
-
-
+        
+        
         return { ...puesto, diferenciaDias };
-        // tienePuestos = jsonSalida.length > 0;
-
-    });
-    console.log(jsonSalida)
+        
+      });
+      console.log(jsonSalida)
+      tienePuestos = jsonSalida.length > 0;
     
     } catch (error) {
     
@@ -91,6 +92,11 @@ const modalOpen = async (data) => {
 //Para mostrar mensaje cuando se pasa el cursor sobre el div de fecha limite
 let mostrarMensaje = false;
 let mensaje = '';
+
+//Función para registrarse y postularse
+const registrarPostular = () =>{
+  push('/Registro')
+}
   </script>
 
 <main>
@@ -100,23 +106,31 @@ let mensaje = '';
     <h1 class="text-info" style="text-shadow: 1px 1px 2px black;">OPORTUNIDADES DE EMPLEO</h1>
     <p>Siempre estamos buscando personas entusiastas y apasionadas para unirse a nuestro equipo, encuentra la vacante ideal para ti.</p>
     <div class="container">
-        {#each jsonSalida as puesto (puesto.id_puesto)}
-            <div class="card shadow p-3 mb-5 bg-body rounded">
-                <div class="card-header">
-                  Vacante en:
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">{puesto.titulo}</h5>
-                  <p class="card-text">{puesto.descripcion}</p>
-                  <p class="card-text">{puesto.lugar}</p>
-                  <p class="card-text">{puesto.doctor_solicitante}</p>
-                  <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
-                </div>
-                <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="color: white; cursor: pointer;">
-                  Fecha limite: {puesto.fecha_limite}
-                </div>
-            </div>
-        {/each}
+      {#if tienePuestos}
+         {#each jsonSalida as puesto (puesto.id_puesto)}
+             <div class="card shadow p-3 mb-5 bg-body rounded">
+                 <div class="card-header">
+                   Vacante en:
+                 </div>
+                 <div class="card-body">
+                   <h5 class="card-title">{puesto.titulo}</h5>
+                   <p class="card-text">{puesto.descripcion}</p>
+                   <p class="card-text">{puesto.lugar}</p>
+                   <p class="card-text">{puesto.doctor_solicitante}</p>
+                   {#if idUsuario == null}
+                   <div>
+                     <button class="btn btn-warning" on:click={registrarPostular}>¡Regístrate y Postúlate!</button>
+                   </div>
+                   {:else}
+                   <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
+                   {/if}
+                 </div>
+                 <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="color: white; cursor: pointer;">
+                   Fecha limite: {puesto.fecha_limite}
+                 </div>
+             </div>
+         {/each}
+      {/if}
     </div>
     <!-- Modal para mostrar información adicional  -->
     {#if openModal == true}
