@@ -121,7 +121,7 @@ const modalOpen = async (data) => {
         open={openModal}
         onClosed={(data) => modalOpen(data)}
         modalSize="modal-ms"
-        title=" vacante:"
+        title=" vacante en:"
         saveButtonText="Postularse"
         closeButtonText="Cerrar"
         >

@@ -143,14 +143,14 @@ const enterLogin = e => {
           
                       <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
                       <div class="input-group mb-3">
-                          <button class="btn btn-outline-secondary" on:click={()=> (lookPass = !lookPass)}><i class={lookPass ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
-                          {#if !lookPass}
-                              <!-- content here -->
-                              <input type="password" class="form-control" bind:value={contrasena}  aria-describedby="basic-addon1" on:keypress={enterLogin}>
-                          {:else}
-                              <!-- else content here -->
-                              <input type="text" class="form-control"  bind:value={contrasena}   aria-describedby="basic-addon1" on:keypress={enterLogin}>
-                          {/if}
+                        {#if !lookPass}
+                        <!-- content here -->
+                        <input type="password" class="form-control" bind:value={contrasena}  aria-describedby="basic-addon1" on:keypress={enterLogin}>
+                        {:else}
+                        <!-- else content here -->
+                        <input type="text" class="form-control"  bind:value={contrasena}   aria-describedby="basic-addon1" on:keypress={enterLogin}>
+                        {/if}
+                        <button class="btn btn-outline-secondary" on:click={()=> (lookPass = !lookPass)}><i class="bi {lookPass ? 'bi-eye-fill' : 'bi-eye-fill'} {lookPass ? 'text-danger' : 'text-success'}"></i></button>
                       </div>
                     </form>
                   </div>
