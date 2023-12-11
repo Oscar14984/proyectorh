@@ -88,6 +88,9 @@ const modalOpen = async (data) => {
          
     }
 }
+//Para mostrar mensaje cuando se pasa el cursor sobre el div de fecha limite
+let mostrarMensaje = false;
+let mensaje = '';
   </script>
 
 <main>
@@ -107,15 +110,15 @@ const modalOpen = async (data) => {
                   <p class="card-text">{puesto.descripcion}</p>
                   <p class="card-text">{puesto.lugar}</p>
                   <p class="card-text">{puesto.doctor_solicitante}</p>
-                  <button class="btn btn-success" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
+                  <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
                 </div>
-                <div class="card-header {getFecha(puesto.diferenciaDias)}" style="color: white;">
+                <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="color: white; cursor: pointer;">
                   Fecha limite: {puesto.fecha_limite}
                 </div>
             </div>
         {/each}
     </div>
-    
+    <!-- Modal para mostrar información adicional  -->
     {#if openModal == true}
         <Modal
         open={openModal}
@@ -171,6 +174,17 @@ const modalOpen = async (data) => {
     }
     .card{
         border-top: 4px solid #17a2b8;
-        
+    }
+    .card-footer:hover::after {
+      content: 'Los colores verde, amarillo y rojo indican el estado en que se encuentra el puesto.';
+      color: black;
+      position: absolute;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-width: 200px;
+      z-index: 100;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
     }
 </style>
