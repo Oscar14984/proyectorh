@@ -114,9 +114,10 @@ function handleFileChange(event) {
 //barra
 let pasoActual = 1;
 
-  function cambiarPaso(paso) {
+  const cambiarPaso = (paso) =>{
     pasoActual = paso;
-  }
+  };
+  
 </script>
 
 <main>
@@ -160,7 +161,7 @@ let pasoActual = 1;
           {#each [1, 2, 3, 4, 5, 6, 7, 8] as numero (numero)}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class={`circulo ${numero <= pasoActual ? 'activo' : ''}`} on:click={() => cambiarPaso(numero)}>
+            <div class={`circulo ${numero <= pasoActual ? 'activo' : ''}`} style="cursor: pointer;" on:click={() => cambiarPaso(numero)}>
               {numero}
             </div>
           {/each}
@@ -205,6 +206,12 @@ let pasoActual = 1;
 </main>
 
 <style>
+.titulo{
+  border-bottom: 2px solid #65c5f1;
+  width: 10%;
+  text-shadow: 3px 3px 3px black;
+} 
+
   
 .card,.titulo{
   margin-left: 10%;
