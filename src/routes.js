@@ -15,7 +15,7 @@ import LoginAdmin from './Login/LoginAdmin.svelte'
 // @ts-ignore
 import Registro from './Login/Registro.svelte'
 // @ts-ignore
-import Perfiles from './Componentes/Perfiles.svelte'
+import Perfiles from './UsuarioFinal/Perfiles.svelte'
 
 //administrativo
 // @ts-ignore
