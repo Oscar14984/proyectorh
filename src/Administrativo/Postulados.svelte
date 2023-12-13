@@ -44,14 +44,6 @@ const cargarUsuarios = async () => {
 };
 cargarUsuarios();
 
-//Funcion para filtar nombres de usuarios
-let terminoBusqueda = '';
-const filtrarUsuarios = () =>{
-    return usuarios.filter(usuario =>
-    usuario.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
-  );
-}
-
 // PAGINADOR
 let maxRegsPP = 10
     let paginas = 0
@@ -95,7 +87,20 @@ let maxRegsPP = 10
         verVideo.update( ()=> ({
             id_usuario:id_usuario,
         }));
-    }
+    };
+
+//Funcion para filtar nombres de usuarios
+let terminoBusqueda = '';
+const filtrarUsuarios = () =>{
+    return usuarios.filter(usuario =>
+      usuario.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      usuario.apellido_paterno.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      usuario.apellido_materno.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      usuario.correo.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      usuario.numero.toLowerCase().includes(terminoBusqueda.toLowerCase())
+    );
+};
+
 </script>
 
 <main>
@@ -107,6 +112,11 @@ let maxRegsPP = 10
     <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
     </div>
+
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+    </form>
 
     <table class="table table-hover" on:change="{cambiarEstatus}">
         <thead>
@@ -179,7 +189,7 @@ let maxRegsPP = 10
                 </div>
             </div>
         {/if}
-        
+
     </div>
 </main>
 
