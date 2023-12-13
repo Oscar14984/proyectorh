@@ -1,25 +1,27 @@
 <script>
-    //componentes de js
+// @ts-nocheck
+//Scrips
 import { idVideo } from './../idVideo.js';
 import {verVideo} from '../verVideo'
+import Lugar from "../Lugares";
 //componentes con variables extra
 import Spinner from './../Componentes/Spinner.svelte';
-import Modal from '../Componentes/Modal.svelte';
+let spinner = false
 //Componentes sin varables extra
 import { onMount } from 'svelte';
 import {push} from 'svelte-spa-router'
-// @ts-nocheck
 import axios from "axios";
-import Lugar from "../Lugares";
+import Modal from '../Componentes/Modal.svelte';
 
-let spinner = false
 
 const setVerIdVideo = (id_video) => {
     idVideo.update(() => ({
         id_video: id_video,
     }));
 };
+
 //Función para consultar videos
+let tieneVideos;
 let infoVideos = [];
 const consultarVideos = async () => {
     try {
@@ -27,9 +29,9 @@ const consultarVideos = async () => {
         const id_usuario = $verVideo.id_usuario; // Obtener el id_usuario del store
         const res = await axios.post(Lugar.backend + 'getVideosInfo.php', { id_usuario });
         const data = JSON.parse(res.data.d);
+        spinner = false;
 
         if (res.data) {
-            spinner = true;
             infoVideos = Object.values(data.infoVideos);
 
             const id_video = infoVideos[0].id_video; 
@@ -37,13 +39,15 @@ const consultarVideos = async () => {
             // Almacena la id_video en el nuevo store
             setVerIdVideo(id_video);
             console.log(infoVideos);
+            //verificar si tiene videos
+        tieneVideos = infoVideos.length > 0;
             
         }
-        spinner = false;
     } catch (error) {
         
     };
 };
+
   onMount(() =>{
       consultarVideos();
   });
@@ -61,21 +65,19 @@ const Regresar = () =>{
 //Función para modal de descarga de videos
 let openModal = false;
 let localidad = []
-const modalOpen = async (data) =>{
+const descargarVideo = async (data) =>{
     openModal =false;
     if(data == 'save'){
         try {
         const id_video = $idVideo.id_video; // Obtener el id_video del store
         const res = await axios.post(Lugar.backend + 'downloadVideo.php', { id_video });
         const data = JSON.parse(res.data.d);
-        if (res.data&& id_video) {
+        if (res.data && id_video) {
             localidad = Object.values(data.localidad);
             // const responseData = res.data;
             // const localidad = responseData.d.localidad;
             // const nombre = responseData.d.nombre;
 
-            // console.log(localidad)
-            // console.log(nombre)
             console.log('Información de descarga:', localidad);
         } else {
             console.log('No hay id_video disponible para la descarga.');
@@ -85,12 +87,30 @@ const modalOpen = async (data) =>{
         };
     };
 }; 
+
+  // Función para descargar el video utilizando la localidad
+  const descargarVideoLocalidad = () => {
+    if (localidad.localidad) {
+      const videoURL = localidad.localidad;
+
+      // Crear un enlace temporal para iniciar la descarga
+      const link = document.createElement('a');
+      link.href = videoURL;
+      link.setAttribute('download', `${localidad.nombre}.mp4`); // Usar el nombre del video obtenido
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error('No se pudo obtener la localidad del video.');
+    }
+  };
 </script>
 
 <main>
     {#if spinner == true}
          <Spinner />
     {/if}
+    <button on:click={descargarVideoLocalidad}>descarga</button>
     <div class="container">
         <table class="table table-hover">
             <thead>
@@ -101,23 +121,27 @@ const modalOpen = async (data) =>{
                 
               </tr>
             </thead>
-            {#each infoVideos as infoVideo(infoVideo.id_video)}
-            <tbody>
-              <tr>
-                <th >{infoVideo.file_name}</th>
-                <th >{infoVideo.localidad}</th>
-                <th>
-                    <button class="btn btn-success" on:click={() => {openModal = true}}>Descargar Video</button>
-                </th>
-              </tr>
-            </tbody>
-            {/each}
+            {#if tieneVideos}
+                 {#each infoVideos as infoVideo(infoVideo.id_video)}
+                 <tbody>
+                   <tr>
+                     <th >{infoVideo.file_name}</th>
+                     <th >{infoVideo.localidad}</th>
+                     <th>
+                         <button class="btn btn-success" on:click={() => {openModal = true}}>Descargar Video</button>
+                     </th>
+                   </tr>
+                 </tbody>
+                 {/each}
+            {:else}
+                 <p style="border-bottom: 2px solid black;"><strong>Sin videos que mostrar.</strong></p>
+            {/if}
             <button class="btn btn-success" on:click={Regresar}>Regresar</button>
           </table>
           {#if openModal ==true}
              <Modal
              open={openModal}
-             onClosed={(data) => modalOpen(data)}
+             onClosed={(data) => descargarVideo(data)}
              modalSize="modal-ms"
              title=" Descargar video"
              saveButtonText="Descargar"

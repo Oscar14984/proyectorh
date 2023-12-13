@@ -1,27 +1,16 @@
 <script>
-	import Spinner from './../Componentes/Spinner.svelte';
 // @ts-nocheck
-
+//Librerias o componentes con variables extra
+import Spinner from './../Componentes/Spinner.svelte';
+let spinner = false;
+//Librerias o componentes sin variables extra
 import { push } from 'svelte-spa-router';
 import axios from "axios";
-import Lugar from '../Lugares';
 import { verVideo } from '../verVideo';
+//Scrips
+import Lugar from '../Lugares';
 
-
-let spinner = false;
-
- //postulados
- // const cargarUsuarios = async () => {
-     //   const res = await axios.post(Lugar.backend+'getUsuarios.php');
-     //   const data = JSON.parse(res.data.d);
-     //  tieneUsuarios = data.tieneUsuarios;
-     //  if (tieneUsuarios == true ) {
-         //    rsUsuarios = Object.values(data.rsUsuarios);
-         //  } else {
-             //     rsUsuarios = "";
-  //  }
-  //};
-  
+//Función para cargar a los usuarios
 let tieneUsuarios;
 let usuarios = [];
 const cargarUsuarios = async () => {
@@ -29,20 +18,40 @@ const cargarUsuarios = async () => {
     spinner = true;
     const res = await axios.post(Lugar.backend + 'getUsuarios.php')
     const data = JSON.parse(res.data.d);
+    spinner = false;
     if(res.data){
       usuarios = Object.values(data.usuarios);
       console.log(usuarios)
-
+      
       //verificar si tiene usuarios
-        tieneUsuarios = usuarios.length > 0;
-    } 
-    spinner = false;
+      if(tieneUsuarios = usuarios.length > 0){
+        paginas = Math.floor( usuarios.length / maxRegsPP )
+        residuo = ( usuarios.length % maxRegsPP )
+        if ( residuo > 0 ) {
+            pagAd = 1
+        } else {
+            pagAd = 0
+        }
+            paginas = paginas + pagAd
+            paginaActual = 1
+            registroInicial = 1
+            registroFinal = maxRegsPP
+        } 
+    }
   } catch (error) {
     
   }
+};
+cargarUsuarios();
+
+//Funcion para filtar nombres de usuarios
+let terminoBusqueda = '';
+const filtrarUsuarios = () =>{
+    return usuarios.filter(usuario =>
+    usuario.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
+  );
 }
 
-cargarUsuarios();
 // PAGINADOR
 let maxRegsPP = 10
     let paginas = 0
@@ -74,12 +83,13 @@ let maxRegsPP = 10
         paginaActual = pagina
         registroInicial = (paginaActual * maxRegsPP) - (maxRegsPP - 1)
         registroFinal = paginaActual * maxRegsPP
-    }
+    };
+
     //boton para ir a inicio
     const inicio = () =>{
         push('/InicioAdmin')
     }
-    
+    //Para guardar el id_usuario en el scrip de verVideos
     const verVideos = (id_usuario) =>{
         push('/Vidos')
         verVideo.update( ()=> ({
@@ -92,10 +102,12 @@ let maxRegsPP = 10
     {#if spinner == true}
          <Spinner />
     {/if}
+
 <div class="container">
     <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
     </div>
+
     <table class="table table-hover" on:change="{cambiarEstatus}">
         <thead>
           <tr>
@@ -107,25 +119,24 @@ let maxRegsPP = 10
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        
-            {#each  usuarios.slice(registroInicial - 1, registroFinal) as usuario (usuario.id_usuario)}
-                <tbody>
-                    <tr>
-                        <td>{usuario.nombre}</td>
-                        <td>{usuario.apellido_paterno}</td>
-                        <td>{usuario.apellido_materno}</td>
-                        <td>{usuario.correo}</td>
-                        <td>{usuario.numero}</td>
-                        <td>
-                        <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
-                        <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos</button>
-                        <button class="btn btn-success" >Ver Documentos</button>
-                        </td>
-                    </tr>
-                </tbody>
-            {/each}
-        
+        {#each  usuarios.slice(registroInicial - 1, registroFinal) as usuario (usuario.id_usuario)}
+            <tbody>
+                <tr>
+                    <td>{usuario.nombre}</td>
+                    <td>{usuario.apellido_paterno}</td>
+                    <td>{usuario.apellido_materno}</td>
+                    <td>{usuario.correo}</td>
+                    <td>{usuario.numero}</td>
+                    <td>
+                    <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
+                    <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos</button>
+                    <button class="btn btn-success" >Ver Documentos</button>
+                    </td>
+                </tr>
+            </tbody>
+        {/each}
         </table>
+
         <div class="col-6 col-lg-4 col-xxl-3">
             <div class="input-group mb-3 bg-light">
                 <span class="input-group-text"><strong>Registros por página:</strong></span>
@@ -136,6 +147,7 @@ let maxRegsPP = 10
                 </select>
             </div>
         </div>
+
         {#if tieneUsuarios }
             <div class="input-group mb-1">
                 <div role="group">
@@ -167,6 +179,7 @@ let maxRegsPP = 10
                 </div>
             </div>
         {/if}
+        
     </div>
 </main>
 
