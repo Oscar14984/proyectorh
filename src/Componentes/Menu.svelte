@@ -1,25 +1,29 @@
 <script>
-	import { session } from './../session.js';
+  //LIBRERIAS O COMPONENTES CON VARIABLES EXTRA
+  import Spinner from './Spinner.svelte';
+  let spinner = false;
+  //LIBRERIAS O COMPONENTES SIN VARIABLES EXTRA
+  import Swal from 'sweetalert2';
   import { link, push } from 'svelte-spa-router';
   import axios from 'axios';
+  //SCRIPTS
+	import { session } from './../session.js';
   import Lugar from '../Lugares.js';
-  import Swal from 'sweetalert2';
-  import Spinner from './Spinner.svelte';
   
 
-  let correo = '';
-  let contrasena = '';
+  
   let imgaFoto = "";
   let nombreUsuario = "";
   
   let sesion = false;
   let lookPass = false;
-  let spinner = false;
 
 const Registro = () =>{
   push('/Registro')
 }
 // Funcion para hacer log in
+let correo = '';
+let contrasena = '';
 const iniciarSesion = async () => {
   if(!correo || !contrasena){
     Swal.fire({
@@ -41,17 +45,23 @@ const iniciarSesion = async () => {
         push("/");
         sesion = true
         if(response.data.foto){
-          const nuevaRuta = response.data.foto.replace("C:/Apache24/htdocs", "http://localhost" )
-        session.update(_ => ({
-          id_usuario:response.data.id_usuario,
-          nombre: response.data.nombre,
-          apellido_paterno: response.data.apellido_paterno,
-          apellido_materno: response.data.apellido_materno,
-          correo: response.data.correo,
-          foto:nuevaRuta,
-          
-        }));
-        }
+          const nuevaRuta = response.data.foto.replace("C:/xampp/htdocs", "http://localhost" )
+            session.update(_ => ({
+              id_usuario:response.data.id_usuario,
+              nombre: response.data.nombre,
+              apellido_paterno: response.data.apellido_paterno,
+              apellido_materno: response.data.apellido_materno,
+              correo: response.data.correo,
+              foto:nuevaRuta,
+            }));
+            // Guardar datos de inicio de sesión
+            localStorage.setItem('id_usuario', response.data.id_usuario);
+            localStorage.setItem('nombre', response.data.nombre);
+            localStorage.setItem('apellido_paterno', response.data.apellido_paterno);
+            localStorage.setItem('apellido_materno', response.data.apellido_materno);
+            localStorage.setItem('correo', response.data.correo);
+            localStorage.setItem('foto', nuevaRuta);
+        };
         spinner = false
       } else {
         // Mostrar un mensaje de error o manejar el inicio de sesión fallido
@@ -67,15 +77,16 @@ const iniciarSesion = async () => {
     };
   };
 
+  //Para mandar al componente perfil
   const perfil = () =>{
     push('/perfil')
-  }
+  };
 
 //Funcion para hacer cerrar sesión
 const desLogueo = () =>{
   sesion = false
   push("/")
-}
+};
 
 const enterLogin = e => {
     if (e.charCode === 13) iniciarSesion();

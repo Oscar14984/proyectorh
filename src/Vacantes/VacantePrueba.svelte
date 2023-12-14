@@ -1,17 +1,16 @@
 <script>
+  // @ts-nocheck
 // LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
-// @ts-nocheck
 import Spinner from './../Componentes/Spinner.svelte';
 let spinner = false;
-
 // LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
-// @ts-nocheck
 import axios from "axios";
-import Lugar from "../Lugares";
-import { session } from "../session";
 import { onMount } from 'svelte';
 import Modal from '../Componentes/Modal.svelte';
-    import { push } from 'svelte-spa-router';
+import { push } from 'svelte-spa-router';
+//SCRIPTS
+import Lugar from "../Lugares";
+import { session } from "../session";
 
   
     
@@ -55,16 +54,18 @@ try {
 };
 // Función para determinar la clase CSS basada en la diferencia de días
 const getFecha = (diferenciaDias) => {
-    if (diferenciaDias >= 15) {
-        return 'verde';  // Clase CSS para color verde
-        } else if (diferenciaDias >= 0) {
-        return 'amarillo';  // Clase CSS para color amarillo
-        } else {
-        return 'rojo';  // Clase CSS para color rojo
-        }
-    }
-    onMount(() => {
-    getPuestos();
+  if (diferenciaDias >= 15) {
+      return 'verde';  // Clase CSS para color verde
+      } else if (diferenciaDias >= 0) {
+      return 'amarillo';  // Clase CSS para color amarillo
+      } else {
+      return 'rojo';  // Clase CSS para color rojo
+      }
+};
+
+//Para hacer llamada de los puestos
+onMount(() => {
+  getPuestos();
 });
 
 //para postutularse
@@ -125,7 +126,7 @@ const registrarPostular = () =>{
                    <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
                    {/if}
                  </div>
-                 <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="color: white; cursor: pointer;">
+                 <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="cursor: pointer;">
                    Fecha limite: {puesto.fecha_limite}
                  </div>
              </div>
@@ -176,9 +177,9 @@ const registrarPostular = () =>{
 
 <style>
     /* colores para del semaforo */
-    .verde { background-color: green; }
-    .amarillo { background-color: yellow; }
-    .rojo { background-color: red; }
+    .verde { background-color: green; color: white;}
+    .amarillo { background-color: #FFC107; color: black;}
+    .rojo { background-color: red; color: white;}
 
     .container{
         display:grid;
