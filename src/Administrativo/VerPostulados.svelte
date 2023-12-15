@@ -1,15 +1,18 @@
 <script>
  // @ts-nocheck
-    // LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
-    import Spinner from "../Componentes/Spinner.svelte";
-    let spinner = false
+// LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
+import Spinner from "../Componentes/Spinner.svelte";
+let spinner = false
+// LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
+import axios from 'axios';
+import Modal from "../Componentes/Modal.svelte";
+import { push } from 'svelte-spa-router'
+//Scripts
+import Lugar from "../Lugares";
+import { idUsuario } from "../idUsuario";
+import { idPuesto } from "../idPuesto";
 
-    // LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
-    import axios from 'axios';
-    import Lugar from "../Lugares";
-    import { push } from 'svelte-spa-router'
-    import { idUsuario } from "../idUsuario";
-
+//Funcion para ver el id de los videos
 const setVerIdUsuario = (id_usuario) => {
     idUsuario.update(() => ({
     id_usuario: id_usuario,
@@ -35,8 +38,6 @@ const extraerTodosIdUsuario = async () => {
           usuarios.forEach(usuario => {
             const id_usuario = usuario.id_usuario;
             console.log(id_usuario);
-            // Aquí puedes hacer lo que necesites con cada id_usuario
-            // Por ejemplo, puedes llamar a la función consultarPostulados con cada id_usuario
             consultarPostulados(id_usuario);
           });
           datosCargados = true;
@@ -75,10 +76,22 @@ const consultarPostulados = async (id_usuario) => {
     console.error("Error al consultar los postulados:", error);
   }
 };
-// consultarPostulados(id_usuario);
 
-
-
+//Componente Modal
+let openModal = false;
+const postulados = async () => {
+  openModal = false;
+  if(data == 'save'){
+    try {
+      const res = await axios.post(Lugar.backend + 'getPuestoDataIDPuesto.php',{
+        id_puesto: idPuesto
+      });
+      const data = JSON.parse(res.data.d)
+    } catch (error) {
+      
+    }
+  }
+}
 </script>
 
 <main>
@@ -90,22 +103,32 @@ const consultarPostulados = async (id_usuario) => {
           <thead>
             <tr>
               <th scope="col">Puesto</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           {#each jsonSalida as puestos (puestos.id_puesto)}
              <tbody>
                <tr>
                  <th scope="row">{puestos.titulo}</th>
-                 <td>{puestos.nombre}</td>
-                 <td>Otto</td>
-                 <td>@mdo</td>
+                 <td>
+                  <button class="btn btn-success" on:click={()=> {openModal = true}}>Ver postulados</button>
+                 </td>
                </tr>
              </tbody>
           {/each}
           </table>
+          {#if openModal == true}
+          <Modal
+          open={openModal}
+          onClose={(data)=>postulados(data)}
+          modalSize="model-ms"
+          title="Ver postulados"
+          saveButtonText="ok"
+          closeButtonText="cerrar"
+          >
+      
+          </Modal>
+          {/if}
     </div>
 </main>
 

@@ -20,7 +20,7 @@
             //Ingresamos las llaves de acceso para usar el paquete de DropBox
             $this->key = "1kf5q92ng3m2dwq";
             $this->secret = "c4unus9wecgp7w6";
-            $this->access_key = "sl.BrsQSTjOrnFo24e5ZlfZDAWeKn4TuMfPUYBqYsH_tG4NcC-qCGCLXprqPWVuwNrGkxo0_-DDq16IILlD2O1BQnDKmG3hf02wUYyj0k4bEd7YlgH4pjrn0wWAGTmGREzQUa4slm1LjgaAdRcVnDcbilA";
+            $this->access_key = "sl.Brwx0KH20ld3gdIqtka6BMRmaXcXbI8mzPkT_w6071pOQWxWEB1p4zdQwrZtamsIQUuACxdwFmEP4CdgFjbDznk8oSWQ-KYSh15I9pRY-8ceV9Q-GSfJakSePqp2iYlQzTvzGD7ZAIC7yDh5YGPVQEI";
             $this->app = new DropboxApp($this->key, $this->secret,$this->access_key);
             $this->dropbox = new Dropbox($this->app);
         }
