@@ -19,10 +19,17 @@ const setVerIdUsuario = (id_usuario) => {
   }));
 };
 
-let usuarios = [];
+//Función para ver el id_puestos
+const extraerPuestos = (id_puesto) =>{
+  idPuesto.update(() => ({
+    id_puesto : id_puesto
+  })) 
+}
+
 
 // Para extraer el id_usuario
 // Para extraer todos los id_usuario
+let usuarios = [];
 let datosCargados = false;
 
 const extraerTodosIdUsuario = async () => {
@@ -62,18 +69,18 @@ const extraerTodosIdPuestos = async () => {
       const res = await axios.post(Lugar.backend + 'getPuestosData.php');
       const data = JSON.parse(res.data.d);
 
-      if (data && data.jsonSalida) {
-        jsonSalida = Object.values(data.jsonSalida);
+      if (data && data.puestoSalida) {
+        puestoSalida = Object.values(data.puestoSalida);
 
-        if (jsonSalida.length > 0) {
-          jsonSalida.forEach(usuario => {
-            const id_puestos = usuario.id_puestos;
+        if (puestoSalida.length > 0) {
+          puestoSalida.forEach(puestoSalida => {
+            const id_puestos = puestoSalida.id_puestos;
             console.log(id_puestos);
             postulados(id_puestos);
           });
           dataCargada = true;
         } else {
-          console.log("No se encontraron jsonSalida");
+          console.log("No se encontraron puestoSalida");
         }
       }
     } catch (error) {

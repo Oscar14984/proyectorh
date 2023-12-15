@@ -29,8 +29,8 @@
         while($row = $getDataRelacionUsuarioPuesto->fetch_assoc()) {
             array_push($valuesData,array("id_usuario"=>$row["id_usuario"],"nombre"=>$row["nombre"],"apellido_paterno"=>$row["apellido_paterno"],"apellido_materno"=>$row["apellido_materno"],"correo"=>$row["correo"],"numero"=>$row["numero"],"contrasena"=>$row["contrasena"],"foto"=>$row["foto"]));
         }
-        $jsonSalida = ($valuesData);
-        $response['d']=json_encode(array("jsonSalida"=>$jsonSalida));
+        $puestoSalida = ($valuesData);
+        $response['d']=json_encode(array("puestoSalida"=>$puestoSalida));
         echo json_encode($response);
     }else{
         //En caso de obtener una tabla vacia
