@@ -52,8 +52,38 @@ const extraerTodosIdUsuario = async () => {
     console.log("Los datos ya fueron cargados");
   }
 };
-
 extraerTodosIdUsuario();
+
+// Para extraer todos los id_puestos
+let dataCargada = false;
+const extraerTodosIdPuestos = async () => {
+  if (!dataCargada) {
+    try {
+      const res = await axios.post(Lugar.backend + 'getPuestosData.php');
+      const data = JSON.parse(res.data.d);
+
+      if (data && data.jsonSalida) {
+        jsonSalida = Object.values(data.jsonSalida);
+
+        if (jsonSalida.length > 0) {
+          jsonSalida.forEach(usuario => {
+            const id_puestos = usuario.id_puestos;
+            console.log(id_puestos);
+            postulados(id_puestos);
+          });
+          dataCargada = true;
+        } else {
+          console.log("No se encontraron jsonSalida");
+        }
+      }
+    } catch (error) {
+      console.error("Error al extraer los id_puestos:", error);
+    }
+  } else {
+    console.log("Los datos ya fueron cargados");
+  }
+};
+extraerTodosIdPuestos();
 
 // Para consultar a los postulados
 let jsonSalida = [];
@@ -73,13 +103,13 @@ const consultarPostulados = async (id_usuario) => {
     }
   } catch (error) {
     // Manejo de errores
-    console.error("Error al consultar los postulados:", error);
+    // console.error("Error al consultar los postulados:", error);
   }
 };
 
 //Componente Modal
 let openModal = false;
-const postulados = async () => {
+const postulados = async (data) => {
   openModal = false;
   if(data == 'save'){
     try {
@@ -87,11 +117,16 @@ const postulados = async () => {
         id_puesto: idPuesto
       });
       const data = JSON.parse(res.data.d)
+      spinner = false;
+      if(res.data && data.jsonSalida){
+        jsonSalida = Object.values(data.jsonSalida)
+        console.log(jsonSalida)
+      }
     } catch (error) {
       
-    }
-  }
-}
+    };
+  };
+};
 </script>
 
 <main>
@@ -111,23 +146,23 @@ const postulados = async () => {
                <tr>
                  <th scope="row">{puestos.titulo}</th>
                  <td>
-                  <button class="btn btn-success" on:click={()=> {openModal = true}}>Ver postulados</button>
+                  <button class="btn btn-success" on:click={() => {openModal = true}}>Ver postulados</button>
                  </td>
                </tr>
              </tbody>
           {/each}
           </table>
           {#if openModal == true}
-          <Modal
-          open={openModal}
-          onClose={(data)=>postulados(data)}
-          modalSize="model-ms"
-          title="Ver postulados"
-          saveButtonText="ok"
-          closeButtonText="cerrar"
-          >
-      
-          </Modal>
+            <Modal
+            open={openModal}
+            onClosed={(data) => postulados(data)}
+            modalSize="model-ms"
+            title="Ver postulados"
+            saveButtonText="ok"
+            closeButtonText="cerrar"
+            >
+            <h1>hola</h1>
+            </Modal>
           {/if}
     </div>
 </main>

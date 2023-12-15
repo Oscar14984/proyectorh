@@ -138,7 +138,7 @@ const descargarVideo = async (data) =>{
             {/if}
             <button class="btn btn-success" on:click={Regresar}>Regresar</button>
           </table>
-          {#if openModal ==true}
+          {#if openModal == true}
              <Modal
              open={openModal}
              onClosed={(data) => descargarVideo(data)}
