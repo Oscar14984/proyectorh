@@ -33,7 +33,7 @@ try {
         const idPuesto = puesto.id_puesto;
         console.log(idPuesto)
 
-        postularse(idPuesto);
+        // postularse(idPuesto);
         // Calcular la diferencia en milisegundos
         // @ts-ignore
         const diferenciaMilisegundos = fechaLimite - fechaActual;
@@ -87,7 +87,15 @@ let cargo = null;
 const modalOpen = async (data) => {
     openModal = false;
     if(data == 'save'){
-         
+      try {
+    const res = await axios.post(Lugar.backend+'postulacion.php',{
+        id_puesto:idPuesto,
+        // @ts-ignore
+        id_usuario:idUsuario,
+      })
+      } catch (error) {
+      
+      };
     }
 }
 //Para mostrar mensaje cuando se pasa el cursor sobre el div de fecha limite

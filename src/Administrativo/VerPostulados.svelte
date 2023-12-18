@@ -160,6 +160,8 @@ profecionistas();
           <thead>
             <tr>
               <th scope="col">Puesto</th>
+              <th scope="col">Luegar</th>
+              <th scope="col">Fecha limite</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
@@ -169,6 +171,8 @@ profecionistas();
                 <tbody>
                   <tr>
                     <th scope="row">{puestos.titulo}</th>
+                    <th scope="row">{puestos.lugar}</th>
+                    <th scope="row">{puestos.fecha_limite}</th>
                     <td>
                      <button class="btn btn-success" on:click={() => {openModal = true, cargo = puestos}}>Ver postulados</button>
                     </td>
