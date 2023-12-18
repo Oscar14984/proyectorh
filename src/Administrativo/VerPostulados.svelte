@@ -29,90 +29,88 @@ const extraerPuestos = (id_puesto) =>{
 
 // Para extraer el id_usuario
 // Para extraer todos los id_usuario
-let usuarios = [];
-let datosCargados = false;
+// let usuarios = [];
+// let datosCargados = false;
 
-const extraerTodosIdUsuario = async () => {
-  if (!datosCargados) {
-    try {
-      const res = await axios.post(Lugar.backend + 'getUsuarios.php');
-      const data = JSON.parse(res.data.d);
+// const extraerTodosIdUsuario = async () => {
+//   if (!datosCargados) {
+//     try {
+//       const res = await axios.post(Lugar.backend + 'getUsuarios.php');
+//       const data = JSON.parse(res.data.d);
 
-      if (data && data.usuarios) {
-        usuarios = Object.values(data.usuarios);
+//       if (data && data.usuarios) {
+//         usuarios = Object.values(data.usuarios);
 
-        if (usuarios.length > 0) {
-          usuarios.forEach(usuario => {
-            const id_usuario = usuario.id_usuario;
-            console.log(id_usuario);
-            consultarPostulados(id_usuario);
-          });
-          datosCargados = true;
-        } else {
-          console.log("No se encontraron usuarios");
-        }
-      }
-    } catch (error) {
-      console.error("Error al extraer los id_usuario:", error);
-    }
-  } else {
-    console.log("Los datos ya fueron cargados");
-  }
-};
-extraerTodosIdUsuario();
+//         if (usuarios.length > 0) {
+//           usuarios.forEach(usuario => {
+//             const id_usuario = usuario.id_usuario;
+//             console.log(id_usuario);
+//             consultarPostulados(id_usuario);
+//           });
+//           datosCargados = true;
+//         } else {
+//           console.log("No se encontraron usuarios");
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error al extraer los id_usuario:", error);
+//     }
+//   } else {
+//     console.log("Los datos ya fueron cargados");
+//   }
+// };
+// extraerTodosIdUsuario();
 
 // Para extraer todos los id_puestos
-let dataCargada = false;
-const extraerTodosIdPuestos = async () => {
-  if (!dataCargada) {
-    try {
-      const res = await axios.post(Lugar.backend + 'getPuestosData.php');
-      const data = JSON.parse(res.data.d);
+// let dataCargada = false;
+// const extraerTodosIdPuestos = async () => {
+//   if (!dataCargada) {
+//     try {
+//       const res = await axios.post(Lugar.backend + 'getPuestosData.php');
+//       const data = JSON.parse(res.data.d);
 
-      if (data && data.puestoSalida) {
-        puestoSalida = Object.values(data.puestoSalida);
+//       if (data && data.puestoSalida) {
+//         puestoSalida = Object.values(data.puestoSalida);
 
-        if (puestoSalida.length > 0) {
-          puestoSalida.forEach(puestoSalida => {
-            const id_puestos = puestoSalida.id_puestos;
-            console.log(id_puestos);
-            postulados(id_puestos);
-          });
-          dataCargada = true;
-        } else {
-          console.log("No se encontraron puestoSalida");
-        }
-      }
-    } catch (error) {
-      console.error("Error al extraer los id_puestos:", error);
-    }
-  } else {
-    console.log("Los datos ya fueron cargados");
-  }
-};
-extraerTodosIdPuestos();
+//         if (puestoSalida.length > 0) {
+//           puestoSalida.forEach(puestoSalida => {
+//             const id_puestos = puestoSalida.id_puestos;
+//             console.log(id_puestos);
+//             postulados(id_puestos);
+//           });
+//           dataCargada = true;
+//         } else {
+//           console.log("No se encontraron puestoSalida");
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error al extraer los id_puestos:", error);
+//     }
+//   } else {
+//     console.log("Los datos ya fueron cargados");
+//   }
+// };
+// extraerTodosIdPuestos();
 
 // Para consultar a los postulados
-let jsonSalida = [];
-const consultarPostulados = async (id_usuario) => {
-  try {
-    // console.log(id_usuario); // Mostrar el id_usuario
-    spinner = true; 
-    const idUsuario = id_usuario;
-    const res = await axios.post(Lugar.backend + 'getPuestosRelacionadosConUsuario.php', {
-      id_usuario: idUsuario // Pasar el id_usuario en la solicitud
-    });
-    const data = JSON.parse(res.data.d);
-    spinner = false; 
-    if (res.data && data.jsonSalida) {
-      jsonSalida = Object.values(data.jsonSalida);
-      console.log(jsonSalida);
-    }
-  } catch (error) {
-    // Manejo de errores
-    // console.error("Error al consultar los postulados:", error);
-  }
-};
+// let jsonSalida = [];
+// const consultarPostulados = async (id_usuario) => {
+//   try {
+//     spinner = true; 
+//     const idUsuario = id_usuario;
+//     const res = await axios.post(Lugar.backend + 'getPuestosRelacionadosConUsuario.php', {
+//       id_usuario: idUsuario 
+//     });
+//     const data = JSON.parse(res.data.d);
+//     spinner = false; 
+//     if (res.data && data.jsonSalida) {
+//       jsonSalida = Object.values(data.jsonSalida);
+//       console.log(jsonSalida);
+//     }
+//   } catch (error) {
+  
+//   }
+// };
 
 //Componente Modal
 let openModal = false;
@@ -139,8 +137,10 @@ let tieneProfesionistas = false;
 let rsProfesionistas = [];
 let cargo = []
 const profecionistas = async () =>{
+spinner = true
 const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
 const data = JSON.parse(res.data.d);
+spinner = false
   tieneProfesionistas = data.tieneProfesionistas;
   if (tieneProfesionistas == true) {
     rsProfesionistas = Object.values(data.rsProfesionistas);
@@ -188,7 +188,22 @@ profecionistas();
             saveButtonText="ok"
             closeButtonText="cerrar"
             >
-            <h1>{cargo.nombre}</h1>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Priemr apellido</th>
+                  <th>Segundo apellido</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{cargo.nombre}</td>
+                  <td>{cargo.apellido_paterno}</td>
+                  <td>{cargo.apellido_materno}</td>
+                </tr>
+              </tbody>
+            </table>
             </Modal>
           {/if}
     </div>
