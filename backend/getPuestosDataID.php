@@ -3,29 +3,9 @@
     require_once('./accesos.php');
     $mysql = new classGetPostInDataBase();
     $query=
-	"SELECT
-	relacionusuariopuesto.id_relacion, 
-	relacionusuariopuesto.id_usuario, 
-	relacionusuariopuesto.id_puesto, 
-	puestos.id_puesto, 
-	puestos.titulo, 
-	puestos.descripcion, 
-	puestos.fecha_limite, 
-	puestos.lugar, 
-	puestos.pais, 
-	puestos.doctor_solicitante, 
-	usuario.id_usuario, 
-	usuario.nombre, 
-	usuario.apellido_paterno, 
-	usuario.correo, 
-	usuario.apellido_materno, 
-	usuario.numero, 
-	usuario.contrasena, 
-	usuario.foto
-    FROM relacionusuariopuesto INNER JOIN puestos ON relacionusuariopuesto.id_puesto = puestos.id
-	relacionusuariopuesto,
-	puestos,
-	usuario";
+	"SELECT * FROM RelacionUsuarioPuesto rpu LEFT JOIN Usuario us ON rpu.id_usuario = us.id_usuario 
+    LEFT JOIN Puestos pu ON rpu.id_puesto = pu.id_puesto
+    WHERE pu.id_puesto";
 
     $sql = $mysql->consulta_sa($query);
     if ($sql->num_rows === 0){

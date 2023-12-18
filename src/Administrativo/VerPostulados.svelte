@@ -137,15 +137,16 @@ const postulados = async (data) => {
 //Consultar profecionistas
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
+let cargo = []
 const profecionistas = async () =>{
-    const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
-    const data = JSON.parse(res.data.d);
-      tieneProfesionistas = data.tieneProfesionistas;
-      if (tieneProfesionistas == true) {
-        rsProfesionistas = Object.values(data.rsProfesionistas);
-      } else {
-        rsProfesionistas = "";
-      }
+const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
+const data = JSON.parse(res.data.d);
+  tieneProfesionistas = data.tieneProfesionistas;
+  if (tieneProfesionistas == true) {
+    rsProfesionistas = Object.values(data.rsProfesionistas);
+  } else {
+    rsProfesionistas = "";
+  }
 }
 profecionistas();
 </script>
@@ -169,7 +170,7 @@ profecionistas();
                   <tr>
                     <th scope="row">{puestos.titulo}</th>
                     <td>
-                     <button class="btn btn-success" on:click={() => {openModal = true}}>Ver postulados</button>
+                     <button class="btn btn-success" on:click={() => {openModal = true, cargo = puestos}}>Ver postulados</button>
                     </td>
                   </tr>
                 </tbody>
@@ -187,7 +188,7 @@ profecionistas();
             saveButtonText="ok"
             closeButtonText="cerrar"
             >
-            <h1>hola</h1>
+            <h1>{cargo.nombre}</h1>
             </Modal>
           {/if}
     </div>
