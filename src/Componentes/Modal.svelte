@@ -63,6 +63,10 @@
   
   <style>
   
+    .modal-title{
+      color: black;
+    }
+    
     .modal-header, .modal-footer {
       background-color: #18d1ff;
       color: white;
@@ -81,6 +85,5 @@
       background-color: #fade00;
       color: black;
     }
-  
     
   </style>
