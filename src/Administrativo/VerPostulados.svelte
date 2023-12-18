@@ -134,6 +134,20 @@ const postulados = async (data) => {
     };
   };
 };
+//Consultar profecionistas
+let tieneProfesionistas = false;
+let rsProfesionistas = [];
+const profecionistas = async () =>{
+  const res = await axios.post (Lugar.backend + 'getPuestosDataID.php');
+  const data = JSON.parse(res.data.d);
+    tieneProfesionistas = data.tieneProfesionistas;
+    if (tieneProfesionistas == true) {
+      rsProfesionistas = Object.values(data.rsProfesionistas);
+    } else {
+      rsProfesionistas = "";
+    }
+}
+profecionistas();
 </script>
 
 <main>
@@ -148,16 +162,18 @@ const postulados = async (data) => {
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          {#each jsonSalida as puestos (puestos.id_puesto)}
-             <tbody>
-               <tr>
-                 <th scope="row">{puestos.titulo}</th>
-                 <td>
-                  <button class="btn btn-success" on:click={() => {openModal = true}}>Ver postulados</button>
-                 </td>
-               </tr>
-             </tbody>
-          {/each}
+          {#if tieneProfesionistas == true}
+             {#each rsProfesionistas as puestos,i}
+                <tbody>
+                  <tr>
+                    <th scope="row">{puestos.titulo}</th>
+                    <td>
+                     <button class="btn btn-success" on:click={() => {openModal = true}}>Ver postulados</button>
+                    </td>
+                  </tr>
+                </tbody>
+             {/each}
+          {/if}
           </table>
           {#if openModal == true}
             <Modal
