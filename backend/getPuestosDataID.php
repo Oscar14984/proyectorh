@@ -4,28 +4,28 @@
     $mysql = new classGetPostInDataBase();
     $query=
 	"SELECT
+	relacionusuariopuesto.id_relacion, 
 	relacionusuariopuesto.id_usuario, 
 	relacionusuariopuesto.id_puesto, 
+	puestos.id_puesto, 
 	puestos.titulo, 
 	puestos.descripcion, 
 	puestos.fecha_limite, 
 	puestos.lugar, 
 	puestos.pais, 
 	puestos.doctor_solicitante, 
+	usuario.id_usuario, 
 	usuario.nombre, 
 	usuario.apellido_paterno, 
-	usuario.apellido_materno, 
-	usuario.id_usuario, 
-	puestos.id_puesto, 
-	relacionusuariopuesto.id_relacion, 
 	usuario.correo, 
+	usuario.apellido_materno, 
 	usuario.numero, 
 	usuario.contrasena, 
 	usuario.foto
-    FROM
-    relacionusuariopuesto,
-    puestos,
-    usuario";
+    FROM relacionusuariopuesto INNER JOIN puestos ON relacionusuariopuesto.id_puesto = puestos.id
+	relacionusuariopuesto,
+	puestos,
+	usuario";
 
     $sql = $mysql->consulta_sa($query);
     if ($sql->num_rows === 0){

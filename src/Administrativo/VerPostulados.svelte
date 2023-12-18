@@ -138,14 +138,14 @@ const postulados = async (data) => {
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
 const profecionistas = async () =>{
-  const res = await axios.post (Lugar.backend + 'getPuestosDataID.php');
-  const data = JSON.parse(res.data.d);
-    tieneProfesionistas = data.tieneProfesionistas;
-    if (tieneProfesionistas == true) {
-      rsProfesionistas = Object.values(data.rsProfesionistas);
-    } else {
-      rsProfesionistas = "";
-    }
+    const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
+    const data = JSON.parse(res.data.d);
+      tieneProfesionistas = data.tieneProfesionistas;
+      if (tieneProfesionistas == true) {
+        rsProfesionistas = Object.values(data.rsProfesionistas);
+      } else {
+        rsProfesionistas = "";
+      }
 }
 profecionistas();
 </script>
@@ -162,6 +162,7 @@ profecionistas();
               <th scope="col">Acciones</th>
             </tr>
           </thead>
+          
           {#if tieneProfesionistas == true}
              {#each rsProfesionistas as puestos,i}
                 <tbody>
@@ -173,6 +174,8 @@ profecionistas();
                   </tr>
                 </tbody>
              {/each}
+          {:else}
+                <div><strong>No tiene profesionistas</strong></div>
           {/if}
           </table>
           {#if openModal == true}
