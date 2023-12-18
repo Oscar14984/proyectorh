@@ -5,60 +5,30 @@
     $query=
  
 	"SELECT
-	profesionistas.curp, 
-	profesionistas.nombre, 
-	profesionistas.primer_apellido, 
-	profesionistas.segundo_apellido, 
-	profesionistas.email_profesionista, 
-	profesionistas.matricula, 
-	profesionistas.pdf, 
-	antecedentes.institucion_procedencia, 
-	antecedentes.fecha_inicio, 
-	antecedentes.fecha_terminacion, 
-	antecedentes.no_cedula, 
-	antecedentes.fk_id_profesionista, 
-	antecedentes.fk_id_tipo_estudio, 
-	antecedentes.fk_id_entidad_federativa, 
-	usuarios_carreras.fk_id_usuario, 
-	usuarios_carreras.fk_id_carrera, 
-	usuarios_carreras.fecha_inicio_carrea, 
-	usuarios_carreras.fecha_expedicion_carrera, 
-	usuarios_carreras.fecha_terminacion_carrera, 
-	usuarios_carreras.modalidad, 
-	usuarios_carreras.fecha_examen_profesional, 
-	usuarios_carreras.fecha_excencion_examen_profesional, 
-	usuarios_carreras.fundamento_legal, 
-	usuarios_carreras.autorizacion_reconocimiento, 
-	usuarios_carreras.folio, 
-	usuarios_carreras.cumplio_servicio_social, 
-	carreras.carrera_clave, 
-	carreras.carrera_nombre, 
-	carreras.carrera_activa, 
-	carreras.id_carrera, 
-	entidades_federativas.id_entidad_federativa, 
-	entidades_federativas.entidad_federativa
+	relacionusuariopuesto.id_usuario, 
+	relacionusuariopuesto.id_puesto, 
+	puestos.titulo, 
+	puestos.descripcion, 
+	puestos.fecha_limite, 
+	puestos.lugar, 
+	puestos.pais, 
+	puestos.doctor_solicitante, 
+	usuario.nombre, 
+	usuario.apellido_paterno, 
+	usuario.apellido_materno, 
+	usuario.id_usuario, 
+	puestos.id_puesto, 
+	relacionusuariopuesto.id_relacion, 
+	usuario.correo, 
+	usuario.numero, 
+	usuario.contrasena, 
+	usuario.foto
 FROM
-	profesionistas
-	INNER JOIN
-	antecedentes
-	ON 
-		profesionistas.id_profesionista = antecedentes.fk_id_profesionista
-	INNER JOIN
-	usuarios_carreras
-	ON 
-		profesionistas.id_profesionista = usuarios_carreras.fk_id_usuario
-	INNER JOIN
-	carreras
-	ON 
-		usuarios_carreras.fk_id_carrera = carreras.id_carrera
-	INNER JOIN
-	entidades_federativas
-	ON 
-		antecedentes.fk_id_entidad_federativa = entidades_federativas.id_entidad_federativa
-WHERE
-	profesionistas.validado = 1
+	relacionusuariopuesto,
+	puestos,
+	usuario
 	ORDER BY
-	profesionistas.primer_apellido ASC ";
+	usuario.primer_apellido ASC ";
     $sql = $mysql->consulta_sa($query);
     if ($sql->num_rows === 0){
 		$nuevoValor = 1;
