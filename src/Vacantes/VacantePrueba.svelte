@@ -1,17 +1,18 @@
 <script>
   // @ts-nocheck
-// LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
-import Spinner from './../Componentes/Spinner.svelte';
-let spinner = false;
-// LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
-import axios from "axios";
-import { onMount } from 'svelte';
-import Modal from '../Componentes/Modal.svelte';
-import { push } from 'svelte-spa-router';
-//SCRIPTS
-import Lugar from "../Lugares";
-import { session } from "../session";
-
+  // LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
+  import Spinner from './../Componentes/Spinner.svelte';
+  let spinner = false;
+  // LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
+  import axios from "axios";
+  import { onMount } from 'svelte';
+  import Modal from '../Componentes/Modal.svelte';
+  import { push } from 'svelte-spa-router';
+  //SCRIPTS
+  import Lugar from "../Lugares";
+  import { session } from "../session";
+	import { idPuesto } from './../idPuesto.js';
+  
   
     
 //Para exportar el id_usuario cuando hace inicio de sesión.
@@ -69,17 +70,17 @@ onMount(() => {
 });
 
 //para postutularse
-const postularse = async (idPuesto) =>{
-    try {
-    const res = await axios.post(Lugar.backend+'postulacion.php',{
-        id_puesto:idPuesto,
-        // @ts-ignore
-        id_usuario:idUsuario,
-    })
-    } catch (error) {
+// const postularse = async (idPuesto) =>{
+//     try {
+//     const res = await axios.post(Lugar.backend+'postulacion.php',{
+//         id_puesto:idPuesto,
+       
+//         id_usuario:idUsuario,
+//     })
+//     } catch (error) {
     
-    };
-};
+//     };
+// };
 
 //Modal Para ver información de las vacantes
 let openModal = false;
@@ -88,9 +89,8 @@ const modalOpen = async (data) => {
     openModal = false;
     if(data == 'save'){
       try {
-    const res = await axios.post(Lugar.backend+'postulacion.php',{
+        const res = await axios.post(Lugar.backend+'postulacion.php',{
         id_puesto:idPuesto,
-        // @ts-ignore
         id_usuario:idUsuario,
       })
       } catch (error) {
@@ -98,6 +98,7 @@ const modalOpen = async (data) => {
       };
     }
 }
+
 //Para mostrar mensaje cuando se pasa el cursor sobre el div de fecha limite
 let mostrarMensaje = false;
 let mensaje = '';
