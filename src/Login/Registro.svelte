@@ -52,6 +52,17 @@ let claveValida = false
         }
     }
 
+//Para la confirmacion de contraseña
+let claveValida2 = false
+    const validarClave2 = async () => {
+        contrasena = contrasena.trim()
+        if ( contarMayusculas(contrasena)>0 && contarMinusculas(contrasena)>0 && contarNumeros(contrasena)>0 && contarEspeciales(contrasena)>0 && contrasena.length>7 ) {
+            claveValida2 =  true
+        } else {
+            claveValida2 = false
+        }
+    }
+
 
 
 //para validar almenos una de cada una en la contraseña    
@@ -209,9 +220,9 @@ try {
           <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" on:click={()=> (verConfirContra = !verConfirContra)}><i class={verConfirContra ? "bi-eye-slash" : "bi bi-eye"} ></i></button>
             {#if !verConfirContra}
-                <input type="password" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control {claveValida2 ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave2}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {:else}
-                <input type="text" class="form-control {claveValida ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
+                <input type="text" class="form-control {claveValida2 ? 'is-valid' : 'is-invalid'}" bind:value={confirmarContrasena} on:input={validarClave2}  placeholder=" Contraseña" aria-describedby="basic-addon1" required>
             {/if}
           </div>
           

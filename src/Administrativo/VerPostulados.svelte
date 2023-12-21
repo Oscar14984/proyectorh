@@ -160,7 +160,7 @@ profecionistas();
           <thead>
             <tr>
               <th scope="col">Puesto</th>
-              <th scope="col">Luegar</th>
+              <th scope="col">Lugar</th>
               <th scope="col">Fecha limite</th>
               <th scope="col">Acciones</th>
             </tr>

@@ -137,51 +137,62 @@ const enterLogin = e => {
             {/if}
             
 
-          <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Inicio de Sesión</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Correo:</label>
-                        <input type="email" class="form-control" bind:value={correo}  id="exampleInputEmail1" aria-describedby="emailHelp" on:keypress={enterLogin}>
-                      </div>
           
-                      <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
-                      <div class="input-group mb-3">
-                        {#if !lookPass}
-                        <!-- content here -->
-                        <input type="password" class="form-control" bind:value={contrasena}  aria-describedby="basic-addon1" on:keypress={enterLogin}>
-                        {:else}
-                        <!-- else content here -->
-                        <input type="text" class="form-control"  bind:value={contrasena}   aria-describedby="basic-addon1" on:keypress={enterLogin}>
-                        {/if}
-                        <button class="btn btn-outline-secondary" on:click={()=> (lookPass = !lookPass)}><i class="bi {lookPass ? 'bi-eye-fill' : 'bi-eye-fill'} {lookPass ? 'text-danger' : 'text-success'}"></i></button>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" on:click={iniciarSesion}  class="btn btn-primary" data-bs-dismiss="modal">Iniciar Sesión</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!--Fin modal-->
           </div>
         </div>
       </nav>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Inicio de Sesión</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Correo:</label>
+                  <input type="email" class="form-control" bind:value={correo}  id="exampleInputEmail1" aria-describedby="emailHelp" on:keypress={enterLogin}>
+                </div>
+    
+                <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
+                <div class="input-group mb-3">
+                  {#if !lookPass}
+                  <input type="password" class="form-control" bind:value={contrasena}  aria-describedby="basic-addon1" on:keypress={enterLogin}>
+                  {:else}
+                  <input type="text" class="form-control"  bind:value={contrasena}   aria-describedby="basic-addon1" on:keypress={enterLogin}>
+                  {/if}
+                  <button class="btn btn-outline-secondary" on:click={()=> (lookPass = !lookPass)}><i class="bi {lookPass ? 'bi-eye-fill' : 'bi-eye-fill'} {lookPass ? 'text-danger' : 'text-success'}"></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" on:click={iniciarSesion}  class="btn btn-primary" data-bs-dismiss="modal">Iniciar Sesión</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Fin modal-->
 </main>
 
 <style>
 main{
   margin-bottom: 10px;
 }
+
+.navbar-expand-lg{
+  position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      background-color: rgba(149, 230, 255, 0.3);
+      /* color: white; */
+      text-align: center;
+      z-index: 1;
+}
+
 @media(min-width: 300px) and (max-width: 1000px){
   .navbar-brand {
     width: 50%;
