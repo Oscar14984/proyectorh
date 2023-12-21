@@ -114,7 +114,7 @@ const registrarPostular = () =>{
          <Spinner />
     {/if}
     <h1 class="text-info" style="text-shadow: 1px 1px 2px black;">OPORTUNIDADES DE EMPLEO</h1>
-    <p>Siempre estamos buscando personas entusiastas y apasionadas para unirse a nuestro equipo, encuentra la vacante ideal para ti.</p>
+    <p class="p-info">Siempre estamos buscando personas entusiastas y apasionadas para unirse a nuestro equipo, encuentra la vacante ideal para ti.</p>
     <div class="container">
       {#if tienePuestos}
          {#each jsonSalida as puesto (puesto.id_puesto)}
@@ -210,5 +210,15 @@ const registrarPostular = () =>{
       z-index: 100;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
       transition: all 0.3s ease;
+    }
+
+    .text-info{
+      position: relative;
+      left: 50px;
+    }
+
+    .p-info{
+      position: relative;
+      left:50px;
     }
 </style>

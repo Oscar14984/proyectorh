@@ -132,6 +132,7 @@ const postulados = async (data) => {
     };
   };
 };
+
 //Consultar profecionistas
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
@@ -183,6 +184,7 @@ profecionistas();
                 <div><strong>No tiene profesionistas</strong></div>
           {/if}
           </table>
+          
           {#if openModal == true}
             <Modal
             open={openModal}
