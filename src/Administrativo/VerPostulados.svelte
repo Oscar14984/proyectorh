@@ -184,7 +184,7 @@ profecionistas();
                 <div><strong>No tiene profesionistas</strong></div>
           {/if}
           </table>
-          
+
           {#if openModal == true}
             <Modal
             open={openModal}
