@@ -148,8 +148,53 @@ spinner = false
   } else {
     rsProfesionistas = "";
   }
-}
+  filtrarPuestosDeTrabajo();
+};
+
+// Función para filtrar los datos de los puestos de trabajo
+let puestosFiltrados = [];
+const filtrarPuestosDeTrabajo = () => {
+
+ if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
+    //Creamos el conjunto para almacenar los titulos ya como unicos 
+    let titulosUnicos = new Set();
+
+    // Recorremos los puestos de trabajo y almacenamos los titulos unicos 
+    rsProfesionistas.forEach((puesto) => {
+      if (!titulosUnicos.has(puesto.titulo)) {
+        titulosUnicos.add(puesto.titulo);
+        puestosFiltrados.push({
+          titulo: puesto.titulo,
+          lugar: puesto.lugar,
+          fecha_limite: puesto.fecha_limite,
+        });
+      }
+    });
+ };
+
+ console.log(puestosFiltrados);
+ return puestosFiltrados;
+};
+
+
+// const filtrarPuestosDeTrabajo = () => {
+//   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
+//     const puestosFiltrados = rsProfesionistas.map((puesto) => {
+//       return {
+//         titulo: puesto.titulo,
+//         lugar: puesto.lugar,
+//         fecha_limite: puesto.fecha_limite,
+//       };
+//     });
+//     console.log(puestosFiltrados);
+//     return puestosFiltrados;
+//   } else {
+//     return [];
+//   }
+// };
 profecionistas();
+
+
 </script>
 
 <main>
@@ -168,14 +213,14 @@ profecionistas();
           </thead>
           
           {#if tieneProfesionistas == true}
-             {#each rsProfesionistas as puestos,i}
+             {#each puestosFiltrados as puesto,i}
                 <tbody>
                   <tr>
-                    <th scope="row">{puestos.titulo}</th>
-                    <th scope="row">{puestos.lugar}</th>
-                    <th scope="row">{puestos.fecha_limite}</th>
+                    <th scope="row">{puesto.titulo}</th>
+                    <th scope="row">{puesto.lugar}</th>
+                    <th scope="row">{puesto.fecha_limite}</th>
                     <td>
-                     <button class="btn btn-success" on:click={() => {openModal = true, cargo = puestos}}>Ver postulados</button>
+                     <button class="btn btn-success" on:click={() => {openModal = true, cargo = puesto}}>Ver Puestos</button>
                     </td>
                   </tr>
                 </tbody>
