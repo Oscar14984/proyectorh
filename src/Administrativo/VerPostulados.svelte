@@ -180,7 +180,7 @@ profecionistas();
 //Función para filtrar los nombres de los postulados.
 const filtrarPostulados = () =>{
   if(tieneProfesionistas == true){
-
+    
   }
 }
 
@@ -200,23 +200,23 @@ const filtrarPostulados = () =>{
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          {#if tieneProfesionistas == true}
-             {#each puestosFiltrados as puesto,i}
-                <tbody>
-                  <tr>
-                    <th scope="row">{puesto.titulo}</th>
-                    <th scope="row">{puesto.lugar}</th>
-                    <th scope="row">{puesto.fecha_limite}</th>
-                    <td>
-                     <button class="btn btn-success" on:click={() => {openModal = true, cargo = puesto}}>Ver Puestos</button>
-                    </td>
-                  </tr>
-                </tbody>
-             {/each}
-          {:else}
-                <div><strong>No tiene profesionistas</strong></div>
-          {/if}
-          </table>
+          <tbody>
+            {#if tieneProfesionistas == true}
+              {#each puestosFiltrados as puesto,i}
+                <tr>
+                  <th scope="row">{puesto.titulo}</th>
+                  <th scope="row">{puesto.lugar}</th>
+                  <th scope="row">{puesto.fecha_limite}</th>
+                  <td>
+                    <button class="btn btn-success" on:click={() => {openModal = true, cargo = puesto}}>Ver Puestos</button>
+                  </td>
+                </tr>
+              {/each}
+            {:else}
+              <div><strong>No tiene profesionistas</strong></div>
+            {/if}
+          </tbody>
+        </table>
 
           {#if openModal == true}
             <Modal
@@ -234,7 +234,7 @@ const filtrarPostulados = () =>{
                   <th>Nombre</th>
                   <th>Priemr apellido</th>
                   <th>Segundo apellido</th>
-                  <th>Acciones Descarga</th>
+                  <th>Acciones Descargar</th>
                 </tr>
               </thead>
               <tbody>
