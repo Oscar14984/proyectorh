@@ -178,7 +178,7 @@ const filtrarPuestosDeTrabajo = () => {
 profecionistas();
 
 // Función para mostrar los detalles del puesto seleccionado en el modal
-let detallePuestoSeleccionado = {};
+let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
   detallePuestoSeleccionado = {
     nombre: puesto.nombre,
@@ -246,9 +246,9 @@ const mostrarDetallePuesto = (puesto) => {
               <tbody>
                 <tr>
                   <td>{cargo.lugar}</td>
-                  <td>{cargo.nombre}</td>
-                  <td>{cargo.apellido_paterno}</td>
-                  <td>{cargo.apellido_materno}</td>
+                  <td>{detallePuestoSeleccionado.nombre}</td>
+                  <td>{detallePuestoSeleccionado.apellido_paterno}</td>
+                  <td>{detallePuestoSeleccionado.apellido_materno}</td>
                   <td>
                     <button class="btn"><i class="bi bi-camera-video"></i></button>
                     <button class="btn"><i class="bi bi-file-earmark-arrow-down"></i></button>
