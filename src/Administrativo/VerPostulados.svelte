@@ -148,17 +148,15 @@ spinner = false
   } else {
     rsProfesionistas = "";
   }
-  filtrarPuestosDeTrabajo();
+  filtrarPuestosDeTrabajo();//Llamodo de la función filtrarPuestosDeTrabajo
 };
 
 // Función para filtrar los datos de los puestos de trabajo
 let puestosFiltrados = [];
 const filtrarPuestosDeTrabajo = () => {
-
  if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
     //Creamos el conjunto para almacenar los titulos ya como unicos 
     let titulosUnicos = new Set();
-
     // Recorremos los puestos de trabajo y almacenamos los titulos unicos 
     rsProfesionistas.forEach((puesto) => {
       if (!titulosUnicos.has(puesto.titulo)) {
@@ -170,30 +168,21 @@ const filtrarPuestosDeTrabajo = () => {
         });
       }
     });
+    filtrarPostulados();// Llamado de la función filtrarPostulados 
  };
-
  console.log(puestosFiltrados);
  return puestosFiltrados;
 };
 
-
-// const filtrarPuestosDeTrabajo = () => {
-//   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
-//     const puestosFiltrados = rsProfesionistas.map((puesto) => {
-//       return {
-//         titulo: puesto.titulo,
-//         lugar: puesto.lugar,
-//         fecha_limite: puesto.fecha_limite,
-//       };
-//     });
-//     console.log(puestosFiltrados);
-//     return puestosFiltrados;
-//   } else {
-//     return [];
-//   }
-// };
+// Llamado de la función profecionistas
 profecionistas();
 
+//Función para filtrar los nombres de los postulados.
+const filtrarPostulados = () =>{
+  if(tieneProfesionistas == true){
+
+  }
+}
 
 </script>
 
@@ -211,7 +200,6 @@ profecionistas();
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          
           {#if tieneProfesionistas == true}
              {#each puestosFiltrados as puesto,i}
                 <tbody>
@@ -234,7 +222,7 @@ profecionistas();
             <Modal
             open={openModal}
             onClosed={(data) => postulados(data)}
-            modalSize="model-ms"
+            modalSize="modal-lg"
             title="Ver postulados"
             saveButtonText="ok"
             closeButtonText="cerrar"
@@ -242,16 +230,23 @@ profecionistas();
             <table class="table table-hover">
               <thead>
                 <tr>
+                  <th>Lugar</th>
                   <th>Nombre</th>
                   <th>Priemr apellido</th>
                   <th>Segundo apellido</th>
+                  <th>Acciones Descarga</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
+                  <td>{cargo.lugar}</td>
                   <td>{cargo.nombre}</td>
                   <td>{cargo.apellido_paterno}</td>
                   <td>{cargo.apellido_materno}</td>
+                  <td>
+                    <button class="btn"><i class="bi bi-camera-video"></i></button>
+                    <button class="btn"><i class="bi bi-file-earmark-arrow-down"></i></button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -261,5 +256,8 @@ profecionistas();
 </main>
 
 <style>
-
+.btn:hover{
+  background-color: green;
+  color: white;
+}
 </style>

@@ -25,6 +25,7 @@
             $rsProfesionistas[$i]['pais']=$row['pais'];
             $rsProfesionistas[$i]['doctor_solicitante']=$row['doctor_solicitante'];
             //Usuarios
+            $rsProfesionistas[$i]['id_usuario']=$row['id_usuario'];
             $rsProfesionistas[$i]['nombre']=$row['nombre'];
             $rsProfesionistas[$i]['apellido_paterno']=$row['apellido_paterno'];
             $rsProfesionistas[$i]['apellido_materno']=$row['apellido_materno'];
