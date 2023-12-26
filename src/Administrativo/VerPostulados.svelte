@@ -167,8 +167,8 @@ const filtrarPuestosDeTrabajo = () => {
           fecha_limite: puesto.fecha_limite,
         });
       }
+      mostrarDetallePuesto(puesto)
     });
-    filtrarPostulados();// Llamado de la función filtrarPostulados 
  };
  console.log(puestosFiltrados);
  return puestosFiltrados;
@@ -178,11 +178,19 @@ const filtrarPuestosDeTrabajo = () => {
 profecionistas();
 
 //Función para filtrar los nombres de los postulados.
-const filtrarPostulados = () =>{
-  if(tieneProfesionistas == true){
-    
-  }
-}
+let detallePuestoSeleccionado = {};
+
+// Función para mostrar los detalles del puesto seleccionado en el modal
+const mostrarDetallePuesto = (puesto) => {
+  detallePuestoSeleccionado = {
+    nombre: puesto.nombre,
+    apellido_paterno: puesto.apellido_paterno,
+    apellido_materno: puesto.apellido_materno,
+  };
+  console.log(detallePuestoSeleccionado)
+  return detallePuestoSeleccionado
+  // openModal = true; 
+};
 
 </script>
 

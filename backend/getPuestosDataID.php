@@ -18,6 +18,7 @@
         while ($row = $sql->fetch_assoc()) {
             //Puestos
             $rsProfesionistas[$i]['contador'] = $i;
+            $rsProfesionistas[$i]['id_puesto']=$row['id_puesto'];
             $rsProfesionistas[$i]['titulo']=$row['titulo'];
             $rsProfesionistas[$i]['descripcion']=$row['descripcion'];
             $rsProfesionistas[$i]['fecha_limite']=$row['fecha_limite'];
