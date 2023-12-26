@@ -177,10 +177,8 @@ const filtrarPuestosDeTrabajo = () => {
 // Llamado de la función profecionistas
 profecionistas();
 
-//Función para filtrar los nombres de los postulados.
-let detallePuestoSeleccionado = {};
-
 // Función para mostrar los detalles del puesto seleccionado en el modal
+let detallePuestoSeleccionado = {};
 const mostrarDetallePuesto = (puesto) => {
   detallePuestoSeleccionado = {
     nombre: puesto.nombre,
