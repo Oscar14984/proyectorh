@@ -134,48 +134,69 @@ const postulados = async (data) => {
 };
 
 //Consultar profecionistas
-let tieneProfesionistas = false;
-let rsProfesionistas = [];
-let cargo = []
-const profecionistas = async () =>{
-spinner = true
-const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
-const data = JSON.parse(res.data.d);
-spinner = false
-  tieneProfesionistas = data.tieneProfesionistas;
-  if (tieneProfesionistas == true) {
-    rsProfesionistas = Object.values(data.rsProfesionistas);
-  } else {
-    rsProfesionistas = "";
-  }
-  filtrarPuestosDeTrabajo();//Llamodo de la función filtrarPuestosDeTrabajo
-};
+// let tieneProfesionistas = false;
+// let rsProfesionistas = [];
+// let cargo = []
+// const profecionistas = async () =>{
+// spinner = true
+// const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
+// const data = JSON.parse(res.data.d);
+// spinner = false
+//   tieneProfesionistas = data.tieneProfesionistas;
+//   if (tieneProfesionistas == true) {
+//     rsProfesionistas = Object.values(data.rsProfesionistas);
+//   } else {
+//     rsProfesionistas = "";
+//   }
+//   filtrarPuestosDeTrabajo()
+// };
 
 // Función para filtrar los datos de los puestos de trabajo
-let puestosFiltrados = [];
-const filtrarPuestosDeTrabajo = () => {
- if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
-    //Creamos el conjunto para almacenar los titulos ya como unicos 
-    let titulosUnicos = new Set();
-    // Recorremos los puestos de trabajo y almacenamos los titulos unicos 
-    rsProfesionistas.forEach((puesto) => {
-      if (!titulosUnicos.has(puesto.titulo)) {
-        titulosUnicos.add(puesto.titulo);
-        puestosFiltrados.push({
-          titulo: puesto.titulo,
-          lugar: puesto.lugar,
-          fecha_limite: puesto.fecha_limite,
-        });
-      }
-      mostrarDetallePuesto(puesto)
-    });
- };
- console.log(puestosFiltrados);
- return puestosFiltrados;
-};
+// let puestosFiltrados = [];
+// const filtrarPuestosDeTrabajo = () => {
+//  if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
+//     let titulosUnicos = new Set();
+//     rsProfesionistas.forEach((puesto) => {
+//       if (!titulosUnicos.has(puesto.titulo)) {
+//         titulosUnicos.add(puesto.titulo);
+//         puestosFiltrados.push({
+//           titulo: puesto.titulo,
+//           lugar: puesto.lugar,
+//           fecha_limite: puesto.fecha_limite,
+//         });
+//       }
+//       mostrarDetallePuesto(puesto)
+//     });
+//  };
+//  console.log(puestosFiltrados);
+//  return puestosFiltrados;
+// };
 
 // Llamado de la función profecionistas
-profecionistas();
+// profecionistas();
+
+let puestos = [];
+  let mostrarModal = false;
+  let postulantes = [];
+
+  const obtenerPuestos = async () => {
+    try {
+      const response = await axios.get(Lugar.backend + 'getPuestosDataID.php');
+      puestos = response.data.rsProfesionistas;
+    } catch (error) {
+      console.error('Error al obtener los puestos:', error);
+    }
+  }
+
+  const obtenerPostulantes = async (idPuesto) => {
+    try {
+      const response = await axios.get(Lugar.backend + 'getPuestosDataID.php');
+      postulantes = response.data.rsProfesionistas.filter(puesto => puesto.id_puesto === idPuesto);
+      mostrarModal = true;
+    } catch (error) {
+      console.error('Error al obtener los postulantes:', error);
+    }
+  }
 
 // Función para mostrar los detalles del puesto seleccionado en el modal
 let detallePuestoSeleccionado = [];

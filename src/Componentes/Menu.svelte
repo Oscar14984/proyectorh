@@ -6,6 +6,7 @@
   import Swal from 'sweetalert2';
   import { link, push } from 'svelte-spa-router';
   import axios from 'axios';
+  import { onMount } from 'svelte';
   //SCRIPTS
 	import { session } from './../session.js';
   import Lugar from '../Lugares.js';
@@ -91,6 +92,26 @@ const desLogueo = () =>{
 const enterLogin = e => {
     if (e.charCode === 13) iniciarSesion();
 };
+
+let scrolled = false;
+const handleScroll = () =>{
+  const scrollPosition = window.scrollY;
+
+  // Cambia la opacidad del menú según la posición del desplazamiento
+  if (scrollPosition > 100) { // Cambia 100 por la posición en la que quieres que ocurra el cambio
+    scrolled = true;
+  } else {
+    scrolled = false;
+  }
+}
+
+onMount(() => {
+  window.addEventListener('scroll', handleScroll);
+
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+});
 </script>
 
 <main style="background-color: rgba(255, 255, 255, 0.2);">
@@ -189,6 +210,8 @@ main{
       /* color: white; */
       text-align: center;
       z-index: 1;
+      
+    
 }
 
 @media(min-width: 300px) and (max-width: 1000px){
