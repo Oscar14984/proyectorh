@@ -133,6 +133,24 @@ const postulados = async (data) => {
   };
 };
 
+//Modal videos
+let openModalVideos = false;
+const setOpenVideo = async (data) => {
+  openModalVideos = false;
+  if(data == 'save'){
+
+  }
+}
+
+//Modal Documentos
+let openDocumento = false;
+const setOpenDocumento = async (data) => {
+  openDocumento = false;
+  if(data == 'save'){
+
+  }
+}
+
 // Consultar profesionistas
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
@@ -234,7 +252,7 @@ const mostrarDetallePuesto = (puesto) => {
             {/if}
           </tbody>
         </table>
-
+        <!-- Modal para ver a los usuarios -->
           {#if openModal == true}
             <Modal
             open={openModal}
@@ -262,14 +280,43 @@ const mostrarDetallePuesto = (puesto) => {
                      <td>{persona.apellido_paterno}</td>
                      <td>{persona.apellido_materno}</td>
                      <td>
-                       <button class="btn"><i class="bi bi-camera-video"></i></button>
-                       <button class="btn"><i class="bi bi-file-earmark-arrow-down"></i></button>
+                       <button class="btn" on:click={() => {openModalVideos = true}}><i class="bi bi-camera-video"></i></button>
+                       <button class="btn" on:click={() => {openDocumento = true}}><i class="bi bi-file-earmark-arrow-down"></i></button>
                      </td>
                    </tr>
                 {/each}
               </tbody>
             </table>
             </Modal>
+          {/if}
+
+          <!-- Modal para ver los videos de los usuarios -->
+          {#if openModalVideos == true}
+             <Modal
+             open={openModalVideos}
+             onClosed={(data)=> setOpenVideo (data)}
+             modalSize= "modal-xl"
+             title= "Ver Videos"
+             saveButtonText="ok"
+             closeButtonText="Cerrar"
+             >
+            <h1>Sin videos que mostrar</h1>
+
+             </Modal>
+          {/if}
+
+          <!-- Modal para ver los documentos de los usuarios -->
+          {#if openDocumento == true}
+          <Modal
+          open={openDocumento}
+          onClosed={(data)=>setOpenDocumento(data)}
+          modalSize= "modal-xl"
+          title= "ver Documentos"
+          saveButtonText="ok"
+          closeButtonText="Cerrar"
+          >
+             <h1>Sin documentos que mostrar </h1>
+          </Modal>
           {/if}
     </div>
 </main>
