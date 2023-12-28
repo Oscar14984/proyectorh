@@ -199,16 +199,31 @@ profecionistas();
 //   }
 
 // Función para mostrar los detalles del puesto seleccionado en el modal
+// const mostrarDetallePuesto = (puesto) => {
+  //   if(tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas > 0){
+    //     let nombreUsuario = new Set();
+    
+    //   }
+    //   detallePuestoSeleccionado = {
+      //     nombre: puesto.nombre,
+      //     apellido_paterno: puesto.apellido_paterno,
+      //     apellido_materno: puesto.apellido_materno,
+      //   };
+      //   console.log(detallePuestoSeleccionado)
+      //   return detallePuestoSeleccionado
+      // };
+      
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
-  detallePuestoSeleccionado = {
-    nombre: puesto.nombre,
-    apellido_paterno: puesto.apellido_paterno,
-    apellido_materno: puesto.apellido_materno,
-  };
-  console.log(detallePuestoSeleccionado)
-  return detallePuestoSeleccionado
-  // openModal = true; 
+  if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
+    const idPuestoSeleccionado = puesto.id_puesto; 
+    const personasPostuladas = rsProfesionistas.filter(item => item.id_puesto === idPuestoSeleccionado);
+    const nombresPostulados = personasPostuladas.map(persona => `${persona.nombre} ${persona.apellido_paterno} ${persona.apellido_materno}`);
+
+    detallePuestoSeleccionado = nombresPostulados;
+    console.log(detallePuestoSeleccionado);
+    return detallePuestoSeleccionado;
+  }
 };
 
 </script>
@@ -265,16 +280,19 @@ const mostrarDetallePuesto = (puesto) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>{cargo.lugar}</td>
-                  <td>{detallePuestoSeleccionado.nombre}</td>
-                  <td>{detallePuestoSeleccionado.apellido_paterno}</td>
-                  <td>{detallePuestoSeleccionado.apellido_materno}</td>
-                  <td>
-                    <button class="btn"><i class="bi bi-camera-video"></i></button>
-                    <button class="btn"><i class="bi bi-file-earmark-arrow-down"></i></button>
-                  </td>
-                </tr>
+                {#each detallePuestoSeleccionado as persona}
+                   <!-- content here -->
+                   <tr>
+                     <td>{cargo.lugar}</td>
+                     <td>{persona.nombre}</td>
+                     <td>{persona.apellido_paterno}</td>
+                     <td>{persona.apellido_materno}</td>
+                     <td>
+                       <button class="btn"><i class="bi bi-camera-video"></i></button>
+                       <button class="btn"><i class="bi bi-file-earmark-arrow-down"></i></button>
+                     </td>
+                   </tr>
+                {/each}
               </tbody>
             </table>
             </Modal>
