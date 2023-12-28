@@ -133,11 +133,11 @@ const postulados = async (data) => {
   };
 };
 
-// Consultar profecionistas
+// Consultar profesionistas
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
 let cargo = []
-const profecionistas = async () =>{
+const profesionistas = async () =>{
 spinner = true
 const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
 const data = JSON.parse(res.data.d);
@@ -176,8 +176,8 @@ const filtrarPuestosDeTrabajo = () => {
  return puestosFiltrados;
 };
 
-// Llamado de la función profecionistas
-profecionistas();
+// Llamado de la función profesionistas
+profesionistas();
 
 /**
  * Función para mostrar los detalles de las personas postuladas a un puesto específico.
