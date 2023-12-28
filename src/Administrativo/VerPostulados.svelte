@@ -218,9 +218,13 @@ const mostrarDetallePuesto = (puesto) => {
   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
     const idPuestoSeleccionado = puesto.id_puesto; 
     const personasPostuladas = rsProfesionistas.filter(item => item.id_puesto === idPuestoSeleccionado);
-    const nombresPostulados = personasPostuladas.map(persona => `${persona.nombre} ${persona.apellido_paterno} ${persona.apellido_materno}`);
-
-    detallePuestoSeleccionado = nombresPostulados;
+    
+    detallePuestoSeleccionado = personasPostuladas.map(persona => ({
+      nombre: persona.nombre,
+      apellido_paterno: persona.apellido_paterno,
+      apellido_materno: persona.apellido_materno
+    }));
+    
     console.log(detallePuestoSeleccionado);
     return detallePuestoSeleccionado;
   }
