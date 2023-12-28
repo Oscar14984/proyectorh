@@ -142,12 +142,14 @@ spinner = true
 const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
 const data = JSON.parse(res.data.d);
 spinner = false
-  tieneProfesionistas = data.tieneProfesionistas;
+  
+tieneProfesionistas = data.tieneProfesionistas;
   if (tieneProfesionistas == true) {
     rsProfesionistas = Object.values(data.rsProfesionistas);
   } else {
     rsProfesionistas = "";
   }
+  
   filtrarPuestosDeTrabajo()
 };
 
@@ -156,6 +158,7 @@ let puestosFiltrados = [];
 const filtrarPuestosDeTrabajo = () => {
  if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
     let titulosUnicos = new Set();
+    
     rsProfesionistas.forEach((puesto) => {
       if (!titulosUnicos.has(puesto.titulo)) {
         titulosUnicos.add(puesto.titulo);
@@ -168,6 +171,7 @@ const filtrarPuestosDeTrabajo = () => {
       mostrarDetallePuesto(puesto)
     });
  };
+ 
  console.log(puestosFiltrados);
  return puestosFiltrados;
 };
@@ -175,44 +179,11 @@ const filtrarPuestosDeTrabajo = () => {
 // Llamado de la función profecionistas
 profecionistas();
 
-// let puestos = [];
-//   let mostrarModal = false;
-//   let postulantes = [];
-
-//   const obtenerPuestos = async () => {
-//     try {
-//       const response = await axios.get(Lugar.backend + 'getPuestosDataID.php');
-//       puestos = response.data.rsProfesionistas;
-//     } catch (error) {
-//       console.error('Error al obtener los puestos:', error);
-//     }
-//   }
-
-//   const obtenerPostulantes = async (idPuesto) => {
-//     try {
-//       const response = await axios.get(Lugar.backend + 'getPuestosDataID.php');
-//       postulantes = response.data.rsProfesionistas.filter(puesto => puesto.id_puesto === idPuesto);
-//       mostrarModal = true;
-//     } catch (error) {
-//       console.error('Error al obtener los postulantes:', error);
-//     }
-//   }
-
-// Función para mostrar los detalles del puesto seleccionado en el modal
-// const mostrarDetallePuesto = (puesto) => {
-  //   if(tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas > 0){
-    //     let nombreUsuario = new Set();
-    
-    //   }
-    //   detallePuestoSeleccionado = {
-      //     nombre: puesto.nombre,
-      //     apellido_paterno: puesto.apellido_paterno,
-      //     apellido_materno: puesto.apellido_materno,
-      //   };
-      //   console.log(detallePuestoSeleccionado)
-      //   return detallePuestoSeleccionado
-      // };
-      
+/**
+ * Función para mostrar los detalles de las personas postuladas a un puesto específico.
+ * @param {Object} puesto - El objeto del puesto seleccionado del cual se mostrarán los detalles.
+ * @returns {Array} - Un array de objetos con los detalles de las personas postuladas al puesto.
+ */
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
@@ -285,7 +256,6 @@ const mostrarDetallePuesto = (puesto) => {
               </thead>
               <tbody>
                 {#each detallePuestoSeleccionado as persona}
-                   <!-- content here -->
                    <tr>
                      <td>{cargo.lugar}</td>
                      <td>{persona.nombre}</td>
