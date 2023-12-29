@@ -437,12 +437,20 @@ textarea {
 }
 
 /* Boton de editar */
+.editar{
+  border: 1px solid green;
+  color: green;
+}
 .editar:hover{
 background-color: green;
 color:white;
 }
 
 /* Boton para borrar */
+.borrar{
+  border: 1px solid red;
+  color: red;
+}
 .borrar:hover{
   background-color: red;
   color: white;
