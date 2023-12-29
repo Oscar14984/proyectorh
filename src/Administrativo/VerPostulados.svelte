@@ -198,7 +198,6 @@ const filtrarPuestosDeTrabajo = () => {
 // Llamado de la función profesionistas
 profesionistas();
 
-
 //Función para mostrar los detalles de las personas postulados a un puesto específico.
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
@@ -224,18 +223,19 @@ const obtenerIdUsuario = () => {
     idUsuarios = rsProfesionistas.map(profesionista => profesionista.id_usuario);
   }
   console.log('Para ver los id_usuarios',idUsuarios)
+  VisibilizarVideos(idUsuarios);
   return idUsuarios;
 };
 
 //Función para Visibilizar videos
 let tieneVideos;
 let infoVideos = [];
-const VisibilizarVideos = async () =>{
+const VisibilizarVideos = async (idUsuarios) =>{
   try {
     const res = await axios.post(lugar.backend + 'getVideosInfo.php', {idUsuarios});
     const data = JSON.parse(res.data.d);
   
-    if(res.data){
+    if(res.data && idUsuarios){
       infoVideos = Object.values(data.infoVideos)
 
       console.log('Para ver la info de videos',infoVideos)
@@ -245,7 +245,7 @@ const VisibilizarVideos = async () =>{
     
   }
 }
-VisibilizarVideos()
+
 
 //Función para descargar videos
 const descargaVideo = async () => {
@@ -262,6 +262,10 @@ const descargaVideo = async () => {
 }
 
 </script>
+
+
+
+
 
 <main>
   {#if spinner == true}
