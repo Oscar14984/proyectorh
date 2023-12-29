@@ -141,6 +141,7 @@ const filtrarUsuarios = () =>{
                     <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
                     <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos</button>
                     <button class="btn btn-success" >Ver Documentos</button>
+                    <button class="btn borrar" ><i class="bi bi-trash3"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -196,5 +197,15 @@ const filtrarUsuarios = () =>{
 <style>
 .table{
     background-color: rgb(198, 244, 255);
+}
+
+/* Boton para borrar */
+.borrar{
+  border: 1px solid red;
+  color: red;
+}
+.borrar:hover{
+  background-color: red;
+  color: white;
 }
 </style>
