@@ -178,7 +178,7 @@ const eliminarPuesto = async (id_puestoT) =>{
       <div class="boton-inicio">
         <button class="btn btn-success" on:click={inicio}>Inicio</button>
       </div>
-        <table class="table table-hover">
+        <table class="table table-hover table-light">
             <thead>
               <tr>
                 <th scope="col">Titulo</th>
@@ -222,8 +222,8 @@ const eliminarPuesto = async (id_puestoT) =>{
                               {/each}
                             </td>
                             <td>
-                                <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto; }}>Editar</button>
-                                <button class="btn btn-info" on:click={eliminarPuesto(puesto.id_puesto)}>Eliminar</button>
+                                <button class="btn editar" on:click={() => {openModal = true; cargo = puesto; }}><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn borrar" on:click={eliminarPuesto(puesto.id_puesto)}><i class="bi bi-trash3"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -434,5 +434,17 @@ textarea {
 
     overflow-y: auto;
     max-height: 400px;
+}
+
+/* Boton de editar */
+.editar:hover{
+background-color: green;
+color:white;
+}
+
+/* Boton para borrar */
+.borrar:hover{
+  background-color: red;
+  color: white;
 }
 </style>
