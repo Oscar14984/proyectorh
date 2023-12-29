@@ -168,7 +168,8 @@ tieneProfesionistas = data.tieneProfesionistas;
     rsProfesionistas = "";
   }
   
-  filtrarPuestosDeTrabajo()
+  filtrarPuestosDeTrabajo();
+  obtenerIdUsuario();
 };
 
 // Función para filtrar los datos de los puestos de trabajo
@@ -190,18 +191,15 @@ const filtrarPuestosDeTrabajo = () => {
     });
  };
  
- console.log(puestosFiltrados);
+ console.log('Para ver los puestos filtrados',puestosFiltrados);
  return puestosFiltrados;
 };
 
 // Llamado de la función profesionistas
 profesionistas();
 
-/**
- * Función para mostrar los detalles de las personas postuladas a un puesto específico.
- * @param {Object} puesto - El objeto del puesto seleccionado del cual se mostrarán los detalles.
- * @returns {Array} - Un array de objetos con los detalles de las personas postuladas al puesto.
- */
+
+//Función para mostrar los detalles de las personas postulados a un puesto específico.
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
@@ -214,10 +212,54 @@ const mostrarDetallePuesto = (puesto) => {
       apellido_materno: persona.apellido_materno
     }));
     
-    console.log(detallePuestoSeleccionado);
+    console.log('Para ver las personas postulados a un puesto específico',detallePuestoSeleccionado);
     return detallePuestoSeleccionado;
   }
 };
+
+//Función para extraer id_usuario
+let idUsuarios = [];
+const obtenerIdUsuario = () => {
+  if (rsProfesionistas.length > 0) {
+    idUsuarios = rsProfesionistas.map(profesionista => profesionista.id_usuario);
+  }
+  console.log('Para ver los id_usuarios',idUsuarios)
+  return idUsuarios;
+};
+
+//Función para Visibilizar videos
+let tieneVideos;
+let infoVideos = [];
+const VisibilizarVideos = async () =>{
+  try {
+    const res = await axios.post(lugar.backend + 'getVideosInfo.php', {idUsuarios});
+    const data = JSON.parse(res.data.d);
+  
+    if(res.data){
+      infoVideos = Object.values(data.infoVideos)
+
+      console.log('Para ver la info de videos',infoVideos)
+      tieneVideos = infoVideos.length > 0;
+    }
+  } catch (error) {
+    
+  }
+}
+VisibilizarVideos()
+
+//Función para descargar videos
+const descargaVideo = async () => {
+  try {
+    const res = await axios.post(lugar.backend + 'downloadVideo.php')
+    const data = JSON.parse(res.data.d)
+    console.log(data)
+    if(data){
+  
+    }
+  }catch (error) {
+    
+  }
+}
 
 </script>
 
@@ -295,13 +337,33 @@ const mostrarDetallePuesto = (puesto) => {
              <Modal
              open={openModalVideos}
              onClosed={(data)=> setOpenVideo (data)}
-             modalSize= "modal-xl"
+             modalSize= "modal-lg"
              title= "Ver Videos"
              saveButtonText="ok"
              closeButtonText="Cerrar"
              >
-            <h1>Sin videos que mostrar</h1>
-
+             <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Localidad</th>
+                  <th scope="col">Descarga</th>
+                </tr>
+              </thead>
+             {#if tieneVideos == true}
+                {#each infoVideos as infoVideo(infoVideo.id_video)}
+                  <tbody>
+                    <tr>
+                      <td>{infoVideo.file_name}</td>
+                      <td>{infoVideo.localidad}</td>
+                    </tr>
+                  </tbody>
+                {/each}
+              {:else}
+                <strong>Ningun video para mostrar</strong>
+              {/if}
+               
+              </table>
              </Modal>
           {/if}
 
@@ -310,12 +372,34 @@ const mostrarDetallePuesto = (puesto) => {
           <Modal
           open={openDocumento}
           onClosed={(data)=>setOpenDocumento(data)}
-          modalSize= "modal-xl"
+          modalSize= "modal-lg"
           title= "ver Documentos"
           saveButtonText="ok"
           closeButtonText="Cerrar"
           >
              <h1>Sin documentos que mostrar </h1>
+             <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">First</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td colspan="2">Larry the Bird</td>
+                </tr>
+              </tbody>
+            </table>
           </Modal>
           {/if}
     </div>
