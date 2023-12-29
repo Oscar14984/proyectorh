@@ -3,7 +3,10 @@
     import routes from './routes';
     import Menu from './Componentes/Menu.svelte';
     import Footer from './Componentes/Footer.svelte';
-
+    //Verifica si la URL actual no termina con '#/'
+    if (window.location.hash !== '#/') {
+        window.location.href = '?#' + window.location.hash.slice(1);
+    }
 </script>
 
 <main>
