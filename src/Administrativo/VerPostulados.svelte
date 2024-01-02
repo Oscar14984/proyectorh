@@ -12,6 +12,7 @@ import Lugar from "../Lugares";
 // import { idUsuario } from "../idUsuario";
 import { idPuesto } from "../idPuesto";
 import { idUsuario } from "../idUsuario";
+import { verVideo } from "../verVideo";
 
 //Funcion para ver el id de los videos
 const setVerIdUsuario = (id_usuario) => {
@@ -179,7 +180,7 @@ tieneProfesionistas = data.tieneProfesionistas;
         } 
   
   filtrarPuestosDeTrabajo();
-  obtenerIdUsuario();
+  // obtenerIdUsuario();
 };
 
 
@@ -237,7 +238,8 @@ const mostrarDetallePuesto = (puesto) => {
     detallePuestoSeleccionado = personasPostuladas.map(persona => ({
       nombre: persona.nombre,
       apellido_paterno: persona.apellido_paterno,
-      apellido_materno: persona.apellido_materno
+      apellido_materno: persona.apellido_materno,
+      id_usuario: persona.id_usuario,
     }));
     
     console.log('Para ver las personas postulados a un puesto específico',detallePuestoSeleccionado);
@@ -246,41 +248,32 @@ const mostrarDetallePuesto = (puesto) => {
 };
 
 //Función para extraer id_usuario
-const obtenerIdUsuario = (id_usuarioT) => {
-  let idUsuarios = []; 
-  if (id_usuarioT) {
-    idUsuarios.push(id_usuarioT); 
-  } else if (rsProfesionistas.length > 0) {
-    idUsuarios = rsProfesionistas.map(profesionista => profesionista.id_usuario);
-   
-  }
-
-  console.log('Para ver los id_usuarios', idUsuarios);
-  VisibilizarVideos(idUsuarios);
-
-  return idUsuarios;
-};
+const obtenerIdUsuario = (id_usuarioT) =>{
+  id_usuario = id_usuarioT;
+  console.log(id_usuario)
+  VisibilizarVideos(id_usuarioT)
+  openModalVideos = true
+}
 
 //Función para Visibilizar videos
 let tieneVideos;
-let infoVideos = [];
-const VisibilizarVideos = async (idUsuarios) =>{
+let rsVideos = [];
+const VisibilizarVideos = async (id_usuarioT) =>{
   try {
-    const res = await axios.post(lugar.backend + 'getVideosInfo.php', {idUsuarios});
+    const res = await axios.post(lugar.backend + 'getVideosInfo.php', {id_usuario: id_usuarioT});
     const data = JSON.parse(res.data.d);
   
-    if(res.data && idUsuarios){
-      infoVideos = Object.values(data.infoVideos)
+    if(res.data.d){
+      rsVideos = Object.values(data.rsVideos)
       
-      console.log('Para ver la info de videos',idUsuarios,infoVideos)
-      tieneVideos = infoVideos.length > 0;
+      console.log('Para ver la info de videos',id_usuarioT,rsVideos)
+      tieneVideos = rsVideos.length > 0;
     }
-
+    openModalVideos = true
   } catch (error) {
     
   }
 };
-
 
 //Función para descargar videos
 const descargaVideo = async () => {
@@ -334,6 +327,7 @@ const setOpenDocumento = async (data) => {
 
   }
 };
+
 
 </script>
 
@@ -443,7 +437,7 @@ const setOpenDocumento = async (data) => {
                      <td>{persona.apellido_paterno}</td>
                      <td>{persona.apellido_materno}</td>
                      <td>
-                       <button class="btn" on:click={() => {openModalVideos = true}}><i class="bi bi-camera-video"></i></button>
+                       <button class="btn" on:click={() => obtenerIdUsuario(persona.id_usuario)}><i class="bi bi-camera-video"></i></button>
                        <button class="btn" on:click={() => {openDocumento = true}}><i class="bi bi-file-earmark-arrow-down"></i></button>
                      </td>
                    </tr>
