@@ -9,8 +9,9 @@ import Modal from "../Componentes/Modal.svelte";
 import { push } from 'svelte-spa-router'
 //Scripts
 import Lugar from "../Lugares";
-import { idUsuario } from "../idUsuario";
+// import { idUsuario } from "../idUsuario";
 import { idPuesto } from "../idPuesto";
+    import { idUsuario } from "../idUsuario";
 
 //Funcion para ver el id de los videos
 const setVerIdUsuario = (id_usuario) => {
@@ -26,6 +27,38 @@ const extraerPuestos = (id_puesto) =>{
   })) 
 }
 
+// PAGINADOR
+let maxRegsPP = 10
+let paginas = 0
+let paginaActual = 1
+let registroInicial = 1
+let registroFinal = 10
+let residuo = 0
+let pagAd = 0
+    
+const cambiarMaxRegsPP = () => {
+    paginas = Math.floor( rsProfesionistas.length / maxRegsPP )
+    residuo = ( rsProfesionistas.length % maxRegsPP )
+    if ( residuo > 0 ) {
+        pagAd = 1
+    } else {
+        pagAd = 0
+    }
+    paginas = paginas + pagAd
+    paginaActual = 1
+    registroInicial = 1
+    registroFinal = maxRegsPP
+}
+
+const cambiarEstatus = () => {
+  profesionistas()
+}
+
+const cambiarPagina = (pagina) => {
+    paginaActual = pagina
+    registroInicial = (paginaActual * maxRegsPP) - (maxRegsPP - 1)
+    registroFinal = paginaActual * maxRegsPP
+};
 
 // Para extraer el id_usuario
 // Para extraer todos los id_usuario
@@ -167,6 +200,21 @@ tieneProfesionistas = data.tieneProfesionistas;
   } else {
     rsProfesionistas = "";
   }
+
+  //verificar si tiene usuarios
+  if(tieneProfesionistas = rsProfesionistas.length > 0){
+        paginas = Math.floor( rsProfesionistas.length / maxRegsPP )
+        residuo = ( rsProfesionistas.length % maxRegsPP )
+        if ( residuo > 0 ) {
+            pagAd = 1
+        } else {
+            pagAd = 0
+        }
+            paginas = paginas + pagAd
+            paginaActual = 1
+            registroInicial = 1
+            registroFinal = maxRegsPP
+        } 
   
   filtrarPuestosDeTrabajo();
   obtenerIdUsuario();
@@ -222,8 +270,10 @@ const obtenerIdUsuario = () => {
   if (rsProfesionistas.length > 0) {
     idUsuarios = rsProfesionistas.map(profesionista => profesionista.id_usuario);
   }
+  // idUsuarios.forEach(idUsuario => {
+    VisibilizarVideos(idUsuarios);
+  // });
   console.log('Para ver los id_usuarios',idUsuarios)
-  VisibilizarVideos(idUsuarios);
   return idUsuarios;
 };
 
@@ -237,10 +287,11 @@ const VisibilizarVideos = async (idUsuarios) =>{
   
     if(res.data && idUsuarios){
       infoVideos = Object.values(data.infoVideos)
-
-      console.log('Para ver la info de videos',infoVideos)
+      
+      console.log('Para ver la info de videos',idUsuarios,infoVideos)
       tieneVideos = infoVideos.length > 0;
     }
+
   } catch (error) {
     
   }
@@ -283,7 +334,7 @@ const descargaVideo = async () => {
           </thead>
           <tbody>
             {#if tieneProfesionistas == true}
-              {#each puestosFiltrados as puesto,i}
+              {#each puestosFiltrados.slice(registroInicial - 1, registroFinal) as puesto,i}
                 <tr>
                   <th scope="row">{puesto.titulo}</th>
                   <th scope="row">{puesto.lugar}</th>
@@ -298,6 +349,49 @@ const descargaVideo = async () => {
             {/if}
           </tbody>
         </table>
+
+        <div class="col-6 col-lg-4 col-xxl-3">
+          <div class="input-group mb-3 bg-light">
+              <span class="input-group-text"><strong>Registros por página:</strong></span>
+              <select class="form-select" bind:value={maxRegsPP} on:change="{cambiarMaxRegsPP}">
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+              </select>
+          </div>
+      </div>
+
+      {#if tieneProfesionistas }
+          <div class="input-group mb-1">
+              <div role="group">
+                  {#if paginaActual != 1}
+                      <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(1)}>{'<<'}</button>
+                  {:else}
+                      <button type="button" class="btn btn-primary" disabled>{'<<'}</button>
+                  {/if}
+                  {#if paginaActual != 1}
+                      <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginaActual-1)}>{'<'}</button>
+                  {:else}
+                      <button type="button" class="btn btn-primary" disabled>{'<'}</button>
+                  {/if}
+                  {#each Array(paginas) as _, i}
+                      {#if i+1 == paginaActual - 1 || i+1 == paginaActual || i+1 == paginaActual + 1}
+                          <button type="button" class="btn {paginaActual == i+1 ? 'btn-primary' : 'btn-light'}" on:click={()=>cambiarPagina(i+1)}>{i+1}</button>
+                      {/if}
+                  {/each}
+                  {#if paginaActual < paginas}
+                      <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginaActual+1)}>{'>'}</button>
+                  {:else}
+                      <button type="button" class="btn btn-primary" disabled>{'>'}</button>
+                  {/if}
+                  {#if paginaActual < paginas}
+                      <button type="button" class="btn btn-primary" on:click={()=>cambiarPagina(paginas)}>{'>>'}</button>
+                  {:else}
+                      <button type="button" class="btn btn-primary" disabled>{'>>'}</button>
+                  {/if}
+              </div>
+          </div>
+      {/if}
         <!-- Modal para ver a los usuarios -->
           {#if openModal == true}
             <Modal

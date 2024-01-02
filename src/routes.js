@@ -57,7 +57,7 @@ const routes ={
     '/RegistroPuesto':RegistroPuesto,
     '/RegistrarPuesto':RegistrarPuesto,
     '/InicioAdmin':InicioAdmin,
-    '/Vidos':Videos,
+    '/Videos':Videos,
     //SuperAdministrativo
     '/Inici0Super@dmin':InicioSuperAdmin,
     '/Rut@S3gur1d@d!2023':LoginSuperAdmin,

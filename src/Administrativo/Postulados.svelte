@@ -83,7 +83,7 @@ let maxRegsPP = 10
     }
     //Para guardar el id_usuario en el scrip de verVideos
     const verVideos = (id_usuario) =>{
-        push('/Vidos')
+        push('/Videos')
         verVideo.update( ()=> ({
             id_usuario:id_usuario,
         }));
