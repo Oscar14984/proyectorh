@@ -330,8 +330,6 @@ const setOpenDocumento = async (data) => {
 
   }
 };
-
-
 </script>
 
 
