@@ -15,7 +15,7 @@
         $tieneVideos=1;
         $i=1;
         while ($row = $sql->fetch_assoc()) {
-            //Puestos
+            //Videos
             $rsVideos[$i]['contador'] = $i;
             $rsVideos[$i]['id_video']=$row['id_video'];
             $rsVideos[$i]['id_usuario']=$row['id_usuario'];

@@ -253,7 +253,7 @@ const obtenerIdUsuario = (id_usuarioT) =>{
   console.log(id_usuario)
   VisibilizarVideos(id_usuario)
   openModalVideos = true
-}
+};
 
 //Función para Visibilizar videos
 let tieneVideos;
