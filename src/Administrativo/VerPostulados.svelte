@@ -251,16 +251,19 @@ const mostrarDetallePuesto = (puesto) => {
 const obtenerIdUsuario = (id_usuarioT) =>{
   id_usuario = id_usuarioT;
   console.log(id_usuario)
-  VisibilizarVideos(id_usuarioT)
+  VisibilizarVideos(id_usuario)
   openModalVideos = true
 }
 
 //Función para Visibilizar videos
 let tieneVideos;
 let rsVideos = [];
-const VisibilizarVideos = async (id_usuarioT) =>{
+const VisibilizarVideos = async (id_usuarioT, id_videoT) =>{
   try {
-    const res = await axios.post(lugar.backend + 'getVideosInfo.php', {id_usuario: id_usuarioT});
+    const res = await axios.post(Lugar.backend + 'getVideosInfo.php',{
+      id_usuario: id_usuarioT,
+      id_video: id_videoT,
+    });
     const data = JSON.parse(res.data.d);
   
     if(res.data.d){
@@ -466,11 +469,11 @@ const setOpenDocumento = async (data) => {
                 </tr>
               </thead>
              {#if tieneVideos == true}
-                {#each infoVideos as infoVideo(infoVideo.id_video)}
+                {#each rsVideos as rsVideo(rsVideo.id_video)}
                   <tbody>
                     <tr>
-                      <td>{infoVideo.file_name}</td>
-                      <td>{infoVideo.localidad}</td>
+                      <td>{rsVideo.file_name}</td>
+                      <td>{rsVideo.localidad}</td>
                     </tr>
                   </tbody>
                 {/each}

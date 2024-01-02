@@ -19,6 +19,7 @@
             $rsVideos[$i]['contador'] = $i;
             $rsVideos[$i]['id_video']=$row['id_video'];
             $rsVideos[$i]['id_usuario']=$row['id_usuario'];
+            $rsVideos[$i]['mime']=$row['mime'];
             $rsVideos[$i]['file_name']=$row['file_name'];
             $rsVideos[$i]['localidad']=$row['localidad'];
             $rsVideos[$i]['fase']=$row['fase'];
