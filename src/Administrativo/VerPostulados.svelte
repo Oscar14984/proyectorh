@@ -261,7 +261,6 @@ const obtenerIdUsuario = (id_usuarioT) => {
   return idUsuarios;
 };
 
-
 //Función para Visibilizar videos
 let tieneVideos;
 let infoVideos = [];
