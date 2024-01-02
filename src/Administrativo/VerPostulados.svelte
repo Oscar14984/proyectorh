@@ -11,7 +11,7 @@ import { push } from 'svelte-spa-router'
 import Lugar from "../Lugares";
 // import { idUsuario } from "../idUsuario";
 import { idPuesto } from "../idPuesto";
-    import { idUsuario } from "../idUsuario";
+import { idUsuario } from "../idUsuario";
 
 //Funcion para ver el id de los videos
 const setVerIdUsuario = (id_usuario) => {
@@ -210,6 +210,23 @@ const filtrarPuestosDeTrabajo = () => {
 // Llamado de la función profesionistas
 main();
 
+//AGREGAR REGISTRO
+let id_puesto = "";
+let titulo = "";
+let descripcion = "";
+let fecha_limite = "";
+let lugar = "";
+let pais = "";
+let doctor_solicitante = "";
+
+// Datos de usuarios
+let id_usuario = "";
+let nombre = "";
+let apellido_paterno = "";
+let apellido_materno = "";
+let correo = "";
+let numero = "";
+
 //Función para mostrar los detalles de las personas postulados a un puesto específico.
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
@@ -283,7 +300,7 @@ const postulados = async (data) => {
   if(data == 'save'){
     try {
       const res = await axios.post(Lugar.backend + 'getPuestoDataIDPuesto.php',{
-        id_puesto: idPuesto
+        id_puesto: id_puestoT
       });
       const data = JSON.parse(res.data.d)
       spinner = false;
