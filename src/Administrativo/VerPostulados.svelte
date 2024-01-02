@@ -443,7 +443,7 @@ const setOpenDocumento = async (data) => {
                      <td>{persona.apellido_paterno}</td>
                      <td>{persona.apellido_materno}</td>
                      <td>
-                       <button class="btn" on:click={VisibilizarVideos(idUsuarios)}><i class="bi bi-camera-video"></i></button>
+                       <button class="btn" on:click={() => {openModalVideos = true}}><i class="bi bi-camera-video"></i></button>
                        <button class="btn" on:click={() => {openDocumento = true}}><i class="bi bi-file-earmark-arrow-down"></i></button>
                      </td>
                    </tr>
