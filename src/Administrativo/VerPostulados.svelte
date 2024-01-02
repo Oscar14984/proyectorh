@@ -51,7 +51,7 @@ const cambiarMaxRegsPP = () => {
 }
 
 const cambiarEstatus = () => {
-  profesionistas()
+  main()
 }
 
 const cambiarPagina = (pagina) => {
@@ -145,50 +145,12 @@ const cambiarPagina = (pagina) => {
 //   }
 // };
 
-//Componente Modal
-let openModal = false;
-const postulados = async (data) => {
-  openModal = false;
-  if(data == 'save'){
-    try {
-      const res = await axios.post(Lugar.backend + 'getPuestoDataIDPuesto.php',{
-        id_puesto: idPuesto
-      });
-      const data = JSON.parse(res.data.d)
-      spinner = false;
-      if(res.data && data.jsonSalida){
-        jsonSalida = Object.values(data.jsonSalida)
-        console.log(jsonSalida)
-      }
-    } catch (error) {
-      
-    };
-  };
-};
-
-//Modal videos
-let openModalVideos = false;
-const setOpenVideo = async (data) => {
-  openModalVideos = false;
-  if(data == 'save'){
-
-  }
-}
-
-//Modal Documentos
-let openDocumento = false;
-const setOpenDocumento = async (data) => {
-  openDocumento = false;
-  if(data == 'save'){
-
-  }
-}
 
 // Consultar profesionistas
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
 let cargo = []
-const profesionistas = async () =>{
+const main = async () =>{
 spinner = true
 const res = await axios.post(Lugar.backend + 'getPuestosDataID.php');
 const data = JSON.parse(res.data.d);
@@ -220,6 +182,8 @@ tieneProfesionistas = data.tieneProfesionistas;
   obtenerIdUsuario();
 };
 
+
+
 // Función para filtrar los datos de los puestos de trabajo
 let puestosFiltrados = [];
 const filtrarPuestosDeTrabajo = () => {
@@ -244,7 +208,7 @@ const filtrarPuestosDeTrabajo = () => {
 };
 
 // Llamado de la función profesionistas
-profesionistas();
+main();
 
 //Función para mostrar los detalles de las personas postulados a un puesto específico.
 let detallePuestoSeleccionado = [];
@@ -295,7 +259,7 @@ const VisibilizarVideos = async (idUsuarios) =>{
   } catch (error) {
     
   }
-}
+};
 
 
 //Función para descargar videos
@@ -310,7 +274,46 @@ const descargaVideo = async () => {
   }catch (error) {
     
   }
-}
+};
+
+//Componente Modal
+let openModal = false;
+const postulados = async (data) => {
+  openModal = false;
+  if(data == 'save'){
+    try {
+      const res = await axios.post(Lugar.backend + 'getPuestoDataIDPuesto.php',{
+        id_puesto: idPuesto
+      });
+      const data = JSON.parse(res.data.d)
+      spinner = false;
+      if(res.data && data.jsonSalida){
+        jsonSalida = Object.values(data.jsonSalida)
+        console.log(jsonSalida)
+      }
+    } catch (error) {
+      
+    };
+  };
+};
+
+//Modal videos
+let openModalVideos = false;
+const setOpenVideo = async (data) => {
+  openModalVideos = false;
+  if(data == 'save'){
+
+  }
+};
+
+//Modal Documentos
+let openDocumento = false;
+const setOpenDocumento = async (data) => {
+  openDocumento = false;
+  if(data == 'save'){
+
+  }
+};
 
 </script>
 
@@ -420,7 +423,7 @@ const descargaVideo = async () => {
                      <td>{persona.apellido_paterno}</td>
                      <td>{persona.apellido_materno}</td>
                      <td>
-                       <button class="btn" on:click={() => {openModalVideos = true}}><i class="bi bi-camera-video"></i></button>
+                       <button class="btn" on:click={VisibilizarVideos(idUsuarios)}><i class="bi bi-camera-video"></i></button>
                        <button class="btn" on:click={() => {openDocumento = true}}><i class="bi bi-file-earmark-arrow-down"></i></button>
                      </td>
                    </tr>
