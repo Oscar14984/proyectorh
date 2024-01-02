@@ -246,17 +246,21 @@ const mostrarDetallePuesto = (puesto) => {
 };
 
 //Función para extraer id_usuario
-let idUsuarios = [];
-const obtenerIdUsuario = () => {
-  if (rsProfesionistas.length > 0) {
+const obtenerIdUsuario = (id_usuarioT) => {
+  let idUsuarios = []; 
+  if (id_usuarioT) {
+    idUsuarios.push(id_usuarioT); 
+  } else if (rsProfesionistas.length > 0) {
     idUsuarios = rsProfesionistas.map(profesionista => profesionista.id_usuario);
+   
   }
-  // idUsuarios.forEach(idUsuario => {
-    VisibilizarVideos(idUsuarios);
-  // });
-  console.log('Para ver los id_usuarios',idUsuarios)
+
+  console.log('Para ver los id_usuarios', idUsuarios);
+  VisibilizarVideos(idUsuarios);
+
   return idUsuarios;
 };
+
 
 //Función para Visibilizar videos
 let tieneVideos;
