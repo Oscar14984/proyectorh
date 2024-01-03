@@ -474,7 +474,7 @@ const setOpenDocumento = async (data) => {
                     <tr>
                       <td>{rsVideo.file_name}</td>
                       <td>{rsVideo.localidad}</td>
-                      <td><button class="btn btn_descarga"><i class="bi bi-download"></i></button></td>
+                      <td><button class="btn btn_descarga" on:click={descargaVideo()}><i class="bi bi-download"></i></button></td>
                     </tr>
                   </tbody>
                 {/each}
