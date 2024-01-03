@@ -16,7 +16,7 @@
     $contrasena = $dataDocument["contrasena"];
     $contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
     $idUsuario = $dataDocument["id_usuario"];
-    $values = array($nombre,$apellido_paterno,$apellido_materno,$correo,$numero,$contrasena(int)$idUsuario);
+    $values = array($nombre,$apellido_paterno,$apellido_materno,$correo,$numero,$contrasena,(int)$idUsuario);
     $insertarEnBaseDatos->consulta_ca($queryUpdateAdmin,$values);
 
 

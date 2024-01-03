@@ -258,12 +258,12 @@ const obtenerIdUsuario = (id_usuarioT) =>{
 // Función para Visibilizar videos
 let tieneVideos;
 let rsVideos = [];
-const VisibilizarVideos = async (id_usuarioT) => {
+const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
   try {
     spinner = true
     const res = await axios.post(Lugar.backend + 'getVideosInfo.php', {
       id_usuario: id_usuarioT,
-      // No se proporciona un id_video para obtener todos los videos del usuario
+      id_video: id_videoT,
     });
     spinner = false
     const data = JSON.parse(res.data.d);
@@ -279,7 +279,6 @@ const VisibilizarVideos = async (id_usuarioT) => {
     console.error('Error al obtener los videos:', error);
   }
 };
-
 
 //Función para descargar videos
 const descargaVideo = async () => {
