@@ -260,10 +260,12 @@ let tieneVideos;
 let rsVideos = [];
 const VisibilizarVideos = async (id_usuarioT) => {
   try {
+    spinner = true
     const res = await axios.post(Lugar.backend + 'getVideosInfo.php', {
       id_usuario: id_usuarioT,
       // No se proporciona un id_video para obtener todos los videos del usuario
     });
+    spinner = false
     const data = JSON.parse(res.data.d);
 
     if (data && data.rsVideos) {
@@ -473,6 +475,7 @@ const setOpenDocumento = async (data) => {
                     <tr>
                       <td>{rsVideo.file_name}</td>
                       <td>{rsVideo.localidad}</td>
+                      <td><button class="btn btn_descarga"><i class="bi bi-download"></i></button></td>
                     </tr>
                   </tbody>
                 {/each}
@@ -523,7 +526,19 @@ const setOpenDocumento = async (data) => {
 </main>
 
 <style>
+  /* Para los botones de ver videos y documentos */
 .btn:hover{
+  background-color: green;
+  color: white;
+}
+
+/* Para el botón de descarga de video */
+.btn_descarga{
+  border: 1px solid green;
+  color: green;
+}
+
+.btn_descarga:hover{
   background-color: green;
   color: white;
 }
