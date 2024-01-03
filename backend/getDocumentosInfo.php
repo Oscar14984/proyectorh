@@ -28,7 +28,7 @@ while ($row = $getDataDocumentos->fetch_assoc()) {
         "localidad" => $row["localidad"],
         "fase" => $row["fase"]
     ));
-}
+};
 
 // Crear la respuesta JSON con los resultados
 $response['d'] = json_encode(array("rsDocumentos" => $rsDocumentos));
