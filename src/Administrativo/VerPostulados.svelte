@@ -255,6 +255,14 @@ const obtenerIdUsuario = (id_usuarioT) =>{
   openModalVideos = true
 };
 
+//Función para extraer id_usuario para documentos
+const obtenerIdUsuarioDocumentos = (id_usuarioT) =>{
+  id_usuario = id_usuarioT;
+  console.log(id_usuario)
+  visibilizarDocumentos(id_usuarioT)
+  openDocumento = true
+}
+
 // Función para Visibilizar videos
 let tieneVideos;
 let rsVideos = [];
@@ -273,9 +281,7 @@ const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
       console.log('Para ver la info de videos', id_usuarioT, rsVideos);
       tieneVideos = rsVideos.length > 0;
     }
-    openModalVideos = true;
   } catch (error) {
-    // Manejo de errores
     console.error('Error al obtener los videos:', error);
   }
 };
@@ -283,7 +289,7 @@ const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
 //Función para descargar videos
 const descargaVideo = async () => {
   try {
-    const res = await axios.post(lugar.backend + 'downloadVideo.php')
+    const res = await axios.post(Lugar.backend + 'downloadVideo.php')
     const data = JSON.parse(res.data.d)
     console.log(data)
     if(data){
@@ -291,6 +297,28 @@ const descargaVideo = async () => {
     }
   }catch (error) {
     
+  }
+};
+
+//FUNCIÓN PARA VISIBILIZAR DOCUMENTOS
+let tieneDocumentos;
+let rsDocumentos = [];
+const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
+  try {
+    spinner = true
+    const res = await axios.post(Lugar.backend + 'getDocumentosInfo.php', {
+      id_usuario: id_usuarioT,
+      id_doc: id_docT,
+    });
+    spinner = false
+    const data = JSON.parse(res.data.d);
+
+    if (data && data.rsDocumentos) {
+      rsDocumentos = Object.values(data.rsDocumentos);
+      console.log('Para ver la info de videos', id_usuarioT, rsDocumentos);
+      tieneVideos = rsDocumentos.length > 0;
+    }
+  } catch (error) {
   }
 };
 
@@ -441,7 +469,7 @@ const setOpenDocumento = async (data) => {
                      <td>{persona.apellido_materno}</td>
                      <td>
                        <button class="btn" on:click={() => obtenerIdUsuario(persona.id_usuario)}><i class="bi bi-camera-video"></i></button>
-                       <button class="btn" on:click={() => {openDocumento = true}}><i class="bi bi-file-earmark-arrow-down"></i></button>
+                       <button class="btn" on:click={() => obtenerIdUsuarioDocumentos(persona.id_usuario)}><i class="bi bi-file-earmark-arrow-down"></i></button>
                      </td>
                    </tr>
                 {/each}
@@ -496,28 +524,28 @@ const setOpenDocumento = async (data) => {
           saveButtonText="ok"
           closeButtonText="Cerrar"
           >
-             <h1>Sin documentos que mostrar </h1>
-             <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                </tr>
-              </tbody>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Localidad</th>
+                <th scope="col">Descarga</th>
+              </tr>
+            </thead>
+           {#if tieneDocumentos == true && rsDocumentos.length > 0}
+              {#each rsDocumentos as rsDocumento}
+                <tbody>
+                  <tr>
+                    <td>{rsDocumento.file_name}</td>
+                    <td>{rsDocumento.localidad}</td>
+                    <td><button class="btn btn_descarga"><i class="bi bi-download"></i></button></td>
+                  </tr>
+                </tbody>
+              {/each}
+            {:else}
+              <strong>Ningun documento para mostrar</strong>
+            {/if}
+             
             </table>
           </Modal>
           {/if}
