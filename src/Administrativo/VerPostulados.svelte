@@ -251,32 +251,33 @@ const mostrarDetallePuesto = (puesto) => {
 const obtenerIdUsuario = (id_usuarioT) =>{
   id_usuario = id_usuarioT;
   console.log(id_usuario)
-  VisibilizarVideos(id_usuario)
+  VisibilizarVideos(id_usuarioT)
   openModalVideos = true
 };
 
-//Función para Visibilizar videos
+// Función para Visibilizar videos
 let tieneVideos;
 let rsVideos = [];
-const VisibilizarVideos = async (id_usuarioT, id_videoT) =>{
+const VisibilizarVideos = async (id_usuarioT) => {
   try {
-    const res = await axios.post(Lugar.backend + 'getVideosInfo.php',{
+    const res = await axios.post(Lugar.backend + 'getVideosInfo.php', {
       id_usuario: id_usuarioT,
-      id_video: id_videoT,
+      // No se proporciona un id_video para obtener todos los videos del usuario
     });
     const data = JSON.parse(res.data.d);
-  
-    if(res.data.d){
-      rsVideos = Object.values(data.rsVideos)
-      
-      console.log('Para ver la info de videos',id_usuarioT,rsVideos)
+
+    if (data && data.rsVideos) {
+      rsVideos = Object.values(data.rsVideos);
+      console.log('Para ver la info de videos', id_usuarioT, rsVideos);
       tieneVideos = rsVideos.length > 0;
     }
-    openModalVideos = true
+    openModalVideos = true;
   } catch (error) {
-    
+    // Manejo de errores
+    console.error('Error al obtener los videos:', error);
   }
 };
+
 
 //Función para descargar videos
 const descargaVideo = async () => {
@@ -466,8 +467,8 @@ const setOpenDocumento = async (data) => {
                   <th scope="col">Descarga</th>
                 </tr>
               </thead>
-             {#if tieneVideos == true}
-                {#each rsVideos as rsVideo(rsVideo.id_video)}
+             {#if tieneVideos == true && rsVideos.length > 0}
+                {#each rsVideos as rsVideo}
                   <tbody>
                     <tr>
                       <td>{rsVideo.file_name}</td>
