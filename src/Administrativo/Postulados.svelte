@@ -138,7 +138,7 @@ const filtrarUsuarios = () =>{
                     <td>{usuario.correo}</td>
                     <td>{usuario.numero}</td>
                     <td>
-                    <!-- Aquí puedes agregar los botones para descargar PDF y videos -->
+                    
                     <button class="btn btn-success" on:click={() => verVideos(usuario.id_usuario)}>Ver Videos</button>
                     <button class="btn btn-success" >Ver Documentos</button>
                     <button class="btn borrar" ><i class="bi bi-trash3"></i></button>
