@@ -3,30 +3,29 @@ require_once "accesos.php";
 require_once "classGetPostInDataBase.php";
 
 // para obtener la solicitud POST en JSON
+$mysql = new classGetPostInDataBase();
 $data = json_decode(file_get_contents("php://input"), true);
-
-$insertarEnBaseDatos = new classGetPostInDataBase();
-
-// Consulta SQL 
-$query = 
-"SELECT
-    documentos.id_doc, 
-    documentos.id_usuario, 
-    documentos.mime, 
-    documentos.file_name, 
-    documentos.localidad, 
-    documentos.fase
-FROM 
-    documentos
-WHERE
-    documentos.id_usuario = ?";
 
 // Obtener el id_usuario 
 $id_usuario = $data["id_usuario"];
 
-$values = array($id_usuario);
 
-$sql = $insertarEnBaseDatos->consulta_ca($query, $values);
+// Consulta SQL 
+$query = 
+"SELECT
+    Documentos.id_doc, 
+    Documentos.id_usuario, 
+    Documentos.mime, 
+    Documentos.file_name, 
+    Documentos.localidad, 
+    Documentos.fase
+FROM 
+    Documentos
+WHERE
+    Documentos.id_usuario = ?";
+
+$values = array((int)$id_usuario);
+$sql = $mysql->consulta_ca($query, $values);
 
 $rsDocumentos = array();
 

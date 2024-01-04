@@ -316,9 +316,10 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
     if (data && data.rsDocumentos) {
       rsDocumentos = Object.values(data.rsDocumentos);
       console.log('Para ver la info de documentos', id_usuarioT, rsDocumentos);
-      tieneVideos = rsDocumentos.length > 0;
+      tieneDocumentos = rsDocumentos.length > 0;
     }
   } catch (error) {
+
   }
 };
 
