@@ -14,14 +14,14 @@ import { idPuesto } from "../idPuesto";
 import { idUsuario } from "../idUsuario";
 import { verVideo } from "../verVideo";
 
-//Funcion para ver el id de los videos
+//FUNCION PARA VER EL ID DE LOS VIDEOS
 const setVerIdUsuario = (id_usuario) => {
     idUsuario.update(() => ({
     id_usuario: id_usuario,
   }));
 };
 
-//Función para ver el id_puestos
+//FUNCION PARA VER EL ID_PUESTO
 const extraerPuestos = (id_puesto) =>{
   idPuesto.update(() => ({
     id_puesto : id_puesto
@@ -146,8 +146,7 @@ const cambiarPagina = (pagina) => {
 //   }
 // };
 
-
-// Consultar profesionistas
+//CONSULTAR PROFESIONISTAS
 let tieneProfesionistas = false;
 let rsProfesionistas = [];
 let cargo = []
@@ -164,7 +163,7 @@ tieneProfesionistas = data.tieneProfesionistas;
     rsProfesionistas = "";
   }
 
-  //verificar si tiene usuarios
+  //VERIFICAR SI TIENE USUARIOS
   if(tieneProfesionistas = rsProfesionistas.length > 0){
         paginas = Math.floor( rsProfesionistas.length / maxRegsPP )
         residuo = ( rsProfesionistas.length % maxRegsPP )
@@ -183,9 +182,7 @@ tieneProfesionistas = data.tieneProfesionistas;
   // obtenerIdUsuario();
 };
 
-
-
-// Función para filtrar los datos de los puestos de trabajo
+//FUNCION PARA FILTRAR LOS DATOS DE LOS PUESTOS DE TRABAJO
 let puestosFiltrados = [];
 const filtrarPuestosDeTrabajo = () => {
  if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
@@ -208,7 +205,7 @@ const filtrarPuestosDeTrabajo = () => {
  return puestosFiltrados;
 };
 
-// Llamado de la función profesionistas
+//LLAMADO DE LA FUNCION MAIN (PROFESIONISTAS)
 main();
 
 //AGREGAR REGISTRO
@@ -220,7 +217,7 @@ let lugar = "";
 let pais = "";
 let doctor_solicitante = "";
 
-// Datos de usuarios
+//DATOS DE USUARIO
 let id_usuario = "";
 let nombre = "";
 let apellido_paterno = "";
@@ -228,7 +225,7 @@ let apellido_materno = "";
 let correo = "";
 let numero = "";
 
-//Función para mostrar los detalles de las personas postulados a un puesto específico.
+//FUNCION PARA MOSTRAR LOS DETALLES DE LAS PERSONAS POSTULADOS A UN UESTO ESPECIFICO.
 let detallePuestoSeleccionado = [];
 const mostrarDetallePuesto = (puesto) => {
   if (tieneProfesionistas && Array.isArray(rsProfesionistas) && rsProfesionistas.length > 0) {
@@ -247,7 +244,7 @@ const mostrarDetallePuesto = (puesto) => {
   }
 };
 
-//Función para extraer id_usuario
+//FUNCION PARA EXTRAER ID_USUARIO
 const obtenerIdUsuario = (id_usuarioT) =>{
   id_usuario = id_usuarioT;
   console.log(id_usuario)
@@ -255,7 +252,7 @@ const obtenerIdUsuario = (id_usuarioT) =>{
   openModalVideos = true
 };
 
-//Función para extraer id_usuario para documentos
+//FUNCION PARA EXTRAER ID_USUARIO PARA DOCUMENTOS
 const obtenerIdUsuarioDocumentos = (id_usuarioT) =>{
   id_usuario = id_usuarioT;
   console.log(id_usuario)
@@ -263,7 +260,7 @@ const obtenerIdUsuarioDocumentos = (id_usuarioT) =>{
   openDocumento = true
 }
 
-// Función para Visibilizar videos
+//FUNCION PARA VISIBILIZAR VIDEOS
 let tieneVideos;
 let rsVideos = [];
 const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
@@ -286,10 +283,12 @@ const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
   }
 };
 
-//Función para descargar videos
-const descargaVideo = async () => {
+//FUNCION PARA DESCARGAR VIDEOS
+const descargaVideo = async (id_videoT) => {
   try {
-    const res = await axios.post(Lugar.backend + 'downloadVideo.php')
+    const res = await axios.post(Lugar.backend + 'downloadVideo.php',{
+      id_video : id_videoT,
+    })
     const data = JSON.parse(res.data.d)
     console.log(data)
     if(data){
@@ -323,7 +322,15 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
   }
 };
 
-//Componente Modal
+//FUNCIÓN PARA DESCARGAR DOCUMENTOS
+const descargarDocumentos = async (id_docT) =>{
+  const res = await axios.post(Lugar.backend + 'downloadDocument.php',{
+    id_doc : id_docT,
+  })
+  const data = JSON.parse(res.data.d)
+}
+
+//COMPONENTE MODAL
 let openModal = false;
 const postulados = async (data) => {
   openModal = false;
@@ -344,7 +351,7 @@ const postulados = async (data) => {
   };
 };
 
-//Modal videos
+//MODAL VIDEOS
 let openModalVideos = false;
 const setOpenVideo = async (data) => {
   openModalVideos = false;
@@ -353,7 +360,7 @@ const setOpenVideo = async (data) => {
   }
 };
 
-//Modal Documentos
+//MODAL DOCUMENTOS
 let openDocumento = false;
 const setOpenDocumento = async (data) => {
   openDocumento = false;
