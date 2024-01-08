@@ -5,6 +5,7 @@ import Spinner from "../Componentes/Spinner.svelte";
 let spinner = false
 // LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
 import axios from 'axios';
+import { saveAs } from 'file-saver';
 import Modal from "../Componentes/Modal.svelte";
 import { push } from 'svelte-spa-router'
 //Scripts
@@ -221,6 +222,7 @@ let doctor_solicitante = "";
 let id_usuario = "";
 let id_video = ""
 let nombre = "";
+let localidad = ""
 let apellido_paterno = "";
 let apellido_materno = "";
 let correo = "";
@@ -300,15 +302,30 @@ const descargarVideo = async (id_videoT) => {
 
     const data = response.data;
 
-    // Generar el enlace de descarga del video
-    const a = document.createElement('a');
-    a.href = data.d.localidad;
-    a.download = data.d.nombre;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error('Error al descargar el video:', error);
+    // Crear un blob con el contenido descargado
+    const blob = new Blob([data], { type: 'video/mp4' });
+
+    // Guardar el blob como un archivo
+    saveAs(blob, data.d.nombre);
+
+    // const localidadMP4 = data.d.localidad.replace('.tmp', '.mp4');
+
+    // const a = document.createElement('a');
+    // a.href = localidadMP4;
+    // a.download = data.d.nombre;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
+
+  //   const a = document.createElement('a');
+  //   a.href = data.d.localidad;
+  //   a.download = data.d.nombre;
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+
+   } catch (error) {
+     console.error('Error al descargar el video:', error);
   }
 };
 

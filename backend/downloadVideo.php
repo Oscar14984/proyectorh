@@ -42,7 +42,8 @@
     file_put_contents($temp, $contents);
     //Devolvemos la localidad y el nombre del archivo en un array
     $response = array();
-    $response["d"] = array("localidad"=>str_replace('\\', '/',$temp),"nombre"=>$filename);
+    // $response["d"] = array("localidad"=>str_replace('\\', '/',$temp),"nombre"=>$filename);
+    $response["d"] = array("localidad"=>$temp,"nombre"=>$filename);
     echo json_encode($response);
     //Desconectamos la base de datos
     $insertarEnBaseDatos->dbDisconnect();
