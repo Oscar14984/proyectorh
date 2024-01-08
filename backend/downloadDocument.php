@@ -5,10 +5,10 @@
     $jsonDataDocument = json_decode(file_get_contents("php://input"), true);
     $insertarEnBaseDatos = new classGetPostInDataBase();
     $insertarEnDropBox = new classInsertInDropBox();
-    $idDocument = (int)$jsonDataDocument["id_documento"];
+    $id_documento = (int)$jsonDataDocument["id_documento"];
 
     $queryDownloadDocument = "SELECT * FROM Documentos doc WHERE doc.id_doc = ?";
-    $values = array($idDocument);
+    $values = array($id_documento);
     $documentInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadDocument,$values);
     $infoDocument = array();
     while($row = $documentInformation->fetch_assoc()){
@@ -21,6 +21,9 @@
     $file = $insertarEnDropBox->download($pathDocument);
     $contents = $file->getContents();
     file_put_contents($temp, $contents);
-    $_POST["document_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
+    
+    $response["d"] = array("localidad"=>$temp,"nombre"=>$filename);
+    echo json_encode($response);
+    // $_POST["document_info"] = json_encode(array("localidad"=>$temp,"nombre"=>$filename));
     $insertarEnBaseDatos->dbDisconnect();
 ?>

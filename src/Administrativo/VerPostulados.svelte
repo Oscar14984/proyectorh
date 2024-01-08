@@ -220,7 +220,8 @@ let doctor_solicitante = "";
 
 //DATOS DE USUARIO
 let id_usuario = "";
-let id_video = ""
+let id_video = "";
+let id_doc = "";
 let nombre = "";
 let localidad = ""
 let apellido_paterno = "";
@@ -268,6 +269,13 @@ const obtenerIdVideo = (id_videoT) =>{
   id_video = id_videoT
   console.log(id_video)
   descargarVideo(id_videoT)
+}
+
+//FUNCION PARA EXTRAER EL ID_DOC
+const obtenerIdDoc = (id_docT) =>{
+  id_doc = id_docT
+  console.log(id_doc)
+  descargarDocumentos(id_docT)
 }
 
 //FUNCION PARA VISIBILIZAR VIDEOS
@@ -353,12 +361,24 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
 };
 
 //FUNCIÓN PARA DESCARGAR DOCUMENTOS
-const descargarDocumentos = async (id_docT) =>{
-  const res = await axios.post(Lugar.backend + 'downloadDocument.php',{
-    id_doc : id_docT,
-  })
-  const data = JSON.parse(res.data.d)
-}
+const descargarDocumentos = async (id_docT) => {
+  try {
+    const response = await axios.post(Lugar.backend + 'downloadDocument.php', {
+      id_doc: id_docT,
+    });
+
+    const data = response.data;
+
+    // Crear un blob con el contenido descargado
+    const blob = new Blob([data], { type: 'application/pdf' });
+
+    // Guardar el blob como un archivo
+    saveAs(blob, data.d.nombre);
+
+   } catch (error) {
+     console.error('Error al descargar el video:', error);
+  }
+};
 
 //COMPONENTE MODAL
 let openModal = false;
@@ -576,7 +596,7 @@ const setOpenDocumento = async (data) => {
                   <tr>
                     <td>{rsDocumento.file_name}</td>
                     <td>{rsDocumento.localidad}</td>
-                    <td><button class="btn btn_descarga"><i class="bi bi-download"></i></button></td>
+                    <td><button class="btn btn_descarga" on:click={() => obtenerIdDoc(rsDocumento.id_doc)}><i class="bi bi-download"></i></button></td>
                   </tr>
                 </tbody>
               {/each}
