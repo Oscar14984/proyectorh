@@ -18,12 +18,12 @@
     $insertarEnBaseDatos = new classGetPostInDataBase();
     $insertarEnDropBox = new classInsertInDropBox();
     //Id del documento que queremos descargar
-    $idVideo = (int)$jsonDataVideo["id_video"];
+    $id_video = (int)$jsonDataVideo["id_video"];
 
     //Query para obtener la informacion del documento deseado
     $queryDownloadVideo = "SELECT * FROM Videos vid WHERE vid.id_video = ?";
     //Array que contiene el id para poder sustuir los signos de interrogacion del query
-    $values = array($idVideo);
+    $values = array($id_video);
     //Obtenemos el documento relacionado con el id del documento
     $videoInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadVideo,$values);
     //Extraemos la información de la consulta

@@ -219,6 +219,7 @@ let doctor_solicitante = "";
 
 //DATOS DE USUARIO
 let id_usuario = "";
+let id_video = ""
 let nombre = "";
 let apellido_paterno = "";
 let apellido_materno = "";
@@ -258,6 +259,13 @@ const obtenerIdUsuarioDocumentos = (id_usuarioT) =>{
   console.log(id_usuario)
   visibilizarDocumentos(id_usuarioT)
   openDocumento = true
+};
+
+//FUNCION PARA EXTRAER EL ID_VIDEO
+const obtenerIdVideo = (id_videoT) =>{
+  id_video = id_videoT
+  console.log(id_video)
+  descargarVideo(id_videoT)
 }
 
 //FUNCION PARA VISIBILIZAR VIDEOS
@@ -284,18 +292,23 @@ const VisibilizarVideos = async (id_usuarioT, id_videoT) => {
 };
 
 //FUNCION PARA DESCARGAR VIDEOS
-const descargaVideo = async (id_videoT) => {
+const descargarVideo = async (id_videoT) => {
   try {
-    const res = await axios.post(Lugar.backend + 'downloadVideo.php',{
-      id_video : id_videoT,
-    })
-    const data = JSON.parse(res.data.d)
-    console.log(data)
-    if(data){
-  
-    }
-  }catch (error) {
-    
+    const response = await axios.post(Lugar.backend + 'downloadVideo.php', {
+      id_video: id_videoT,
+    });
+
+    const data = response.data;
+
+    // Generar el enlace de descarga del video
+    const a = document.createElement('a');
+    a.href = data.d.localidad;
+    a.download = data.d.nombre;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Error al descargar el video:', error);
   }
 };
 
@@ -510,7 +523,7 @@ const setOpenDocumento = async (data) => {
                     <tr>
                       <td>{rsVideo.file_name}</td>
                       <td>{rsVideo.localidad}</td>
-                      <td><button class="btn btn_descarga" on:click={descargaVideo()}><i class="bi bi-download"></i></button></td>
+                      <td><button class="btn btn_descarga" on:click={() => obtenerIdVideo(rsVideo.id_video)}><i class="bi bi-download"></i></button></td>
                     </tr>
                   </tbody>
                 {/each}
