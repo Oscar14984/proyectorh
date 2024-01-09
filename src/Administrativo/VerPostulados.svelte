@@ -361,7 +361,6 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
 };
 
 //FUNCIÓN PARA DESCARGAR DOCUMENTOS
-
 const descargarDocumentos = async (id_docT) => {
   try {
     const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
@@ -371,20 +370,29 @@ const descargarDocumentos = async (id_docT) => {
     
      localidad = data.d.localidad;
      console.log(localidad)
+     
+     const blob = new Blob([data], { type: 'application/pdf' });
+     localidad = URL.createObjectURL(blob);
 
      
-    const a = document.createElement('a');
-    a.href = data.d.localidad;
-    a.download = data.d.nombre;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // const a = document.createElement('a');
+    // a.href = data.d.localidad;
+    // a.download = data.d.nombre;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
 
     // const response = await axios.get(localidad, {
     //   responseType: 'blob' 
     // });
 
-    // const blob = new Blob([data], { type: 'application/pdf' });
+    const linkDescarga = document.createElement('a');
+    linkDescarga.href = localidad;
+    linkDescarga.download = data.d.nombre; 
+    linkDescarga.textContent = 'Haz clic aquí para descargar el archivo';
+    document.body.appendChild(linkDescarga);
+    linkDescarga.click();
+
 
     // saveAs(blob, data.d.nombre);
     
