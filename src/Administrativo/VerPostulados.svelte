@@ -325,12 +325,12 @@ const descargarVideo = async (id_videoT) => {
     // a.click();
     // document.body.removeChild(a);
 
-  //   const a = document.createElement('a');
-  //   a.href = data.d.localidad;
-  //   a.download = data.d.nombre;
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
+    // const a = document.createElement('a');
+    // a.href = data.d.localidad;
+    // a.download = data.d.nombre;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
 
    } catch (error) {
      console.error('Error al descargar el video:', error);
@@ -361,40 +361,32 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
 };
 
 //FUNCIÓN PARA DESCARGAR DOCUMENTOS
+
 const descargarDocumentos = async (id_docT) => {
   try {
     const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
       id_doc: id_docT,
     });
-
     const data = res.data;
 
-    if (data && data.d && data.d.nombre) {
-      const blob = new Blob([data], { type: 'application/pdf' });
-      saveAs(blob, data.d.nombre);
-    } else {
-      console.error('Los datos de la respuesta no tienen la estructura esperada.');
-    }
-  } catch (error) {
-    console.error('Error al descargar el documento:', error);
+    const a = document.createElement('a');
+    a.href = data.d.localidad;
+    a.download = data.d.nombre;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
+
+
+    // const blob = new Blob([data], { type: 'application/pdf' });
+
+    // saveAs(blob, data.d.nombre);
+    // nombre = data.d.nombre
+    // console.log(nombre)
+    
+   } catch (error) {
+     console.error('Error al descargar el documento:', error);
   }
 };
-// const descargarDocumentos = async (id_docT) => {
-//   try {
-//     const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
-//       id_doc: id_docT,
-//     });
-
-//     const data = res.data;
-
-//     const blob = new Blob([data], { type: 'application/pdf' });
-
-//     saveAs(blob, data.d.nombre);
-
-//    } catch (error) {
-//      console.error('Error al descargar el documento:', error);
-//   }
-// };
 
 //COMPONENTE MODAL
 let openModal = false;
@@ -619,7 +611,7 @@ const setOpenDocumento = async (data) => {
             {:else}
               <strong>Ningun documento para mostrar</strong>
             {/if}
-             
+
             </table>
           </Modal>
           {/if}

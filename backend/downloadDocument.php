@@ -2,7 +2,7 @@
  /*
  Back End que prepara todo para poder hacer la descarga de un video en el Front End de la pagina.
  Entradas:
- 1.- id_video : int, Numero de la id del video que queremos descargar
+ 1.- id_doc : int, Numero de la id del video que queremos descargar
  Salidas:
  1.- response : json, Este json contiene un apuntador llamado "d" que apunta a otro array que contiene la "localidad" del archivo en el servidor temporal
  y un "nombre" que contiene el nombre normal del archivo para poder descargarlo.
@@ -28,7 +28,7 @@
  $DocumentoInformation = $insertarEnBaseDatos->consulta_ca($queryDownloadDocumento,$values);
  //Extraemos la información de la consulta
  $infoDocumento = array();
- $localPath = getcwd();
+//  $localPath = getcwd();
  while($row = $DocumentoInformation->fetch_assoc()){
      array_push($infoDocumento,(array("id_doc"=>$row["id_doc"],"id_usuario"=>$row["id_usuario"],"mime"=>$row["mime"],"file_name"=>$row["file_name"],"localidad"=>$row["localidad"],"fase"=>$row["fase"])));
  }
@@ -36,13 +36,13 @@
  $filename = pathinfo($infoDocumento[0]["localidad"], PATHINFO_FILENAME);
  $temp = tempnam(sys_get_temp_dir(), $filename);
  $infoDocumento = $infoDocumento[0];
- $pathVideo = $infoDocumento["localidad"];
- $file = $insertarEnDropBox->download($pathVideo);
+ $pathDocumento = $infoDocumento["localidad"];
+ $file = $insertarEnDropBox->download($pathDocumento);
  $contents = $file->getContents();
  file_put_contents($temp, $contents);
  //Devolvemos la localidad y el nombre del archivo en un array
  $response = array();
- // $response["d"] = array("localidad"=>str_replace('\\', '/',$temp),"nombre"=>$filename);
+//  $response["d"] = array("localidad"=>str_replace('\\', '/',$temp),"nombre"=>$filename);
  $response["d"] = array("localidad"=>$temp,"nombre"=>$filename);
  echo json_encode($response);
  //Desconectamos la base de datos
