@@ -363,22 +363,38 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
 //FUNCIÓN PARA DESCARGAR DOCUMENTOS
 const descargarDocumentos = async (id_docT) => {
   try {
-    const response = await axios.post(Lugar.backend + 'downloadDocument.php', {
+    const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
       id_doc: id_docT,
     });
 
-    const data = response.data;
+    const data = res.data;
 
-    // Crear un blob con el contenido descargado
-    const blob = new Blob([data], { type: 'application/pdf' });
-
-    // Guardar el blob como un archivo
-    saveAs(blob, data.d.nombre);
-
-   } catch (error) {
-     console.error('Error al descargar el video:', error);
+    if (data && data.d && data.d.nombre) {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      saveAs(blob, data.d.nombre);
+    } else {
+      console.error('Los datos de la respuesta no tienen la estructura esperada.');
+    }
+  } catch (error) {
+    console.error('Error al descargar el documento:', error);
   }
 };
+// const descargarDocumentos = async (id_docT) => {
+//   try {
+//     const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
+//       id_doc: id_docT,
+//     });
+
+//     const data = res.data;
+
+//     const blob = new Blob([data], { type: 'application/pdf' });
+
+//     saveAs(blob, data.d.nombre);
+
+//    } catch (error) {
+//      console.error('Error al descargar el documento:', error);
+//   }
+// };
 
 //COMPONENTE MODAL
 let openModal = false;
