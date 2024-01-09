@@ -1,109 +1,224 @@
 <script>
-    import axios from "axios";
-    import Lugar from "../Lugares";
-    import { onMount } from 'svelte';
-
-  let tienePuestos;
-  let rsPuestos;
-
-  const puestos = async () => {
-    const res = await axios.post(Lugar.backend+'getPuestosDataPrueba.php');
+  // @ts-nocheck
+  // LIBRERIAS O COMPONENTES CON VARIABLE EXTRA
+  import Spinner from './../Componentes/Spinner.svelte';
+  let spinner = false;
+  // LIBRERIAS O COMPONENTES SIN VARIABLE EXTRA
+  import axios from "axios";
+  import { onMount } from 'svelte';
+  import Modal from '../Componentes/Modal.svelte';
+  import { push } from 'svelte-spa-router';
+  //SCRIPTS
+  import Lugar from "../Lugares";
+  import { session } from "../session";
+	import { idPuesto } from './../idPuesto.js';
+  
+  
+    
+//Para exportar el id_usuario cuando hace inicio de sesión.
+let idUsuario = null;
+idUsuario = $session.id_usuario;
+console.log(idUsuario)
+  
+let tienePuestos;
+let jsonSalida = [];
+const getPuestos = async () =>{
+try {
+    spinner = true
+    const res = await axios.post(Lugar.backend + 'getPuestosData.php')
     const data = JSON.parse(res.data.d);
-    tienePuestos = data.tienePuestos;
-    if (tienePuestos == true ) {
-      rsPuestos = Object.values(data.rsPuestos);
-    } else {
-      rsPuestos = "";
+    spinner = false
+    jsonSalida = Object.values(data.jsonSalida).map(puesto => {
+        const fechaLimite = new Date(puesto.fecha_limite);
+        const fechaActual = new Date();
+        const idPuesto = puesto.id_puesto;
+        console.log(idPuesto)
+
+        // postularse(idPuesto);
+        // Calcular la diferencia en milisegundos
+        // @ts-ignore
+        const diferenciaMilisegundos = fechaLimite - fechaActual;
+
+        // Calcular la diferencia en días
+        const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+        
+        
+        return { ...puesto, diferenciaDias };
+        
+      });
+      console.log(jsonSalida)
+      tienePuestos = jsonSalida.length > 0;
+    
+    } catch (error) {
+    
     }
-  };
-  puestos();
+};
+// Función para determinar la clase CSS basada en la diferencia de días
+const getFecha = (diferenciaDias) => {
+  if (diferenciaDias >= 15) {
+      return 'verde';  // Clase CSS para color verde
+      } else if (diferenciaDias >= 0) {
+      return 'amarillo';  // Clase CSS para color amarillo
+      } else {
+      return 'rojo';  // Clase CSS para color rojo
+      }
+};
 
-  let isFlipped = false;
+//Para hacer llamada de los puestos
+onMount(() => {
+  getPuestos();
+});
 
-  const flipCard = () => {
-    isFlipped = !isFlipped;
-  };
-</script>
+//para postutularse
+// const postularse = async (idPuesto) =>{
+//     try {
+//     const res = await axios.post(Lugar.backend+'postulacion.php',{
+//         id_puesto:idPuesto,
+       
+//         id_usuario:idUsuario,
+//     })
+//     } catch (error) {
+    
+//     };
+// };
+
+//Modal Para ver información de las vacantes
+let openModal = false;
+let cargo = null;
+const modalOpen = async (data) => {
+    openModal = false;
+    if(data == 'save'){
+      try {
+        const res = await axios.post(Lugar.backend+'postulacion.php',{
+        id_puesto:idPuesto,
+        id_usuario:idUsuario,
+      })
+      } catch (error) {
+      
+      };
+    }
+}
+
+//Para mostrar mensaje cuando se pasa el cursor sobre el div de fecha limite
+let mostrarMensaje = false;
+let mensaje = '';
+
+//Función para registrarse y postularse
+const registrarPostular = () =>{
+  push('/Registro')
+}
+  </script>
 
 <main>
-  <div>
-    <h1 class="text-info" style="text-shadow: 1px 1px 2px black;">OPORTUNIDADES DE EMPLEO</h1>
-    <p>Siempre estamos buscando personas entusiastas y apasionadas para unirse a nuestro equipo, encuentra la vacante ideal para ti.</p>
-  </div>
-  <div class="container">
-    {#if tienePuestos == true}
-      {#each rsPuestos as vacantes (vacantes.id_puesto)}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div class="card" on:click={flipCard}>
-        <div class="card-front">
-          <div class="card-body">
-            <h5 class="card-title">{vacantes.titulo}</h5>
-            <p class="card-text">{vacantes.descripcion}</p>
-          </div>
-        </div>
-        <div1 class="card-back">
-          <div class="card-body">
-            <h5 class="card-title">Detalles de la Vacante</h5>
-            <p class="card-text">Fecha Limite: {vacantes.fecha_limite}</p>
-          <button class="btn btn-info">Aplicar</button>
-          </div>
-        </div1>
-      </div>
-      {/each}
-      {:else}
-      <p class="noPuestos">No se encuentra ningun puestos disponible.</p>
+    {#if spinner == true}
+         <Spinner />
     {/if}
-  </div>
-  
+    <h1 class="text-info" style="text-shadow: 1px 1px 2px black;">OPORTUNIDADES DE EMPLEO</h1>
+    <p class="p-info">Siempre estamos buscando personas entusiastas y apasionadas para unirse a nuestro equipo, encuentra la vacante ideal para ti.</p>
+    <div class="container">
+      {#if tienePuestos}
+         {#each jsonSalida as puesto (puesto.id_puesto)}
+             <div class="card shadow p-3 mb-5 bg-body rounded">
+                 <div class="card-header">
+                   Vacante en:
+                 </div>
+                 <div class="card-body">
+                   <h5 class="card-title">{puesto.titulo}</h5>
+                   <p class="card-text">{puesto.descripcion}</p>
+                   <p class="card-text">{puesto.lugar}</p>
+                   <p class="card-text">{puesto.doctor_solicitante}</p>
+                   {#if idUsuario == null}
+                   <div>
+                     <button class="btn btn-warning" on:click={registrarPostular}>¡Regístrate y Postúlate!</button>
+                   </div>
+                   {:else}
+                   <button class="btn btn-info" on:click={() => {openModal = true; cargo = puesto;}}>Información</button>
+                   {/if}
+                 </div>
+                 <div class="card-footer {getFecha(puesto.diferenciaDias)}" style="cursor: pointer;">
+                   Fecha limite: {puesto.fecha_limite}
+                 </div>
+             </div>
+         {/each}
+      {/if}
+    </div>
+    <!-- Modal para mostrar información adicional  -->
+    {#if openModal == true}
+        <Modal
+        open={openModal}
+        onClosed={(data) => modalOpen(data)}
+        modalSize="modal-ms"
+        title=" vacante en:"
+        saveButtonText="Postularse"
+        closeButtonText="Cerrar"
+        >
+        <h6 class="card-subtitle mt-3 mb-2 text-muted">Requisitos:</h6>
+        <ul class="list-group">
+          {#each cargo.requisitos as requisito}
+              <li class="list-group-item">{requisito.linea}</li>
+          {/each}
+        </ul>
+
+        <h6 class="card-subtitle mt-3 mb-2 text-muted">Ofrecemos:</h6>
+        <ul class="list-group">
+          {#each cargo.ofrecemos as ofrecemo}
+            <li class="list-group-item">{ofrecemo.linea}</li>
+          {/each}
+        </ul>
+
+        <h6 class="card-subtitle mt-3 mb-2 text-muted">Funciones Generales:</h6>
+        <ul class="list-group">
+          {#each cargo.funcionesGenerales as funcionGeneral}
+            <li class="list-group-item">{funcionGeneral.linea}</li>
+          {/each}
+        </ul>
+
+        <h6 class="card-subtitle mt-3 mb-2 text-muted">Habilidades y Conocimientos:</h6>
+        <ul class="list-group">
+          {#each cargo.habilidadesConocimientos as habilidadConocimiento}
+            <li class="list-group-item">{habilidadConocimiento.linea}</li>
+          {/each}
+        </ul>
+        </Modal>
+    {/if}
+
 </main>
 
 <style>
-  .container{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-    grid-auto-rows: 200px;
-    margin-bottom: 10%;
-  }
-  .card {
-    width: 18rem;
-    margin: 20px;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-    
-  }
+    /* colores para del semaforo */
+    .verde { background-color: green; color: white;}
+    .amarillo { background-color: #FFC107; color: black;}
+    .rojo { background-color: red; color: white;}
 
-  .card:hover {
-    transform: rotateY(180deg);
-  }
+    .container{
+        display:grid;
+        grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+        grid-auto-rows: auto;
+        gap: 20px;
+    }
+    .card{
+        border-top: 4px solid #17a2b8;
+    }
+    .card-footer:hover::after {
+      content: 'Los colores verde, amarillo y rojo indican el estado en que se encuentra el puesto.';
+      color: black;
+      position: absolute;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-width: 200px;
+      z-index: 100;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
 
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-  }
+    .text-info{
+      position: relative;
+      left: 50px;
+    }
 
-  .card-front {
-    border-top: 4px solid #17a2b8;
-    color: #212529;
-    transform: rotateY(0deg);
-    /* z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center; */
-    background-color: #fff;
-  }
-
-  .card-back {
-    color: black;
-    transform: rotateY(180deg);
-    border-top: 4px solid #17a2b8;
-    background-color: #f8f9fa;
-  }
-  .noPuestos{
-    display: flex;
-    align-items: center;
-  }
+    .p-info{
+      position: relative;
+      left:50px;
+    }
 </style>

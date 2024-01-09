@@ -365,26 +365,31 @@ const visibilizarDocumentos = async (id_usuarioT, id_docT) => {
 const descargarDocumentos = async (id_docT) => {
   try {
     const res = await axios.post(Lugar.backend + 'downloadDocument.php', {
-      id_doc: id_docT,
+      id_documento: id_docT,
     });
     const data = res.data;
+    
+     localidad = data.d.localidad;
+     console.log(localidad)
 
+     
     const a = document.createElement('a');
     a.href = data.d.localidad;
     a.download = data.d.nombre;
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
+    // const response = await axios.get(localidad, {
+    //   responseType: 'blob' 
+    // });
 
     // const blob = new Blob([data], { type: 'application/pdf' });
 
     // saveAs(blob, data.d.nombre);
-    // nombre = data.d.nombre
-    // console.log(nombre)
     
-   } catch (error) {
-     console.error('Error al descargar el documento:', error);
+  } catch (error) {
+    console.error('Error al descargar el documento:', error);
   }
 };
 
